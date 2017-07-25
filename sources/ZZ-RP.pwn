@@ -1821,8 +1821,7 @@ enum _@en@booleano
 {
     RadioOn, 
     gMensajesP, 
-    jObjetivo, 
-    OnDuty, 
+    jObjetivo,
     TextShow, 
     ConEstado, 
     CallGiveWeapon, 
@@ -1985,7 +1984,7 @@ enum _@en@cuenta
     cAcceso[24], 
     cAcceso2[24], 
     cNivel, 
-    cEmpleado, 
+    cEmpleado,
     cAdministrador, 
     cZonaZeroCash, 
     cHorasJugadas, 
@@ -2023,7 +2022,8 @@ enum _@en@cuenta
     Float:cArmadura, 
     cInterior, 
     cMundo, 
-    cEquipo, 
+    cEquipo,
+    cFaccOnDuty,
     cTelefono, 
     cSaldo, 
     cMinutos, 
@@ -2043,7 +2043,7 @@ enum _@en@cuenta
     cLicenciaMoto, 
     cLicenciaVuelo, 
     cLicenciaBote, 
-    cLicenciaArma, 
+    cLicenciaArma,
     cGafas, 
     cTutorial, 
     cAntecedente1[64], 
@@ -2427,7 +2427,9 @@ public OnPlayerSpawn(playerid)
     //
     if(IsPlayerConnected(playerid))
     {
-        SetPlayerSkin(playerid, cuenta[playerid][cTraje]);
+        if (!cuenta[playerid][cFaccOnDuty]) { //Si no está de servicio en una facción legal, poner la skin que tiene comprada. Si está de servicio mantener la de policía etc
+            SetPlayerSkin(playerid, cuenta[playerid][cTraje]);
+        }
         switch(cuenta[playerid][cTutorial])
         {
         case 0:
@@ -6751,7 +6753,7 @@ CallBack::GuardarDatosMySQL(playerid)
     connectedtime=%d, acento=%d, registro=%d, sexo=%d, edad=%d, origen=%d, estilocaminar=%d, cobro=%d, stereo=%d, respeto=%d, \
     dinero=%d, dinerobanco=%d, cheques=%d, kills=%d, muertes=%d, arrestos=%d, lottonr=%d, trabajo=%d, carcel=%d, tiempocarcel=%d, \
     materiales=%d, drogas=%d, speed=%d, ectasy=%d, ritalin=%d, heroina=%d, marihuana=%d, lider=%d, miembro=%d, rango=%d, caracter=%d, \
-    interior=%d, virtualworld=%d, team=%d, numerotelefonico=%d, minutos=%d, minutr=%d, horas=%d, mtexto=%d, ipod=%d, \
+    interior=%d, virtualworld=%d, team=%d, facconduty=%d, numerotelefonico=%d, minutos=%d, minutr=%d, horas=%d, mtexto=%d, ipod=%d, \
     auto=%d, auto2=%d, auto3=%d, auto4=%d, casa=%d, casa2=%d, negocio=%d, negocio2=%d, licenciaauto=%d, licenciaarma=%d, gafas=%d, tutorial=%d, \
     encendedor=%d, cigarrillos=%d, mascara=%d, advertencias=%d, adminadver=%d, dni=%d, weap0=%d, ammo0=%d, weap1=%d, ammo1=%d, \
     weap2=%d, ammo2=%d, weap3=%d, ammo3=%d, weap4=%d, ammo4=%d, weap5=%d, ammo5=%d, weap6=%d, ammo6=%d, weap7=%d, ammo7=%d, \
@@ -6765,7 +6767,7 @@ CallBack::GuardarDatosMySQL(playerid)
     cuenta[playerid][cArrestado], cuenta[playerid][cLoteria], cuenta[playerid][cTrabajo], cuenta[playerid][cCarcel], cuenta[playerid][cTiempoCarcel], 
     cuenta[playerid][cMateriales], cuenta[playerid][cDrogas], cuenta[playerid][cSpeed], cuenta[playerid][cExtasis], cuenta[playerid][cRitalin], 
     cuenta[playerid][cHeroina], cuenta[playerid][cMarihuana], cuenta[playerid][cLider], cuenta[playerid][cMiembro], cuenta[playerid][cRango], cuenta[playerid][cTraje], 
-    cuenta[playerid][cInterior], cuenta[playerid][cMundo], cuenta[playerid][cEquipo], cuenta[playerid][cTelefono], 
+    cuenta[playerid][cInterior], cuenta[playerid][cMundo], cuenta[playerid][cEquipo], cuenta[playerid][cFaccOnDuty], cuenta[playerid][cTelefono], 
     cuenta[playerid][cSaldo], cuenta[playerid][cMinutos], cuenta[playerid][cHoras], cuenta[playerid][cMensajes], cuenta[playerid][cIpod], 
     cuenta[playerid][cCoche], cuenta[playerid][cCoche2], cuenta[playerid][cCoche3], cuenta[playerid][cCoche4], cuenta[playerid][cCasa], cuenta[playerid][cCasa2], 
     cuenta[playerid][cNegocio], cuenta[playerid][cNegocio2], cuenta[playerid][cLicenciaAuto], cuenta[playerid][cLicenciaArma], cuenta[playerid][cGafas], cuenta[playerid][cTutorial], 
@@ -7836,7 +7838,7 @@ command(id, playerid, params[]){
 }
 command(gpsmeca, playerid, params[]){
     if(!Team_Mecanicos(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres mecánico!");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "No estás en servicio!");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estás en servicio!");
     if(!Mecanico_Vehicle(GetPlayerVehicleID(playerid)))return Mensaje(playerid, COLOR_GRIS2, "No estás en un carro de mecanico!");
     if(!sscanf(params, "u", params[0])){
         new Float:X, Float:Y, Float:Z;
@@ -8314,7 +8316,7 @@ COMMAND:radio(playerid, params[])
 {
     if(!cuenta[playerid][cMiembro])return Mensaje(playerid, COLOR_GRIS2, "Usted no puedo usar esto.");
     if(cuenta[playerid][cCarcel] > 0)return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No puedes usar esto aquí.");
-    if(!booleano[OnDuty]{playerid} && cuenta[playerid][cMiembro] < 16)return Mensaje(playerid, COLOR_GRIS2, "No estás en servicio!");
+    if(!cuenta[playerid][cFaccOnDuty] && cuenta[playerid][cMiembro] < 16)return Mensaje(playerid, COLOR_GRIS2, "No estás en servicio!");
     if(!booleano[RadioOn]{playerid})
     {
         booleano[RadioOn]{playerid} = true;
@@ -8343,30 +8345,30 @@ command(duty, playerid, params[]){
     new string[128];
     if(Team_FBI(playerid)){
         if(IsPlayerInRangeOfPoint(playerid, 20.0, 222.3244, 186.7450, 1003.0313)){
-            if(!booleano[OnDuty]{playerid}){
+            if(!cuenta[playerid][cFaccOnDuty]){
                 format(string, sizeof(string), "* %s coge su placa y su radio.", PlayerName(playerid));
                 ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
-                booleano[OnDuty]{playerid} = true;
+                cuenta[playerid][cFaccOnDuty] = 1;
             }else{
                 format(string, sizeof(string), "* %s deja su placa y su radio.", PlayerName(playerid));
                 ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                 quitarArmas(playerid);
-                booleano[OnDuty]{playerid} = false;
+                cuenta[playerid][cFaccOnDuty] = 0;
             }
         } else return Mensaje(playerid, COLOR_GRIS2, "No estás en el lugar adecuado.");
     }else if(Team_SAMUR(playerid)){
         if(IsPlayerInRangeOfPoint(playerid, 20.0, -2652.1270, 504.4646, 48.0835))
         {
-            if(!booleano[OnDuty]{playerid})
+            if(!cuenta[playerid][cFaccOnDuty])
             {
-                booleano[OnDuty]{playerid} = true;
+                cuenta[playerid][cFaccOnDuty] = 1;
                 Mensaje(playerid, COLOR_BLANCO, "* Estas de servicio, recibirás llamadas.");
                 format(string, sizeof(string), "{FFB6C1}* Medico/Bombero %s está en servicio, llamar al 911.", PlayerName(playerid));
                 OOCNews(-1, string);
             }
             else
             {
-                booleano[OnDuty]{playerid} = false;
+                cuenta[playerid][cFaccOnDuty] = 0;
                 Mensaje(playerid, COLOR_BLANCO, "* Terminaste tu servicio, ya no recibirás llamadas.");
             }
         }  else return Mensaje(playerid, COLOR_GRIS2, "No estás en el lugar adecuado.");
@@ -8375,14 +8377,14 @@ command(duty, playerid, params[]){
     {
         if(IsPlayerInRangeOfPoint(playerid, 20.0, 2124.6816, -2272.2881, 20.6719))
         {
-            if(!booleano[OnDuty]{playerid})
+            if(!cuenta[playerid][cFaccOnDuty])
             {
-                booleano[OnDuty]{playerid} = true;
+                cuenta[playerid][cFaccOnDuty] = 1;
                 format(string, sizeof(string), "{00E45B}* Mecánico %s está en servicio, venga al taller o llame al {FFFFFF}(Tlf. %d)", PlayerName(playerid), cuenta[playerid][cTelefono]);
                 OOCNews(-1, string);
             }
             else{
-                booleano[OnDuty]{playerid} = false;
+                cuenta[playerid][cFaccOnDuty] = 0;
                 Mensaje(playerid, COLOR_BLANCO, "* Terminaste tu servicio, ya no recibirás llamadas.");
                 format(string, sizeof(string), "{AA3333}* Mecánico %s está fuera de servicio.", PlayerName(playerid));
                 OOCNews(-1, string);
@@ -8390,13 +8392,13 @@ command(duty, playerid, params[]){
         } else return Mensaje(playerid, COLOR_GRIS2, "No estás en el lugar adecuado.");
     }
     else if(Gobierno(playerid) || EsPeriodista(playerid)){
-        if(!booleano[OnDuty]{playerid})
+        if(!cuenta[playerid][cFaccOnDuty])
         {
-            booleano[OnDuty]{playerid} = true;
+            cuenta[playerid][cFaccOnDuty] = 1;
             Mensaje(playerid, COLOR_BLANCO, "* Estas de servicio, puedes encender tu radio.");
         }
         else{
-            booleano[OnDuty]{playerid} = false;
+            cuenta[playerid][cFaccOnDuty] = 0;
             Mensaje(playerid, COLOR_BLANCO, "* Terminaste tu servicio, ya no puedes usar tu radio.");
         }
     }
@@ -8671,7 +8673,7 @@ command(moneda, playerid, params[])
 command(ant, playerid, params[])
 {
     if(IsACop(playerid) || Team_FBI(playerid)){
-        if(!booleano[OnDuty]{playerid})return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
+        if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
         if(!sscanf(params, "us[64]", params[0], params[1]))
         {
             if(IsPlayerConnected(params[0]))
@@ -8764,7 +8766,7 @@ command(nokear, playerid, params[]){
 command(pstrips, playerid, params[])
 {
     if(!IsACop(playerid))return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No perteneces a ningún departamento policial.");
-    if(!booleano[OnDuty]{playerid})return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
+    if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
     new Float:plocx, Float:plocy, Float:plocz, Float:ploca;
     GetPlayerPos(playerid, plocx, plocy, plocz);
     GetPlayerFacingAngle(playerid, ploca);
@@ -8777,7 +8779,7 @@ command(pstrips, playerid, params[])
 command(qstrips, playerid, params[])
 {
     if(!IsACop(playerid))return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
-    if(!booleano[OnDuty]{playerid})return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
+    if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
     DeleteClosestStrip(playerid);
     GameTextForPlayer(playerid, "~r~Banda de clavos ~w~eliminada!", 3000, 1);
     return 1;
@@ -8835,7 +8837,7 @@ COMMAND:callsing(playerid, params[])
 {
     if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_GRIS, "Usted no es policía local.");
     if(cuenta[playerid][cRango] < 3)return Mensaje(playerid, COLOR_GRIS, "Usted debe ser nivel 3 o mayor.");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás de servicio. Ve a la comisaria para ponerte en Servicio!");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás de servicio. Ve a la comisaria para ponerte en Servicio!");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid))
     {
@@ -8866,7 +8868,7 @@ COMMAND:sospechosos(playerid, params[])
 {
     if(Team_LSPD(playerid) || Team_FBI(playerid))
     {
-        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_ROJO, "No estas en servicio.");
+        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_ROJO, "No estas en servicio.");
         new encontro, string[126];
         
         Mensaje(playerid, COLOR_VERDE, "Sospechosos más buscados");
@@ -8885,7 +8887,7 @@ COMMAND:su(playerid, params[])
 {
     if(Team_LSPD(playerid) || Team_FBI(playerid))
     {
-        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "No estas OnDuty.");
+        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas OnDuty.");
         new usuario, crimen[64];
         if(sscanf(params, "us[64]", usuario, crimen))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /su [Usuario] [Crimen]");
         
@@ -8911,7 +8913,7 @@ COMMAND:limpiar(playerid, params[])
 {
     if(Team_LSPD(playerid) || Team_FBI(playerid))
     {
-        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
+        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
         new usuario, item, string[126];
         if(sscanf(params, "ud", usuario, item))
         {
@@ -8979,7 +8981,7 @@ COMMAND:bk(playerid, params[])
             if(!IsPlayerConnected(i)) continue;
             if(Team_LSPD(i))
             {
-                if(booleano[OnDuty]{i})
+                if(cuenta[i][cFaccOnDuty])
                 {
                     booleano[jObjetivo]{playerid} = true;
                     Mensaje(playerid, COLOR_VERDE, "Usted acaba de ordenar refuerzos.");
@@ -8997,7 +8999,7 @@ COMMAND:bk(playerid, params[])
             if(!IsPlayerConnected(i)) continue;
             if(Team_FBI(i))
             {
-                if(booleano[OnDuty]{i})
+                if(cuenta[i][cFaccOnDuty])
                 {
                     booleano[jObjetivo]{playerid} = true;
                 }
@@ -9041,7 +9043,7 @@ command(ta, playerid, params[]){
 
 command(bar, playerid, params[]){
     if(IsACop(playerid) || Team_FBI(playerid)){
-        if(!booleano[OnDuty]{playerid})return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
+        if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
         if(!sscanf(params, "i", params[0])){
             new Float:plocx, Float:plocy, Float:plocz, Float:ploca;
             GetPlayerPos(playerid, plocx, plocy, plocz);
@@ -9092,7 +9094,7 @@ command(qbs, playerid, params[])
 command(multar, playerid, params[])
 {
     if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres policia!");
-    if(!booleano[OnDuty]{playerid})return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
+    if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
     if(!sscanf(params, "uis[64]", params[0], params[1], params[2]))
     {
         if(params[1] < 0 || params[1] > 6000)return Mensaje(playerid, COLOR_GRIS, "El máximo de multa son 6000$");
@@ -12329,7 +12331,7 @@ command(sacarsangre, playerid, params[])
     if(!sscanf(params, "u", params[0]))
     {
         if(!Team_SAMUR(playerid)) 	return Mensaje(playerid, COLOR_GRIS2, "No eres médico!");
-        if(!booleano[OnDuty]{playerid})   return Mensaje(playerid, COLOR_GRIS2, "No estás de servicio!");
+        if(!cuenta[playerid][cFaccOnDuty])   return Mensaje(playerid, COLOR_GRIS2, "No estás de servicio!");
         if(IsPlayerConnected(params[0]))
         {
             if(IsPlayerInRangeOfPoint(playerid, 10.0, 2003.3566, 2288.7163, 1011.1256))
@@ -12870,7 +12872,7 @@ command(mm, playerid, params[])
     if(Team_Mecanicos(playerid))
     {
         if(!IsPlayerInAnyVehicle(playerid))return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás en un vehículo para utilizar las funciones.");
-        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás de servicio. Ve al lugar indicado para colocarte en servicio.");
+        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás de servicio. Ve al lugar indicado para colocarte en servicio.");
         return ShowPlayerDialog(playerid, MECANICO_MENU, DIALOG_STYLE_LIST, "-> Mecánico Menú <-", "» Repararaciones\n» Gasolinera\n» Piezas\n» Remolcar {ABD387}(Fuera/Dentro del taller.)\n» Otros {ABD387}(Fuera/Dentro del taller.)\n» Defecto de Fábrica", ">>", "<<");
     }
     else Mensaje(playerid, COLOR_AMARILLO, "No eres mecánico, por lo tanto no puedes utilizar esto.");
@@ -12883,7 +12885,7 @@ command(embargar, playerid, params[])
     if(Team_LSPD(playerid) && cuenta[playerid][cRango] >= 3)
     {
         if(!IsPlayerInAnyVehicle(playerid))return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás en un vehículo para utilizar las funciones.");
-        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás de servicio. Ve a la comisaria para ponerte en Servicio.");
+        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás de servicio. Ve a la comisaria para ponerte en Servicio.");
         return ShowPlayerDialog(playerid, LSPD_EMBARGOS_MENU, DIALOG_STYLE_LIST, "-> Embargos LSPD Menú <-", "» Embargar Vehiculo", ">>", "<<");
     }
     else Mensaje(playerid, COLOR_ROJO, "No eres de la Policia Local o mayor a rango 3!");
@@ -12894,7 +12896,7 @@ COMMAND:quitarseguro(playerid, params[])
 {
     if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_GRIS, "Usted no es policía local.");
     if(cuenta[playerid][cRango] < 3)return Mensaje(playerid, COLOR_GRIS, "Usted debe ser nivel 3 o mayor.");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás de servicio. Ve a la comisaria para ponerte en Servicio!");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}No estás de servicio. Ve a la comisaria para ponerte en Servicio!");
     new carid = 0;
     static Float:ipos[3];
     for(new i=1;i<MAX_VEHICLES;i++)
@@ -14023,7 +14025,7 @@ public OnPlayerText(playerid, text[])
                 SetTimerEx("RemoveHand", 1800, false, "i", playerid);
                 for(new i=0, _max=GetMaxPlayers();i<_max;i++){
                     if(IsPlayerConnected(i)){
-                        if(Team_Mecanicos(i) && booleano[OnDuty]{i}){
+                        if(Team_Mecanicos(i) && cuenta[i][cFaccOnDuty]){
                             format(string, 256, "  Tlf: %d - Nombre: %s", cuenta[i][cTelefono] , PlayerName(i));
                             Mensaje(playerid, -1, string);
                             Mobile[playerid] = 255;
@@ -15894,16 +15896,16 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
                             {
                                 if(IsACop(playerid))
                                 {
-                                    if(!booleano[OnDuty]{playerid})
+                                    if(!cuenta[playerid][cFaccOnDuty])
                                     {
                                         format(string, sizeof(string), "* %s coge su placa y su radio.", PlayerName(playerid));
                                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
-                                        booleano[OnDuty]{playerid} = true;
+                                        cuenta[playerid][cFaccOnDuty] = 1;
                                     }else{
                                         format(string, sizeof(string), "* %s deja su placa y su radio.", PlayerName(playerid));
                                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                                         quitarArmas(playerid);
-                                        booleano[OnDuty]{playerid} = false;
+                                        cuenta[playerid][cFaccOnDuty] = 0;
                                     }
                                 }
                             }
@@ -17121,7 +17123,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     cuenta[playerid][cInterior] = cache_get_row_int(0, 42, servidor[mysqlControl]);
                     cuenta[playerid][cMundo] = cache_get_row_int(0, 43, servidor[mysqlControl]);
                     cuenta[playerid][cEquipo] = cache_get_row_int(0, 44, servidor[mysqlControl]);
-                    //Libreparaunanuevavar45
+                    cuenta[playerid][cFaccOnDuty] = cache_get_row_int(0, 45, servidor[mysqlControl]);
                     cuenta[playerid][cTelefono] = cache_get_row_int(0, 46, servidor[mysqlControl]);
                     cuenta[playerid][cSaldo] = cache_get_row_int(0, 47, servidor[mysqlControl]);
                     cuenta[playerid][cMinutos] = cache_get_row_int(0, 48, servidor[mysqlControl]);
@@ -17366,6 +17368,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         format(string, sizeof(string), "{77B5D9}Atención!:{FFFFFF} Usted ingresó sesión con nivel administrativo %d.", cuenta[playerid][cAdministrador]);
                         Mensaje(playerid, -1, string);
+                    }
+                    if(cuenta[playerid][cFaccOnDuty])
+                    {
+                        Mensaje(playerid, COLOR_AZUL_CLARO, "Atención!:{FFFFFF} Estás de servicio en tu facción legal. Rolea acorde a esto.");
                     }
                     for(new i=0, t=GetMaxPlayers();i<t;i++)
                     {
@@ -21186,7 +21192,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                 case 0:
                     {
-                        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_BLANCO, "{868FD9}»{FFFFFF} No estás en servicio.");
+                        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_BLANCO, "{868FD9}»{FFFFFF} No estás en servicio.");
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
                         darArma(playerid, 41, 500);//Aerosol
@@ -21199,7 +21205,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 case 1:
                     {
                         if(cuenta[playerid][cRango] < 1)return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No perteneces a tal rango de tropa.");
-                        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
+                        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
                         darArma(playerid, 25, 150);//Escopeta
@@ -21215,7 +21221,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 case 2:
                     {
                         if(cuenta[playerid][cRango] < 2)return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No perteneces a tal rango de tropa.");
-                        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
+                        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
                         darArma(playerid, 25, 150);//Escopeta
@@ -21228,7 +21234,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 case 3:
                     {
                         if(cuenta[playerid][cRango] < 3)return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No perteneces a tal rango de tropa.");
-                        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
+                        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
                         darArma(playerid, 25, 150);//Escopeta
@@ -21241,7 +21247,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 case 4:
                     {
                         if(cuenta[playerid][cRango] < 4)return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No perteneces a tal rango de tropa.");
-                        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
+                        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
                         darArma(playerid, 25, 150);//Escopeta
@@ -21329,7 +21335,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 case 11:
                     {
-                        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
+                        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
                         if(cuenta[playerid][cRango] < 2)return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No tienes el rango suficiente.");
                         darArmadura(playerid, 100);
                         SetHP(playerid, 100);
@@ -21338,7 +21344,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 case 12:
                     {
-                        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
+                        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No estás en servicio.");
                         if(cuenta[playerid][cRango] < 2)return Mensaje(playerid, COLOR_GRIS2, "{868FD9}»{FFFFFF} No tienes el rango suficiente.");
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
@@ -21347,7 +21353,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 case 13:
                     {
-                        if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_BLANCO, "{868FD9}»{FFFFFF} No estás en servicio.");
+                        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_BLANCO, "{868FD9}»{FFFFFF} No estás en servicio.");
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
                         darArma(playerid, 41, 500);//Aerosol
@@ -21465,7 +21471,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 case 6:
                     {
-                        if(booleano[OnDuty]{playerid}){	Mensaje(playerid, COLOR_GRIS2, "Estás en labor! Termina tu turno!"); return 1;    }
+                        if(cuenta[playerid][cFaccOnDuty]){	Mensaje(playerid, COLOR_GRIS2, "Estás en labor! Termina tu turno!"); return 1;    }
                         SetPlayerSkin(playerid, cuenta[playerid][cTraje]);
                         format(string, sizeof(string), "* %s se viste con ropa normal", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
@@ -24910,7 +24916,6 @@ CallBack::ResetearVariables(playerid)
     booleano[gMensajesP]{playerid} = false;
     booleano[jObjetivo]{playerid} = false;
     booleano[RadioOn]{playerid} = false;
-    booleano[OnDuty]{playerid} = false;
     booleano[TextShow]{playerid} = false;
     booleano[ConEstado]{playerid} = false;
     booleano[CallGiveWeapon]{playerid} = false;
@@ -30224,7 +30229,7 @@ COMMAND:examinar(playerid, params[])
 {
     new jugador, string[144];
     if(!Team_SAMUR(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres médico.");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
     if(sscanf(params, "u", jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /Examinar (jugador)");
     if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Este jugador no esta conectado.");
     if(dDistanciaJugador(5.0, playerid, jugador)){
@@ -30249,7 +30254,7 @@ COMMAND:diagnostico(playerid, params[])
 {
     new jugador, string[144];
     if(!Team_SAMUR(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres médico.");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
     if(sscanf(params, "u", jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /Diagnostico (jugador)");
     if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Este jugador no esta conectado.");
     if(dDistanciaJugador(5.0, playerid, jugador)){
@@ -30269,7 +30274,7 @@ COMMAND:operar(playerid, params[])
 {
     new jugador, string[144], str[12];
     if(!Team_SAMUR(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres médico.");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
     if(sscanf(params, "u", jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /operar (jugador)");
     if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Este jugador no esta conectado.");
 
@@ -30321,7 +30326,7 @@ COMMAND:operar(playerid, params[])
 COMMAND:transplante(playerid, params[]){
     new jugador, item, string[144], str[12];
     if(!Team_SAMUR(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres médico.");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
     if(sscanf(params, "ud", jugador, item))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /transplante (jugador) (1:Higado - 2:Pancreas - 3:Pulmón - 4:Corazón - 5:Sangre - 6:Estomago)");
     if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Este jugador no esta conectado.");
     switch(item){
@@ -30360,7 +30365,7 @@ COMMAND:curar(playerid, params[])
 {
     new jugador;
     if(!Team_SAMUR(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres médico.");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
     if(sscanf(params, "u", jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /curar (jugador)");
     if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Este jugador no esta conectado.");
     if(dDistanciaJugador(5.0, playerid, jugador)){
@@ -30384,7 +30389,7 @@ COMMAND:sangre(playerid, params[])
 {
     new jugador, string[64];
     if(!Team_SAMUR(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres médico.");
-    if(!booleano[OnDuty]{playerid})return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas de servicio.");
     if(sscanf(params, "u", jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /sangre (jugador)");
     if(dDistanciaJugador(5.0, playerid, jugador)){
         SetHP(jugador, 100.0);
