@@ -8681,11 +8681,11 @@ command(ant, playerid, params[])
                 if(StringOther(playerid, params[1]) == 1)
                 {
                     if (IsACop(params[0]))return Mensaje(playerid, COLOR_GRIS2, "No puedes acusar a un policía.");
-                    if(strcmp("None", cuenta[params[0]][cAntecedente1], true) == 0 || strcmp("None", cuenta[params[0]][cAntecedente2], true) == 0 || strcmp("None", cuenta[params[0]][cAntecedente3], true) == 0)
+                    if(strcmp("Ninguno", cuenta[params[0]][cAntecedente1], true) == 0 || strcmp("Ninguno", cuenta[params[0]][cAntecedente2], true) == 0 || strcmp("Ninguno", cuenta[params[0]][cAntecedente3], true) == 0)
                     {
-                        if(strcmp("None", cuenta[params[0]][cAntecedente1], true) == 0)  	strmid(cuenta[params[0]][cAntecedente1], params[1], 0, strlen(params[1]), 64);
-                        else if(strcmp("None", cuenta[params[0]][cAntecedente2], true) == 0) strmid(cuenta[params[0]][cAntecedente2], params[1], 0, strlen(params[1]), 64);
-                        else if(strcmp("None", cuenta[params[0]][cAntecedente3], true) == 0) strmid(cuenta[params[0]][cAntecedente3], params[1], 0, strlen(params[1]), 64);
+                        if(strcmp("Ninguno", cuenta[params[0]][cAntecedente1], true) == 0)  	strmid(cuenta[params[0]][cAntecedente1], params[1], 0, strlen(params[1]), 64);
+                        else if(strcmp("Ninguno", cuenta[params[0]][cAntecedente2], true) == 0) strmid(cuenta[params[0]][cAntecedente2], params[1], 0, strlen(params[1]), 64);
+                        else if(strcmp("Ninguno", cuenta[params[0]][cAntecedente3], true) == 0) strmid(cuenta[params[0]][cAntecedente3], params[1], 0, strlen(params[1]), 64);
 
                         new string[128];
                         Mensaje(playerid, COLOR_ROJO, "_________| Antecedentes Policiales |_________");
@@ -8926,21 +8926,21 @@ COMMAND:limpiar(playerid, params[])
         {
         case 1:
             {
-                format(cuenta[usuario][cAntecedente1], 64, "Sin Antecedente");
+                format(cuenta[usuario][cAntecedente1], 64, "Ninguno");
                 format(string, sizeof(string), "%s limpió el antecedente 1º de %s", PlayerName(playerid), PlayerName(usuario));
                 Mensaje(playerid, COLOR_VERDE, string);
                 Mensaje(usuario, COLOR_VERDE, string);
             }
         case 2:
             {
-                format(cuenta[usuario][cAntecedente2], 64, "Sin Antecedente");
+                format(cuenta[usuario][cAntecedente2], 64, "Ninguno");
                 format(string, sizeof(string), "%s limpió el antecedente 2º de %s", PlayerName(playerid), PlayerName(usuario));
                 Mensaje(playerid, COLOR_VERDE, string);
                 Mensaje(usuario, COLOR_VERDE, string);
             }
         case 3:
             {
-                format(cuenta[usuario][cAntecedente3], 64, "Sin Antecedente");
+                format(cuenta[usuario][cAntecedente3], 64, "Ninguno");
                 format(string, sizeof(string), "%s limpió el antecedente 3º de %s", PlayerName(playerid), PlayerName(usuario));
                 Mensaje(playerid, COLOR_VERDE, string);
                 Mensaje(usuario, COLOR_VERDE, string);
@@ -8954,9 +8954,9 @@ COMMAND:limpiar(playerid, params[])
             }
         default:
             {
-                format(cuenta[usuario][cAntecedente1], 64, "Sin Antecedente");
-                format(cuenta[usuario][cAntecedente2], 64, "Sin Antecedente");
-                format(cuenta[usuario][cAntecedente3], 64, "Sin Antecedente");
+                format(cuenta[usuario][cAntecedente1], 64, "Ninguno");
+                format(cuenta[usuario][cAntecedente2], 64, "Ninguno");
+                format(cuenta[usuario][cAntecedente3], 64, "Ninguno");
                 cuenta[usuario][cBusqueda] = 0; 
                 format(string, sizeof(string), "%s limpió los antecedentes y la búsqueda de %s", PlayerName(playerid), PlayerName(usuario));
                 Mensaje(playerid, COLOR_VERDE, string);
