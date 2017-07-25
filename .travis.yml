@@ -1,0 +1,6 @@
+language: Pawn
+script: make
+addons:
+  apt:
+    packages:
+      - libc6-i386
