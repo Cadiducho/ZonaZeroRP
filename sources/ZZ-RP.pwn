@@ -9684,7 +9684,7 @@ command(altavoz, playerid, params[])
 }
 command(miranda, playerid, params[])
 {
-    if(IsACop(playerid))
+    if(IsACop(playerid) || Team_FBI(playerid))
     {
         new string[128];
         format(string, sizeof(string), "* %s lee los 'Derechos Miranda'", PlayerName(playerid));
@@ -30164,47 +30164,46 @@ COMMAND:quitar(playerid, params[])
 }
 COMMAND:arrestar(playerid, params[]){
     new player, minuto, multa, fianza, string[128];
-    if(Team_LSPD(playerid) || Team_FBI(playerid))
+    if(!(Team_LSPD(playerid) || Team_FBI(playerid))) return Mensaje(playerid, COLOR_GRIS2, "No puedes hacer esto!");
+    if(sscanf(params, "uiii", player, minuto, multa, fianza)) return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /arrestar <PlayerID> <Minutos> <Multa$> <Fianza$>");
+    if(IsPlayerInRangeOfPoint(playerid, 10.0, 2046.4567, -2075.2861, 13.6079) || IsPlayerInRangeOfPoint(playerid, 10.0, 200.6976,168.3504,1003.0234)) return Mensaje(playerid, COLOR_GRIS2, "No estás en en lugar adecuado!");
+    
+    if(!dDistanciaJugador(5.0, playerid, player)) return Mensaje(playerid, COLOR_GRIS, "Jugador muy lejos.");
+    if(minuto < 0 || minuto > 120) return Mensaje(playerid, COLOR_GRIS, "El máximo de minutos es 120.");
+    if(multa < 0 || multa > 12000) return Mensaje(playerid, COLOR_GRIS, "El máximo de precio es 12000$");
+    if(fianza < 0 || fianza > 9999999) return Mensaje(playerid, COLOR_GRIS, "Máximo fianza: 9, 999, 999$ (Sin fianza)");
+
+    pierdeDinero(player, multa);
+    SetPlayerSkin(player, 8);
+    quitarArmas(player);
+    
+    for(new x=0;x<6;x++)
     {
-        if(sscanf(params, "uiii", player, minuto, multa, fianza))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /arrestar <PlayerID> <Minutos> <Multa$> <Fianza$>");
-        if(IsPlayerInRangeOfPoint(playerid, 10.0, 2046.4567, -2075.2861, 13.6079)){
-            if(!dDistanciaJugador(5.0, playerid, player))return Mensaje(playerid, COLOR_GRIS, "Jugador muy lejos.");
-            if(minuto < 0 || minuto > 120)return Mensaje(playerid, COLOR_GRIS, "El máximo de minutos es 120.");
-            if(multa < 0 || multa > 12000)return Mensaje(playerid, COLOR_GRIS, "El máximo de precio es 12000$");
-            if(fianza < 0 || fianza > 9999999)return Mensaje(playerid, COLOR_GRIS, "Máximo fianza: 9, 999, 999$ (Sin fianza)");
-
-            pierdeDinero(player, multa);
-            SetPlayerSkin(player, 8);
-            quitarArmas(player);
-            
-            for(new x=0;x<6;x++)
-            {
-                inventario[player][invArmas][x] = 0;
-                inventario[player][invBalas][x] = 0;
-            }
-            
-            cuenta[player][cHeroina] = 0;
-            cuenta[player][cMarihuana] = 0;
-            cuenta[player][cRitalin] = 0;
-            cuenta[player][cExtasis] = 0;
-            cuenta[player][cSpeed] = 0;
-            cuenta[player][cMateriales] = 0;
-
-            cuenta[player][cTiempoCarcel] = minuto * 60;
-            cuenta[player][cCarcel] = 3;
-
-            for(new i=0;i<5;i++){
-                cuenta[player][cSemillas][i] = 0;
-            }
-
-            format(string, sizeof(string), "{FFFFFF}Noticias {EE0000}SA {00B546}CNN+{FFFFFF} 'Sospechoso {FF9900}%s {FFFFFF}ha sido arrestado por %d Dias'", PlayerName(player), minuto);
-            MensajeGlobal(-1, string);
-
-            format(string, sizeof(string), "[ Sospechoso %s encarcelado por %d minutos, multa %d$, fianza %d$ - Oficial: %s ]", PlayerName(player), minuto, multa, fianza, PlayerName(playerid));
-            MensajeAmbos(playerid, player, COLOR_BLANCO, string);
-            SetPosEx(player, 2043.3182, -2066.0278, 13.5889, 177.9065, 0, 0);
-        }
+        inventario[player][invArmas][x] = 0;
+        inventario[player][invBalas][x] = 0;
     }
+    
+    cuenta[player][cHeroina] = 0;
+    cuenta[player][cMarihuana] = 0;
+    cuenta[player][cRitalin] = 0;
+    cuenta[player][cExtasis] = 0;
+    cuenta[player][cSpeed] = 0;
+    cuenta[player][cMateriales] = 0;
+
+    cuenta[player][cTiempoCarcel] = minuto * 60;
+    cuenta[player][cCarcel] = 3;
+
+    for(new i=0;i<5;i++){
+        cuenta[player][cSemillas][i] = 0;
+    }
+
+    format(string, sizeof(string), "{FFFFFF}Noticias {EE0000}SA {00B546}CNN+{FFFFFF} 'Sospechoso {FF9900}%s {FFFFFF}ha sido arrestado por %d Dias'", PlayerName(player), minuto);
+    MensajeGlobal(-1, string);
+
+    format(string, sizeof(string), "[ Sospechoso %s encarcelado por %d minutos, multa %d$, fianza %d$ - Oficial: %s ]", PlayerName(player), minuto, multa, fianza, PlayerName(playerid));
+    MensajeAmbos(playerid, player, COLOR_BLANCO, string);
+    SetPosEx(player, 2043.3182, -2066.0278, 13.5889, 177.9065, 0, 0);
+    
     return 1;
 }
 COMMAND:darlicencia(playerid, params[])
