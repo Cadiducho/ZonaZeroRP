@@ -2981,14 +2981,70 @@ LoadObjects(playerid){
     return SetTimerEx("SafeLoadObjects", 3000, 0, "d", playerid);
 }
 
-EsCochePolicial(carid){ for(new v=0;v<sizeof(CochesPolicia);v++){ if(carid == CochesPolicia[v]){ return true; } } return false; }
-EsFortCarson(carid){ for(new v=0;v<sizeof(CochesFortCarson);v++){ if(carid == CochesFortCarson[v]){ return true; } } return false; }
-Hire_Vehicle(carid){ for(new v=0;v<sizeof(CochesRenta);v++){ if(carid == CochesRenta[v]){ return true; } } return false; }
-SAMD_Vehicle(carid){ for(new v=0;v<sizeof(CochesMedicos);v++){ if(carid == CochesMedicos[v]){ return true; } } return false; }
-Mecanico_Vehicle(carid){ for(new v=0;v<sizeof(CochesMecanicos);v++){ if(carid == CochesMecanicos[v]){ return true; } } return false; }
-CNN_Vehicle(carid){ for(new v=0;v<sizeof(CochesNoticias);v++){ if(carid == CochesNoticias[v]){ return true; } } return false; }
-FBI_Vehicle(carid){ for(new v=0;v<sizeof(CochesFbi);v++){ if(carid == CochesFbi[v]){ return true; } } return false; }
-Gobierno_Vehicle(carid){ for(new v=0;v<sizeof(CochesGobierno);v++){ if(carid == CochesGobierno[v]){ return true; } } return false; } 
+EsCochePolicial(carid) { 
+    for(new v=0;v<sizeof(CochesPolicia);v++){ 
+        if(carid == CochesPolicia[v]){
+            return true;
+        }
+    } 
+    return false;
+}
+EsFortCarson(carid){
+    for(new v=0;v<sizeof(CochesFortCarson);v++){
+        if(carid == CochesFortCarson[v]){
+            return true;
+        }
+    } 
+    return false;
+}
+Hire_Vehicle(carid){ 
+    for(new v=0;v<sizeof(CochesRenta);v++){ 
+        if(carid == CochesRenta[v]){ 
+            return true;
+        }
+    }
+    return false;
+}
+SAMD_Vehicle(carid){ 
+    for(new v=0;v<sizeof(CochesMedicos);v++){ 
+        if(carid == CochesMedicos[v]){
+            return true;
+        }
+    }
+    return false; 
+}
+Mecanico_Vehicle(carid){
+    for(new v=0;v<sizeof(CochesMecanicos);v++){
+        if(carid == CochesMecanicos[v]){
+            return true;
+        }
+    }
+    return false;
+}
+CNN_Vehicle(carid){
+    for(new v=0;v<sizeof(CochesNoticias);v++){
+        if(carid == CochesNoticias[v]){
+            return true;
+        }
+    }
+    return false;
+}
+FBI_Vehicle(carid){ 
+    for(new v=0;v<sizeof(CochesFbi);v++){
+        if(carid == CochesFbi[v]){
+            return true;
+        }
+    }
+    return false;
+}
+Gobierno_Vehicle(carid){
+    for(new v=0;v<sizeof(CochesGobierno);v++){
+        if(carid == CochesGobierno[v]){
+            return true;
+        }
+    }
+    return false;
+} 
 IsAPlane(carid){
     #pragma unused carid
     return false;
@@ -11876,9 +11932,9 @@ command(casas, playerid, params[]){
 //FRANCOC
 command(color, playerid, params[]){
     if(cuenta[playerid][cAdministrador] < 1)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
-    if(!booleano[AntiAbusos]{playerid}){Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No puedes usar este comando sin estar en OnDuty."); return 1;}{
-        ShowPlayerDialog(playerid, COLOR_ADM, DIALOG_STYLE_LIST, " {00ABFF}Seleccione su color", "{000000}»{ffffff}Negro\n {FFFFFF}» Blanco", "Seleccionar", "Salir");
-    }
+    if(!booleano[AntiAbusos]{playerid}) return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No puedes usar este comando sin estar en OnDuty.");
+    
+    ShowPlayerDialog(playerid, COLOR_ADM, DIALOG_STYLE_LIST, " {00ABFF}Seleccione su color", "{000000}»{ffffff}Negro\n {FFFFFF}» Blanco", "Seleccionar", "Salir");
     return 1;
 }
 
@@ -32556,16 +32612,86 @@ Funcion.verificarArmaHack(playerid)
     return 1;
 }
 //
-Funcion.transAuto(vehicleid) {for(new i=0; i<sizeof(transCoches); i++){if(transCoches[i] == vehicleid){return true;}}return false;}
-Funcion.aviadorAuto(vehicleid) {for(new i=0; i<sizeof(aviadorCoches); i++){if(aviadorCoches[i] == vehicleid){return true;}}return false;}
-Funcion.camioneroAuto(vehicleid) {for(new i=0; i<sizeof(camioneroCoches); i++){if(camioneroCoches[i] == vehicleid){return true;}}return false;}
-Funcion.barrenderoAuto(vehicleid) {for(new i=0; i<sizeof(barrenderoCoches); i++){if(barrenderoCoches[i] == vehicleid){return true;}}return false;}
-Funcion.busesAuto(vehicleid) {for(new i=0; i<sizeof(busesCoches); i++){if(busesCoches[i] == vehicleid){return true;}}return false;}
-Funcion.agricultorAuto(vehicleid) {for(new i=0; i<sizeof(agricultorCoches); i++){if(agricultorCoches[i] == vehicleid){return true;}}return false;}
-Funcion.pizzaAuto(vehicleid) {for(new i=0; i<sizeof(pizzaCoches); i++){if(pizzaCoches[i] == vehicleid){return true;}}return false;}
-Funcion.taxiAuto(vehicleid) {for(new i=0; i<sizeof(taxiCoches); i++){if(taxiCoches[i] == vehicleid){return true;}}return false;}
-Funcion.basureroAuto(vehicleid) {for(new i=0; i<sizeof(basureroCoches); i++){if(basureroCoches[i] == vehicleid){return true;}}return false;}
-Funcion.pescadorAuto(vehicleid) {for(new i=0; i<sizeof(pescadorCoches); i++){if(pescadorCoches[i] == vehicleid){return true;}}return false;}
-//
+Funcion.transAuto(vehicleid) {
+    for (new i = 0; i < sizeof(transCoches); i++) {
+        if (transCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.aviadorAuto (vehicleid) {
+    for (new i = 0; i < sizeof(aviadorCoches); i++) {
+        if (aviadorCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.camioneroAuto (vehicleid) {
+    for (new i = 0; i < sizeof(camioneroCoches); i++) {
+        if (camioneroCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.barrenderoAuto (vehicleid) {
+    for (new i = 0; i < sizeof(barrenderoCoches); i++) {
+        if (barrenderoCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.busesAuto (vehicleid) {
+    for (new i = 0; i < sizeof(busesCoches); i++) {
+        if (busesCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.agricultorAuto (vehicleid) {
+    for (new i = 0; i < sizeof(agricultorCoches); i++) {
+        if (agricultorCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.pizzaAuto (vehicleid) {
+    for (new i = 0; i < sizeof(pizzaCoches); i++) {
+        if (pizzaCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.taxiAuto (vehicleid) {
+    for (new i = 0; i < sizeof(taxiCoches); i++) {
+        if (taxiCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.basureroAuto (vehicleid) {
+    for (new i = 0; i < sizeof(basureroCoches); i++) {
+        if (basureroCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
+Funcion.pescadorAuto (vehicleid) {
+    for (new i = 0; i < sizeof(pescadorCoches); i++) {
+        if (pescadorCoches[i] == vehicleid) {
+            return true;
+        }
+    }
+    return false;
+}
 
+//
 #include "zz_mapas.pwn"
