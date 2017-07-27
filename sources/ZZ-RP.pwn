@@ -1,10 +1,11 @@
 /*
-    *	(c) Copyright 2013 - 2015
+    *	(c) Copyright 2013 - 2017
     *
     *	Nombre del proyecto:	ZonaZero RolePlay
-    *	Desarrollador:			Parka, Lucas Clemente(lolking), Sergio Mitnick.
+    *	Desarrollador:		    Cadiducho	
+    *   Antiguos Creditos:      Parka, Lucas Clemente(lolking), Sergio Mitnick. Desarrolladores de Ciudad Prohibida
     *   Mappers:                Javier_Cardenas.
-    *	Version:				1.6.5.4
+    *	Version:				1.6.6
     *
     *	Principal: ZZ-RP.pwn
     *
@@ -38,7 +39,7 @@ AntiDeAMX()
 #undef MAX_PLAYERS
 #define MAX_PLAYERS (150)
 
-#define Version			"v1.6.5.5"
+#define Version			"v1.6.6"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
@@ -1514,22 +1515,23 @@ enum _@en@trabCamionero
 {
     Float:camPos[3], 
     camLugar[64], 
+    camMateriales[64], 
     camPaga, 
     camArma, 
     camDroga
 }
 new static trabCamionero[][_@en@trabCamionero] = 
 {
-    {{2195.2854, -2659.9751, 13.6404}, "Central de Camioneros", 0, 0, 0}, 
-    {{1930.6619, -2105.1597, 13.3022}, "Dildos y ropa erotica Sex Shop", 80, 0, 0}, 
-    {{1923.9396, -1791.7094, 13.1099}, "Bebidas 24-7 Idlewood", 180, 0, 0}, 
-    {{1826.4622, -1682.4236, 13.1887}, "Productos Alhambra", 250, 0, 0}, 
-    {{1534.4846, -1612.2167, 13.1891}, "Uniformes Comisaria", 310, 0, 0}, 
-    {{1361.7355, -1279.9271, 13.1889}, "Chalecos y Porras Ammunation", 350, 0, 0}, 
-    {{1191.1016, -1330.4587, 13.2075}, "Medicamentos Hospital", 365, 0, 0}, 
-    {{763.6075, -1324.5220, 13.1931}, "Microfonos y parlantes CNN", 380, 0, 0}, 
-    {{-63.9782, -1163.8698, 1.4974}, "Drogas Ilegales", 280, 0, 1}
-    //{{957.5847, -1195.5867, 16.7029}, "Armas Ilegales", 300, 1, 0}
+    {{2195.2854, -2659.9751, 13.6404}, "Central de Camioneros", "Vacío", 0, 0, 0}, 
+    {{1930.6619, -2105.1597, 13.3022}, "Dildos y ropa erotica Sex Shop", "Material erótico", 80, 0, 0}, 
+    {{1923.9396, -1791.7094, 13.1099}, "Bebidas 24-7 Idlewood", "Bebidas", 180, 0, 0}, 
+    {{1826.4622, -1682.4236, 13.1887}, "Productos Alhambra", "Materiales hosteleros", 250, 0, 0}, 
+    {{1534.4846, -1612.2167, 13.1891}, "Uniformes Comisaria", "Ropa", 310, 0, 0}, 
+    {{1361.7355, -1279.9271, 13.1889}, "Chalecos y Porras Ammunation", "Chalecos y Porras", 350, 0, 0}, 
+    {{1191.1016, -1330.4587, 13.2075}, "Medicamentos Hospital", "Medicamentos", 365, 0, 0}, 
+    {{763.6075, -1324.5220, 13.1931}, "Microfonos y parlantes CNN", "Equipos de sonido", 380, 0, 0}, 
+    {{-63.9782, -1163.8698, 1.4974}, "Drogas Ilegales", "Drogas", 280, 0, 1}
+    //{{957.5847, -1195.5867, 16.7029}, "Armas Ilegales", "Armas", 300, 1, 0}
 };
 //Barrendero
 new	barrenderoCoches[5];
@@ -9561,8 +9563,7 @@ COMMAND:cinturon(playerid, params[])
     Mensaje(playerid, COLOR_GRIS2, "No estas en un vehiculo!");
     return 1;
 }
-//
-COMMAND:vercinturon(playerid, params[])
+command(vercinturon, playerid, params[])
 {
     if(!IsACop(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres policía!");
     new tmp[126], jugador;
@@ -9584,6 +9585,69 @@ COMMAND:vercinturon(playerid, params[])
         }
     }
     return 1;
+}
+command(revisarcarga, playerid, params[])
+{
+	if(!IsACop(playerid)) return Mensaje(playerid, COLOR_GRIS2, "¡No perteneces a un cuerpo de justicia!");
+	if(!sscanf(params, "u", params[0])){
+		if(!IsPlayerConnected(params[0])) return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
+		if(!dDistanciaJugador(5.0, playerid, params[0])) return Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
+		new string[100];
+        if (cuenta[params[0]][selecciono]) {
+            format(string, sizeof(string), "* El camión de %s esta vacio.", PlayerName(params[0]));
+        } else {
+            format(string, sizeof(string), "* Contenido del camión de %s: %s.", PlayerName(params[0]), trabCamionero[cuenta[playerid][selecciono]][camMateriales]);
+        }
+		Mensaje(playerid, COLOR_VERDE, string);
+		format(string, sizeof(string), "* %s revisa el camión de %s", PlayerName(playerid), PlayerName(params[0]));
+		ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
+	} else Mensaje(playerid, COLOR_GRIS2, "Utilice: /revisarcarga <PlayerID>");
+	return 1;
+}
+command(quitarcarga, playerid, params[])
+{
+	if(!IsACop(playerid)) return Mensaje(playerid, COLOR_GRIS2, "¡No perteneces a un cuerpo de justicia!");
+	if(!sscanf(params, "u", params[0])){
+		if(!IsPlayerConnected(params[0])) return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
+		if(!dDistanciaJugador(5.0, playerid, params[0])) return Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
+		if(!cuenta[params[0]][selecciono]) return Mensaje(playerid, COLOR_GRIS2, "El jugador no tiene ninguna carga.");
+		new string[100];
+		format(string, sizeof(string), "* %s incauta la mercancia del camión de %s", PlayerName(playerid), PlayerName(params[0]));
+		ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
+		Mensaje(params[0], COLOR_GRIS2, "* Han incautado la mercancia que debias entregar.");
+		DisablePlayerCheckpoint(params[0]);
+ 
+        cuenta[params[0]][servicio] = false;
+        cuenta[params[0]][selecciono] = 0;
+        SetPlayerSkin(params[0], cuenta[params[0]][cTraje]);
+        addObjetoTrabajo(params[0], 1, 0.0000, 0.0000, 0.0000);
+        RemovePlayerAttachedObject(params[0], 8);
+        RemovePlayerAttachedObject(params[0], 9);
+        cuenta[params[0]][pagas] = 0;
+	} else Mensaje(playerid, COLOR_GRIS2, "Utilice: /quitarcarga <PlayerID>");
+	return 1;
+}
+command(drag, playerid, params[])
+{
+	new carid = GetPlayerVehicleID(playerid);
+	if(!IsACop(playerid) || Team_FBI(playerid)) return Mensaje(playerid, COLOR_GRIS2, "No perteneces a una fuerza de seguridad.");
+	if(!EsCochePolicial(carid) && !FBI_Vehicle(carid)) return Mensaje(playerid, COLOR_GRIS2, "¡No estás en una patrulla!");
+	if(!sscanf(params, "u", params[0]))
+	{
+		if(IsPlayerConnected(params[0]))
+		{
+			if(!dDistanciaJugador(8.0, playerid, params[0])) return Mensaje(playerid, COLOR_GRIS2, "¡Demasiado lejos!");
+			new Float:x, Float:y, Float:z, string[128];
+			GetPlayerPos(params[0],x,y,z);
+			PutPlayerInVehicle(params[0],GetPlayerVehicleID(playerid),1);
+			format(string, sizeof(string), "Oficial %s sube forzosamente a %s a la patrulla", PlayerName(playerid), PlayerName(params[0]));
+			ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
+			return 1;
+		}
+		else Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
+	}
+	else Mensaje(playerid, COLOR_GRIS2, "Utilice: /drag <PlayerID>");
+	return 1;
 }
 command(verip, playerid, params[])
 {
@@ -9611,9 +9675,6 @@ command(cuenta, playerid, params[])
     }
     return 1;
 }
-
-
-
 command(gob, playerid, params[])
 {
     new string[128], rango[64];
@@ -16400,12 +16461,12 @@ PreloadAnimLib(playerid, animlib[])
 command(rc, playerid, params[])
 {
     new string[128];
-    if(cuenta[playerid][cTrabajo] == 8)
+    if(cuenta[playerid][cTrabajo] == 3)
     {
         if(sscanf(params, "s[128]", params[0]))return Mensaje(playerid, COLOR_GRIS2, "[ERROR] Utiliza:: /rc + mensaje");
         for(new i=0, _max=GetMaxPlayers();i<_max;i++)
         {
-            if(cuenta[i][cTrabajo] == 8)
+            if(cuenta[i][cTrabajo] == 3)
             {
                 format(string, sizeof(string), ""COL_AZUL_CLARO"[R.CAMIONEROS]"COL_BLANCO"%s:"COL_GRIS" %s", PlayerName(playerid), params[0]);
                 Mensaje(i, -1, string);
@@ -32620,7 +32681,7 @@ Funcion.transAuto(vehicleid) {
     }
     return false;
 }
-Funcion.aviadorAuto (vehicleid) {
+Funcion.aviadorAuto(vehicleid) {
     for (new i = 0; i < sizeof(aviadorCoches); i++) {
         if (aviadorCoches[i] == vehicleid) {
             return true;
@@ -32628,7 +32689,7 @@ Funcion.aviadorAuto (vehicleid) {
     }
     return false;
 }
-Funcion.camioneroAuto (vehicleid) {
+Funcion.camioneroAuto(vehicleid) {
     for (new i = 0; i < sizeof(camioneroCoches); i++) {
         if (camioneroCoches[i] == vehicleid) {
             return true;
@@ -32636,7 +32697,7 @@ Funcion.camioneroAuto (vehicleid) {
     }
     return false;
 }
-Funcion.barrenderoAuto (vehicleid) {
+Funcion.barrenderoAuto(vehicleid) {
     for (new i = 0; i < sizeof(barrenderoCoches); i++) {
         if (barrenderoCoches[i] == vehicleid) {
             return true;
@@ -32644,7 +32705,7 @@ Funcion.barrenderoAuto (vehicleid) {
     }
     return false;
 }
-Funcion.busesAuto (vehicleid) {
+Funcion.busesAuto(vehicleid) {
     for (new i = 0; i < sizeof(busesCoches); i++) {
         if (busesCoches[i] == vehicleid) {
             return true;
@@ -32652,7 +32713,7 @@ Funcion.busesAuto (vehicleid) {
     }
     return false;
 }
-Funcion.agricultorAuto (vehicleid) {
+Funcion.agricultorAuto(vehicleid) {
     for (new i = 0; i < sizeof(agricultorCoches); i++) {
         if (agricultorCoches[i] == vehicleid) {
             return true;
@@ -32660,7 +32721,7 @@ Funcion.agricultorAuto (vehicleid) {
     }
     return false;
 }
-Funcion.pizzaAuto (vehicleid) {
+Funcion.pizzaAuto(vehicleid) {
     for (new i = 0; i < sizeof(pizzaCoches); i++) {
         if (pizzaCoches[i] == vehicleid) {
             return true;
@@ -32668,7 +32729,7 @@ Funcion.pizzaAuto (vehicleid) {
     }
     return false;
 }
-Funcion.taxiAuto (vehicleid) {
+Funcion.taxiAuto(vehicleid) {
     for (new i = 0; i < sizeof(taxiCoches); i++) {
         if (taxiCoches[i] == vehicleid) {
             return true;
@@ -32676,7 +32737,7 @@ Funcion.taxiAuto (vehicleid) {
     }
     return false;
 }
-Funcion.basureroAuto (vehicleid) {
+Funcion.basureroAuto(vehicleid) {
     for (new i = 0; i < sizeof(basureroCoches); i++) {
         if (basureroCoches[i] == vehicleid) {
             return true;
@@ -32684,7 +32745,7 @@ Funcion.basureroAuto (vehicleid) {
     }
     return false;
 }
-Funcion.pescadorAuto (vehicleid) {
+Funcion.pescadorAuto(vehicleid) {
     for (new i = 0; i < sizeof(pescadorCoches); i++) {
         if (pescadorCoches[i] == vehicleid) {
             return true;
