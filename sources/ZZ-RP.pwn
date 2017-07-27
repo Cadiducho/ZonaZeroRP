@@ -15747,10 +15747,9 @@ public OnVehicleDamageStatusUpdate(vehicleid, playerid)
 }
 public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fScaleX, Float:fScaleY, Float:fScaleZ)
 {
-    juguetes[playerid][index][ptScaleX] = (fScaleX < 1.5) ? (fScaleX):(1.0);
-    juguetes[playerid][index][ptScaleY] = (fScaleY < 1.5) ? (fScaleY):(1.0);
-    juguetes[playerid][index][ptScaleZ] = (fScaleZ < 1.5) ? (fScaleZ):(1.0);
-
+    juguetes[playerid][index][ptScaleX] = fScaleX;
+    juguetes[playerid][index][ptScaleY] = fScaleY;
+    juguetes[playerid][index][ptScaleZ] = fScaleZ;
     juguetes[playerid][index][ptPosX] = fOffsetX;
     juguetes[playerid][index][ptPosY] = fOffsetY;
     juguetes[playerid][index][ptPosZ] = fOffsetZ;
