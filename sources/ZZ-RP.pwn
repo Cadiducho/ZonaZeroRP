@@ -4783,7 +4783,8 @@ public OnGameModeInit()
     CreateDynamicPickup(1239,1,-204.3939,-1735.3229,675.7687); // Salida Hospital
     CreateDynamic3DTextLabel("Salida del Hospital General\n{FC7F75}Pulse Y", 0xFFFFFFFF,-204.3939,-1735.3229,675.7687,5.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);
     //CASINO CABALLo
-    CreateDynamic3DTextLabel("Para jugar el minijuego usa:\n{FC7F75}/caballos", 0xFFFFFFFF, 2253.5981,1668.3154,6.9099, 6.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);
+    CreateDynamicPickup(1239, 0, 2253.5981,1668.3154,6.9099);
+    CreateDynamic3DTextLabel("Para jugar el minijuego usa:\n{FC7F75}/caballos", 0, 2253.5981,1668.3154,6.9099, 2.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);
     //EQUIPO GOB
     CreateDynamicPickup(1239, 1, 365.8287, 122.4748, 1025.2539); // 
     CreateDynamic3DTextLabel("Para Equiparce usa\n{FC7F75}/equipo", 0xFFFFFFFF, 365.8287,122.4748,1025.2539, 6.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);
@@ -5225,6 +5226,7 @@ public OnGameModeInit()
     //mecánicos
     CreateDynamicPickup(1239, 1, 2124.6816, -2272.2881, 20.6719);
     CreateDynamicPickup(1239, 1, 2132.3005, -2280.6406, 14.7769);
+    CreateDynamic3DTextLabel("TALLER LSPD\n{FFFFFF} Para reparar usa\n/tallerpd", COLOR_ROJO, 1602.7480, -1623.6783, 13.4950, 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);
     
     // -========================= Dynamic Pickups ========================- //
     /*    Police LA     */
@@ -13006,7 +13008,17 @@ command(me, playerid, params[])
     } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /me <Acción>");
     return 1;
 }
-
+command(ame, playerid, params[])
+{
+    new string[128];
+    if(estaSilenciado(playerid))return 1;
+    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
+    if(sscanf(params, "s[128]", params)) return Mensaje(playerid, COLOR_GRIS2, "USAGE: /ame [acción]");
+    format(string, sizeof(string), "{9933CC}* %s %s", PlayerName(playerid), params);
+    SetPlayerChatBubble(playerid, string, COLOR_PURPURA, 100.0, 10000);
+    Mensaje(playerid, COLOR_PURPURA, string);
+    return 1;
+}
 command(b, playerid, params[])
 { 
     if(estaSilenciado(playerid)) return 1;
