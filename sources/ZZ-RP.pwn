@@ -3476,7 +3476,7 @@ public OnPlayerEnterCheckpoint(playerid)
             comenzarCosechar(playerid);
             return 1;
         }
-        else if(trab == 7 && IsPlayerInAnyVehicle(playerid) && GetVehicleModel(carid) == 448)
+        else if(trab == 7 && cuenta[playerid][servicio])
         {
             if(IsPlayerInRangeOfPoint(playerid, 10.0, casa[id][hEntrancex], casa[id][hEntrancey], casa[id][hEntrancez]))
             {
@@ -4050,7 +4050,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         else if(!cuenta[playerid][servicio] && tren == newcar || transAuto(newcar) || aviadorAuto(newcar) || camioneroAuto(newcar) || barrenderoAuto(newcar) || busesAuto(newcar) || agricultorAuto(newcar) || pizzaAuto(newcar) || taxiAuto(newcar) || basureroAuto(newcar) || pescadorAuto(newcar))
         {
             RemovePlayerFromVehicle(playerid);
-            Mensaje(playerid, COLOR_ROJO, "Usted debe estar en /servicio para usar este vehiculo.");
+            Mensaje(playerid, COLOR_ROJO, "Usted debe estar en servicio para usar este vehiculo. Hable con su jefe");
         }
     }
     return 1;
@@ -27840,7 +27840,7 @@ COMMAND:tarifa(playerid, params[])
 COMMAND:ruta(playerid, params[])
 {
     if(cuenta[playerid][cTrabajo] != 8)return Mensaje(playerid, COLOR_ROJO, "Usted no pertenece a este departamento.");
-    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en /servicio.");
+    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en servicio. Hable con su jefe");
     if(cuenta[playerid][selecciono])return Mensaje(playerid, COLOR_ROJO, "Usted ya esta en una ruta.");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(vehicle) == 538)
@@ -27853,33 +27853,32 @@ COMMAND:ruta(playerid, params[])
 COMMAND:pizza(playerid, params[])
 {
     if(cuenta[playerid][cTrabajo] != 7)return Mensaje(playerid, COLOR_ROJO, "Usted no pertenece a este departamento.");
-    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en /servicio.");
+    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en servicio. Hable con su jefe");
     if(cuenta[playerid][selecciono])return Mensaje(playerid, COLOR_ROJO, "Usted ya esta en una ruta.");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(vehicle) == 448)
     {
-        static entrega;
-        for(new i=1; i<sizeof(casa); i++)
-        {
-            entrega = random(sizeof(casa));
-            if(casa[entrega][hOwned])
-            {
-                cuenta[playerid][selecciono] = entrega;
-                SetPlayerCheckpoint(playerid, casa[entrega][hEntrancex], casa[entrega][hEntrancey], casa[entrega][hEntrancez], 2.0);
-                new string[126];
-                format(string, sizeof(string), "Usted se le asigno una entrega para ~g~%s ~w~Su destino fue marcado en su ~g~minimapa~w~.", casa[entrega][hOwner]);
-                TextoInformatico(25, playerid, string);
-                break;
-            }
-        }
-    }else return Mensaje(playerid, COLOR_ROJO, "Debe estar dentro del vehiculo de su trabajo.");
+        static entrega; 
+        for(new i=1; i<sizeof(casa); i++)  {
+            entrega = random(sizeof(casa)); 
+            if(casa[entrega][hOwned]) 
+            { 
+                cuenta[playerid][selecciono] = entrega; 
+                SetPlayerCheckpoint(playerid, casa[entrega][hEntrancex], casa[entrega][hEntrancey], casa[entrega][hEntrancez], 2.0); 
+                new string[126]; 
+                format(string, sizeof(string), "Usted se le asigno una entrega para ~g~%s ~w~Su destino fue marcado en su ~g~minimapa~w~.", casa[entrega][hOwner]); 
+                TextoInformatico(25, playerid, string); 
+                break; 
+            } 
+        } 
+    }else return Mensaje(playerid, COLOR_ROJO, "Debe estar dentro del vehiculo de su trabajo."); 
     return 1;
 }
 
 COMMAND:cosechar(playerid, params[])
 {
     if(cuenta[playerid][cTrabajo] != 6)return Mensaje(playerid, COLOR_ROJO, "Usted no pertenece a este departamento.");
-    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en /servicio.");
+    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en servicio. Hable con su jefe");
     if(cuenta[playerid][selecciono])return Mensaje(playerid, COLOR_ROJO, "Usted ya esta en una ruta.");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(vehicle) == 532)
@@ -27891,7 +27890,7 @@ COMMAND:cosechar(playerid, params[])
 COMMAND:recorrido(playerid, params[])
 {
     if(cuenta[playerid][cTrabajo] != 5)return Mensaje(playerid, COLOR_ROJO, "Usted no pertenece a este departamento.");
-    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en /servicio.");
+    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en servicio. Hable con su jefe");
     if(cuenta[playerid][selecciono])return Mensaje(playerid, COLOR_ROJO, "Usted ya esta en una ruta.");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(vehicle) == 431)
@@ -27908,7 +27907,7 @@ COMMAND:recorrido(playerid, params[])
 COMMAND:limpiarcalle(playerid, params[])
 {
     if(cuenta[playerid][cTrabajo] != 4)return Mensaje(playerid, COLOR_ROJO, "Usted no pertenece a este departamento.");
-    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en /servicio.");
+    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en servicio. Hable con su jefe");
     if(cuenta[playerid][selecciono])return Mensaje(playerid, COLOR_ROJO, "Usted ya esta en una ruta.");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(vehicle) == 574)
@@ -27925,7 +27924,7 @@ COMMAND:limpiarcalle(playerid, params[])
 COMMAND:cargar(playerid, params[])
 {
     if(cuenta[playerid][cTrabajo] != 3)return Mensaje(playerid, COLOR_ROJO, "Usted no pertenece a este departamento.");
-    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en /servicio.");
+    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en servicio. Hable con su jefe");
     if(cuenta[playerid][selecciono])return Mensaje(playerid, COLOR_ROJO, "Usted ya esta en una ruta.");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(vehicle) == 456 || GetVehicleModel(vehicle) == 414)
@@ -27942,7 +27941,7 @@ COMMAND:cargar(playerid, params[])
 COMMAND:pilotear(playerid, params[])
 {
     if(cuenta[playerid][cTrabajo] != 2)return Mensaje(playerid, COLOR_ROJO, "Usted no pertenece a este departamento.");
-    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en /servicio.");
+    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en servicio. Hable con su jefe");
     if(cuenta[playerid][selecciono])return Mensaje(playerid, COLOR_ROJO, "Usted ya esta en una ruta.");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(vehicle) == 593)
@@ -27959,7 +27958,7 @@ COMMAND:pilotear(playerid, params[])
 COMMAND:transportar(playerid, params[])
 {
     if(cuenta[playerid][cTrabajo] != 1)return Mensaje(playerid, COLOR_ROJO, "Usted no pertenece a este departamento.");
-    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en /servicio.");
+    if(!cuenta[playerid][servicio])return Mensaje(playerid, COLOR_ROJO, "Usted no se encuentra en servicio. Hable con su jefe");
     if(cuenta[playerid][selecciono])return Mensaje(playerid, COLOR_ROJO, "Usted ya esta en una ruta.");
     new vehicle = GetPlayerVehicleID(playerid);
     if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(vehicle) == 428)
