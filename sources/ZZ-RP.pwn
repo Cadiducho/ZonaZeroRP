@@ -5,7 +5,7 @@
     *	Desarrollador:		    Cadiducho	
     *   Antiguos Creditos:      Parka, Lucas Clemente(lolking), Sergio Mitnick. Desarrolladores de Ciudad Prohibida
     *   Mappers:                Javier_Cardenas.
-    *	Version:				1.6.6
+    *	Version:				1.7
     *
     *	Principal: ZZ-RP.pwn
     *
@@ -39,7 +39,7 @@ AntiDeAMX()
 #undef MAX_PLAYERS
 #define MAX_PLAYERS (150)
 
-#define Version			"v1.6.6"
+#define Version			"v1.7-pre"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
@@ -53,8 +53,6 @@ AntiDeAMX()
 #define AdminPanel(%1)  				ShowPlayerDialog(%1, PW_ADMIN, DIALOG_STYLE_INPUT, "{EE6C68}Panel Administrativo", "{FFFFFF}Ingrese su nueva contraseña de administración", "Ingresar", "Salir")
 
 #define	CallBack::%0(%1)				forward  %0(%1); public  %0(%1)
-#define MensajeGlobal   				SendClientMessageToAll
-#define Mensaje 						SendClientMessage
 #define Sostener(%0)					((newkeys & (%0)) == (%0))
 #define Funcion.%0(%1)					static %0(%1)
 //Definiciones todos los colores |----->
@@ -8925,7 +8923,17 @@ COMMAND:callsing(playerid, params[])
     }
     return 1;
 }
-
+command(lspd, playerid, params[]) {
+    new encontro;
+        
+    for(new i=0, t=GetMaxPlayers(); i<t; i++) {
+        if (Team_LSPD(i) && cuenta[i][cFaccOnDuty]) encontro++;
+    }
+    if(!encontro) return Mensaje(playerid, COLOR_BUSCADO, "No hay ningún policía de servicio.");
+    new string[128];
+    format(string, sizeof(string), "Hay %d policías de servicio", encontro);
+    return Mensaje(playerid, COLOR_BUSCADO, string);
+}
 COMMAND:sospechosos(playerid, params[])
 {
     if(Team_LSPD(playerid) || Team_FBI(playerid))
@@ -13876,9 +13884,7 @@ public OnPlayerCommandPerformed(playerid, cmdtext[], success)
     }
     return 1;
 }
-
-CallBack::ProxDetector(Float:radi, playerid, string[], col1, col2, col3, col4, col5)
-{
+CallBack::ProxDetector(Float:radi, playerid, string[], col1, col2, col3, col4, col5) {
     if(IsPlayerConnected(playerid))
     {
         new Float:posx, Float:posy, Float:posz;
@@ -24128,7 +24134,7 @@ stock ShowInfoForPlayer(playerid, text[], time)
     InfoTimer[playerid] = SetTimerEx("HideInfoForPlayer", time, false, "i", playerid);
     return 1;
 }
-stock OOCOff(color, const string[]){
+stock OOCOff(color, string[]){
     for(new i=0, t=GetMaxPlayers();i<t;i++){
         if(IsPlayerConnected(i)){
             if(!booleano[gOoc]{i}){
@@ -24138,7 +24144,7 @@ stock OOCOff(color, const string[]){
     }
     return 1;
 }
-stock OOCNews(color, const string[])
+stock OOCNews(color, string[])
 {
     for(new i=0, t=GetMaxPlayers();i<t;i++)
     {
@@ -25727,7 +25733,7 @@ CallBack::GetClosestPlayer(p1){
     }
     return player;
 }
-CallBack::BroadCast(color, const string[]){
+CallBack::BroadCast(color, string[]){
     MensajeGlobal(color, string);
     return 1;
 }
@@ -25858,7 +25864,7 @@ CallBack::PlayerToPointStripped(Float:radi, playerid, Float:x, Float:y, Float:z,
     }
     return 0;
 }
-CallBack::MensajeAdmin(color, const string[], level)
+CallBack::MensajeAdmin(color, string[], level)
 {
     for(new i=0, t=GetMaxPlayers();i<t;i++)
     {
@@ -25872,7 +25878,7 @@ CallBack::MensajeAdmin(color, const string[], level)
     }
     return 1;
 }
-CallBack::MensajeAdmin2(color, const string[], level)
+CallBack::MensajeAdmin2(color, string[], level)
 {
     for(new i=0, t=GetMaxPlayers();i<t;i++)
     {
@@ -28579,8 +28585,8 @@ COMMAND:comprarproductos(playerid, params[])
 {
     new neg, valor, string[144];
     if(sscanf(params, "dd", neg, valor))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /comprarproductos [slot 1 - 2][cantidad]");
-    if(valor < 1 || valor > 1000)return Mensaje(playerid, COLOR_GRIS2, "El valor por cada producto es de 40$");
-    new total = valor * 40;
+    if(valor < 1 || valor > 1000)return Mensaje(playerid, COLOR_GRIS2, "La cantidad debe ser entre 1 y 1000. El valor por cada producto es de 20$");
+    new total = valor * 20;
     if(obtenerDinero(playerid) < total)return Mensaje(playerid, COLOR_GRIS2, "Usted no tiene suficiente dinero para comprar esta cantidad.");
     
     switch(neg)
@@ -32251,7 +32257,7 @@ Funcion.VenderLocal(x)
     return 1;
 }
 //
-Funcion.MensajeAmbos(jugador1, jugador2, const color, const string[])
+Funcion.MensajeAmbos(jugador1, jugador2, const color, string[])
 {
     Mensaje(jugador1, color, string);
     Mensaje(jugador2, color, string);
@@ -32460,6 +32466,28 @@ Funcion.GiveSkillPlayer(playerid, skillid)
             }
         }
     }
+    return 1;
+}
+Funcion.Mensaje(playerid, const color, text[]) {
+    if(strlen(text) <= 139) return SendClientMessage(playerid, color, text);
+            
+    new texts[140];
+    strmid(texts, text, 139, 129);
+    strins(text, "-", 139, 1);
+    strdel(text, 140, 129);
+    SendClientMessage(playerid, color, text);
+    SendClientMessage(playerid, color, texts);
+    return 1;
+}
+Funcion.MensajeGlobal(color, text[]) {
+    if(strlen(text) <= 139) return SendClientMessageToAll(color, text);
+            
+    new texts[140];
+    strmid(texts, text, 139, 129);
+    strins(text, "-", 139, 1);
+    strdel(text, 140, 129);
+    SendClientMessageToAll(color, text);
+    SendClientMessageToAll(color, texts);
     return 1;
 }
 Funcion.AccionMe(playerid, accion[])
