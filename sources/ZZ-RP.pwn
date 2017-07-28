@@ -13127,13 +13127,11 @@ command(me, playerid, params[])
 }
 command(ame, playerid, params[])
 {
-    new string[128];
     if(estaSilenciado(playerid))return 1;
     if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
-    if(sscanf(params, "s[128]", params)) return Mensaje(playerid, COLOR_GRIS2, "USAGE: /ame [acción]");
-    format(string, sizeof(string), "{9933CC}* %s %s", PlayerName(playerid), params);
-    SetPlayerChatBubble(playerid, string, COLOR_PURPURA, 100.0, 10000);
-    Mensaje(playerid, COLOR_PURPURA, string);
+    if(!sscanf(params, "s[128]", params[0])){
+        AccionMeAmbiente(playerid, params[0]);
+    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /ame <Acción>");
     return 1;
 }
 command(b, playerid, params[])
@@ -32463,6 +32461,20 @@ Funcion.AccionMe(playerid, accion[])
     {
         format(string, sizeof(string), "* %s %s.", PlayerName(playerid), accion);
     }
+    return ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
+}
+Funcion.AccionMeAmbiente(playerid, accion[])
+{
+    new string[256];
+    if(Maskuse[playerid])
+    {
+        format(string, sizeof(string), "* %s ((Desconocido)).", accion);
+    }
+    else
+    {
+        format(string, sizeof(string), "* %s ((%s)).", accion, PlayerName(playerid));
+    }
+    SetPlayerChatBubble(playerid, string, COLOR_PURPURA, 100.0, 10000); 
     return ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
 }
 Funcion.AccionDo(playerid, accion[])
