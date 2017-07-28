@@ -2262,6 +2262,7 @@ new HoldingBones[][] = {
     "Quijada"};
 //new Climas;
 new skinb = mS_INVALID_LISTID;
+new skinInicio = mS_INVALID_LISTID;
 new armariolist = mS_INVALID_LISTID;
 
 new PayDayLeft = MaxTimePayDay;
@@ -4175,6 +4176,7 @@ public OnGameModeInit()
     CargarRejas();
     
     skinb = LoadModelSelectionMenu("bincos.txt");
+    skinInicio = LoadModelSelectionMenu("bincos.txt");
     for(new x=0;x<sizeof(armasventa);x++)
     {
         CreateDynamic3DTextLabel("Presione ~k~~VEHICLE_ENTER_EXIT~\nPara visualizar el item.", 0xFFFFFF88, armasventa[x][av@Pos][0], armasventa[x][av@Pos][1], armasventa[x][av@Pos][2], 10.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 0, -1, 7, -1);
@@ -4749,7 +4751,6 @@ public OnGameModeInit()
     TextDrawSetShadow(streamer, 1);
     
     ManualVehicleEngineAndLights();
-    UsePlayerPedAnims();
 
     SetGameModeText(ModeText);
     //SendRconCommand("password 0");
@@ -5531,7 +5532,8 @@ CallBack::HacerPruebaRol(playerid)
             default:
                 {
                     cuenta[playerid][cInv1][0] = 11;
-                    Mensaje(playerid, COLOR_VERDE, "Usted paso la prueba de rol puede jugar.");
+                    Mensaje(playerid, COLOR_VERDE, "¡Has pasado la prueba de rol! Selecciona tu apariencia y comienza a jugar.");
+                    ShowModelSelectionMenu(playerid, skinInicio, "Selecciona tu apariencia");
                 }
             }
         }
@@ -13128,9 +13130,9 @@ command(me, playerid, params[])
 command(ame, playerid, params[])
 {
     new string[128];
-    if(estaSilenciado(playerid))return 1;
-    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
-    if(sscanf(params, "s[128]", params)) return Mensaje(playerid, COLOR_GRIS2, "USAGE: /ame [acción]");
+    if(estaSilenciado(playerid)) return 1;
+    if(palabrasProhibidas(params[0])) return AccionSPAM(playerid, params[0]);
+    if(sscanf(params, "s[128]", params)) return Mensaje(playerid, COLOR_GRIS2, "Use: /ame [acción]");
     format(string, sizeof(string), "{9933CC}* %s %s", PlayerName(playerid), params);
     SetPlayerChatBubble(playerid, string, COLOR_PURPURA, 100.0, 10000);
     Mensaje(playerid, COLOR_PURPURA, string);
@@ -15772,10 +15774,18 @@ public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Fl
 // de ropa binco
 public OnPlayerModelSelection(playerid, response, listid, modelid)
 {
-    if(listid == skinb)
-    {
-        if(response)
-        {
+    if (listid == skinInicio) {
+        if(response) {
+            cuenta[playerid][cTraje] = modelid;
+            SetPlayerSkin(playerid, cuenta[playerid][cTraje]);
+            return 1;
+        } else {
+            ShowModelSelectionMenu(playerid, skinInicio, "Selecciona tu apariencia");
+            return 1;
+        }
+    }
+    if (listid == skinb) {
+        if(response) {
             if(verificarDinero(playerid, 200))
             {
                 cuenta[playerid][cTraje] = modelid;
