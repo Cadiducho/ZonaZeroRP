@@ -5,7 +5,7 @@
     *	Desarrollador:		    Cadiducho	
     *   Antiguos Creditos:      Parka, Lucas Clemente(lolking), Sergio Mitnick. Desarrolladores de Ciudad Prohibida
     *   Mappers:                Javier_Cardenas.
-    *	Version:				1.6.6
+    *	Version:				1.6.6b
     *
     *	Principal: ZZ-RP.pwn
     *
@@ -39,7 +39,7 @@ AntiDeAMX()
 #undef MAX_PLAYERS
 #define MAX_PLAYERS (150)
 
-#define Version			"v1.6.6"
+#define Version			"v1.6.6b"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
@@ -2023,9 +2023,9 @@ enum _@en@cuenta
     Float:cVida, 
     Float:cArmadura, 
     cInterior, 
-    cMundo, 
-    cEquipo,
+    cMundo,
     cFaccOnDuty,
+    cSkinFacc, 
     cTelefono, 
     cSaldo, 
     cMinutos, 
@@ -2429,9 +2429,12 @@ public OnPlayerSpawn(playerid)
     //
     if(IsPlayerConnected(playerid))
     {
-        if (!cuenta[playerid][cFaccOnDuty]) { //Si no está de servicio en una facción legal, poner la skin que tiene comprada. Si está de servicio mantener la de policía etc
+        if (cuenta[playerid][cFaccOnDuty]) { //Si no está de servicio en una facción legal, poner la skin que tiene comprada. Si está de servicio mantener la de policía etc
+            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+        } else {
             SetPlayerSkin(playerid, cuenta[playerid][cTraje]);
         }
+        
         switch(cuenta[playerid][cTutorial])
         {
         case 0:
@@ -6813,11 +6816,11 @@ CallBack::GuardarDatosMySQL(playerid)
     connectedtime=%d, acento=%d, registro=%d, sexo=%d, edad=%d, origen=%d, estilocaminar=%d, cobro=%d, stereo=%d, respeto=%d, \
     dinero=%d, dinerobanco=%d, cheques=%d, kills=%d, muertes=%d, arrestos=%d, lottonr=%d, trabajo=%d, carcel=%d, tiempocarcel=%d, \
     materiales=%d, drogas=%d, speed=%d, ectasy=%d, ritalin=%d, heroina=%d, marihuana=%d, lider=%d, miembro=%d, rango=%d, caracter=%d, \
-    interior=%d, virtualworld=%d, team=%d, facconduty=%d, numerotelefonico=%d, minutos=%d, minutr=%d, horas=%d, mtexto=%d, ipod=%d, \
+    interior=%d, virtualworld=%d, facconduty=%d, skinfaccion=%d, numerotelefonico=%d, minutos=%d, minutr=%d, horas=%d, mtexto=%d, ipod=%d, \
     auto=%d, auto2=%d, auto3=%d, auto4=%d, casa=%d, casa2=%d, negocio=%d, negocio2=%d, licenciaauto=%d, licenciaarma=%d, gafas=%d, tutorial=%d, \
     encendedor=%d, cigarrillos=%d, mascara=%d, advertencias=%d, adminadver=%d, dni=%d, weap0=%d, ammo0=%d, weap1=%d, ammo1=%d, \
     weap2=%d, ammo2=%d, weap3=%d, ammo3=%d, weap4=%d, ammo4=%d, weap5=%d, ammo5=%d, weap6=%d, ammo6=%d, weap7=%d, ammo7=%d, \
-    weap8=%d, ammo8=%d, weap9=%d, ammo9=%d, weap10=%d, ammo10=%d, weap11=%d, ammo11=%d, maleta=%d, mochila=%d, casco=%d, Skate=%d, miniwofer=%d, fam=%d, famr=%d, deagle=%d, shotgun=%d, mp5=%d, \
+    weap8=%d, ammo8=%d, weap9=%d, ammo9=%d, weap10=%d, ammo10=%d, weap11=%d, ammo11=%d, maleta=%d, mochila=%d, casco=%d, miniwofer=%d, fam=%d, famr=%d, deagle=%d, shotgun=%d, mp5=%d, \
     ak47=%d, m4=%d, sniper=%d, fstyle=%d, leccion=%d, busqueda=%d, rent=%d, rob=%d, donate=%d, donatedia=%d, donatemes=%d, donateyear=%d, banduda=%d, \
     seguro=%d, walkie=%d WHERE id = '%d'", 
     cuenta[playerid][cNivel], cuenta[playerid][cEmpleado], cuenta[playerid][cAdministrador], cuenta[playerid][cZonaZeroCash], 
@@ -6827,7 +6830,7 @@ CallBack::GuardarDatosMySQL(playerid)
     cuenta[playerid][cArrestado], cuenta[playerid][cLoteria], cuenta[playerid][cTrabajo], cuenta[playerid][cCarcel], cuenta[playerid][cTiempoCarcel], 
     cuenta[playerid][cMateriales], cuenta[playerid][cDrogas], cuenta[playerid][cSpeed], cuenta[playerid][cExtasis], cuenta[playerid][cRitalin], 
     cuenta[playerid][cHeroina], cuenta[playerid][cMarihuana], cuenta[playerid][cLider], cuenta[playerid][cMiembro], cuenta[playerid][cRango], cuenta[playerid][cTraje], 
-    cuenta[playerid][cInterior], cuenta[playerid][cMundo], cuenta[playerid][cEquipo], cuenta[playerid][cFaccOnDuty], cuenta[playerid][cTelefono], 
+    cuenta[playerid][cInterior], cuenta[playerid][cMundo], cuenta[playerid][cFaccOnDuty], cuenta[playerid][cSkinFacc], cuenta[playerid][cTelefono], 
     cuenta[playerid][cSaldo], cuenta[playerid][cMinutos], cuenta[playerid][cHoras], cuenta[playerid][cMensajes], cuenta[playerid][cIpod], 
     cuenta[playerid][cCoche], cuenta[playerid][cCoche2], cuenta[playerid][cCoche3], cuenta[playerid][cCoche4], cuenta[playerid][cCasa], cuenta[playerid][cCasa2], 
     cuenta[playerid][cNegocio], cuenta[playerid][cNegocio2], cuenta[playerid][cLicenciaAuto], cuenta[playerid][cLicenciaArma], cuenta[playerid][cGafas], cuenta[playerid][cTutorial], 
@@ -17228,7 +17231,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 cuenta[playerid][cDinero] = cache_get_field_content_int(0, "dinero");
                 cuenta[playerid][cDineroBanco] = cache_get_field_content_int(0, "dinerobanco");
                 cuenta[playerid][cCheques] = cache_get_field_content_int(0, "cheques");
-                cuenta[playerid][cAsesinatos] = cache_get_field_content_int(0, "asesinatos");
+                cuenta[playerid][cAsesinatos] = cache_get_field_content_int(0, "kills");
                 cuenta[playerid][cMuerte] = cache_get_field_content_int(0, "muertes");
                 cuenta[playerid][cArrestado] = cache_get_field_content_int(0, "arrestos");
                 cuenta[playerid][cLoteria] = cache_get_field_content_int(0, "lottonr");
@@ -17250,8 +17253,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 cuenta[playerid][cArmadura] = cache_get_field_content_float(0, "chaleco");
                 cuenta[playerid][cInterior] = cache_get_field_content_int(0, "interior");
                 cuenta[playerid][cMundo] = cache_get_field_content_int(0, "virtualworld");
-                cuenta[playerid][cEquipo] = cache_get_field_content_int(0, "team");
                 cuenta[playerid][cFaccOnDuty] = cache_get_field_content_int(0, "facconduty");
+                cuenta[playerid][cSkinFacc] = cache_get_field_content_int(0, "skinfaccion");
                 cuenta[playerid][cTelefono] = cache_get_field_content_int(0, "numerotelefonico");
                 cuenta[playerid][cSaldo] = cache_get_field_content_int(0, "minutos"); //minutos es el saldo, sí...
                 cuenta[playerid][cMinutos] = cache_get_field_content_int(0, "minutr"); //why not
@@ -17290,7 +17293,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 cuenta[playerid][cEncendedor] = cache_get_field_content_int(0, "encendedor");
                 cuenta[playerid][cCigarrillos] = cache_get_field_content_int(0, "cigarrillos");
                 cuenta[playerid][cMascara] = cache_get_field_content_int(0, "mascara");
-                cuenta[playerid][cAdvertencias] = cache_get_field_content_int(0, "advertencia");
+                cuenta[playerid][cAdvertencias] = cache_get_field_content_int(0, "advertencias");
                 cuenta[playerid][cAdminAdvertencia] = cache_get_field_content_int(0, "adminadver");
                 cuenta[playerid][cIdentificacion] = cache_get_field_content_int(0, "dni");
                 cuenta[playerid][cArma][0] = cache_get_field_content_int(0, "weap0");
@@ -17373,11 +17376,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 cuenta[playerid][cAMinutos] = cache_get_field_content_int(0, "inv21");
                 cuenta[playerid][cMonedas] = cache_get_field_content_int(0, "monedas");
   
-                for(new i;i<5;i++)
-                {
+                for(new i=1; i<=5; i++) {
                     new semillasString[10];
                     format(semillasString, sizeof(semillasString), "semillas%i", i);
-                    cuenta[playerid][cSemillas][i] = cache_get_field_content_int(0, semillasString);
+                    cuenta[playerid][cSemillas][i-1] = cache_get_field_content_int(0, semillasString);
                 }
 
                 cuenta[playerid][cNavidad] = cache_get_field_content_int(0, "navidad");
@@ -21150,8 +21152,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 3, 1);
                         darArma(playerid, 24, 100);
                         darArma(playerid, 41, 1000);
-                        if(cuenta[playerid][cSexo] == 1){ SetPlayerSkin(playerid, 286); }
-                        if(cuenta[playerid][cSexo] == 2){ SetPlayerSkin(playerid, 12); }
+                        if(cuenta[playerid][cSexo] == 1){
+                            cuenta[playerid][cSkinFacc] = 286;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
+                        if(cuenta[playerid][cSexo] == 2){
+                            cuenta[playerid][cSkinFacc] = 12;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se pone el uniforme de FBI.", PlayerName(playerid));
@@ -21164,8 +21172,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 41, 1250);
                         darArma(playerid, 25, 100);
                         darArma(playerid, 31, 400);
-                        if(cuenta[playerid][cSexo] == 1){ SetPlayerSkin(playerid, 286); }
-                        if(cuenta[playerid][cSexo] == 2){ SetPlayerSkin(playerid, 12); }
+                        if(cuenta[playerid][cSexo] == 1){
+                            cuenta[playerid][cSkinFacc] = 286;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
+                        if(cuenta[playerid][cSexo] == 2){
+                            cuenta[playerid][cSkinFacc] = 12;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se pone el uniforme de FBI.", PlayerName(playerid));
@@ -21175,24 +21189,41 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         if(cuenta[playerid][cRango] < 4)return Mensaje(playerid, COLOR_GRIS2, "No puedes utilizar esta opción!");
                         darArma(playerid, 43, 50);
                         darArma(playerid, 24, 100);
-                        if(cuenta[playerid][cSexo] == 1){ SetPlayerSkin(playerid, 286); }
-                        if(cuenta[playerid][cSexo] == 2){ SetPlayerSkin(playerid, 12); }
+                        if(cuenta[playerid][cSexo] == 1){
+                            cuenta[playerid][cSkinFacc] = 286;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
+                        if(cuenta[playerid][cSexo] == 2){
+                            cuenta[playerid][cSkinFacc] = 286;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se pone su uniforme de Criminalista.", PlayerName(playerid));
                         ProxDetector(2.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 3:{
-                        if(cuenta[playerid][cSexo] == 1){ SetPlayerSkin(playerid, 137); }
-                        if(cuenta[playerid][cSexo] == 2){ SetPlayerSkin(playerid, 152); }
+                        if(cuenta[playerid][cSexo] == 1){
+                            cuenta[playerid][cSkinFacc] = 137;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
+                        if(cuenta[playerid][cSexo] == 2){ 
+                            cuenta[playerid][cSkinFacc] = 152;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]); }
                         cuenta[playerid][cMascara] = 1;
                         darArma(playerid, 24, 100);
                         darArma(playerid, 43, 50);
                         Mensaje(playerid, -1, "Estas encubierto y tienes una máscara. [/mascara]");
                     }
                 case 4:{
-                        if(cuenta[playerid][cSexo] == 1){ SetPlayerSkin(playerid, 135); }
-                        if(cuenta[playerid][cSexo] == 2){ SetPlayerSkin(playerid, 151); }
+                        if(cuenta[playerid][cSexo] == 1){
+                            cuenta[playerid][cSkinFacc] = 135;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
+                        if(cuenta[playerid][cSexo] == 2){
+                            cuenta[playerid][cSkinFacc] = 151;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
                         cuenta[playerid][cMascara] = 1;
                         darArma(playerid, 24, 100);
                         darArma(playerid, 43, 50);
@@ -21200,8 +21231,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 case 5:
                     {
-                        if(cuenta[playerid][cSexo] == 1){ SetPlayerSkin(playerid, 98); }
-                        if(cuenta[playerid][cSexo] == 2){ SetPlayerSkin(playerid, 172); }
+                        if(cuenta[playerid][cSexo] == 1){
+                            cuenta[playerid][cSkinFacc] = 98;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
+                        if(cuenta[playerid][cSexo] == 2){ 
+                            cuenta[playerid][cSkinFacc] = 172;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
                         cuenta[playerid][cMascara] = 1;
                         darArma(playerid, 24, 100);
                         darArma(playerid, 43, 50);
@@ -21228,7 +21265,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 case 0:{
                         darArma(playerid, 4, 1);
                         darArma(playerid, 31, 3250);
-                        SetPlayerSkin(playerid, 179);
+                        cuenta[playerid][cSkinFacc] = 179;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se viste con uniforme de entrenamiento.", PlayerName(playerid));
@@ -21240,7 +21278,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 24, 150);
                         darArma(playerid, 31, 600);
                         darArma(playerid, 29, 500);
-                        SetPlayerSkin(playerid, 287);
+                        cuenta[playerid][cSkinFacc] = 287;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se viste con uniforme de Soldado.", PlayerName(playerid));
@@ -21250,7 +21289,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 4, 1);
                         darArma(playerid, 24, 150);
                         darArma(playerid, 34, 100);
-                        SetPlayerSkin(playerid, 287);
+                        cuenta[playerid][cSkinFacc] = 287;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se equipa con armas de Francotirador.", PlayerName(playerid));
@@ -21260,7 +21300,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 4, 1);
                         darArma(playerid, 24, 150);
                         darArma(playerid, 29, 500);
-                        SetPlayerSkin(playerid, 287);
+                        cuenta[playerid][cSkinFacc] = 287;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se viste y equipa con US Army Liviana.", PlayerName(playerid));
@@ -21272,14 +21313,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 29, 500);
                         darArma(playerid, 27, 100);
                         darArma(playerid, 31, 600);
-                        SetPlayerSkin(playerid, 287);
+                        cuenta[playerid][cSkinFacc] = 287;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se viste y equipa con US Army Pesada.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 5:{
-                        SetPlayerSkin(playerid, cuenta[playerid][cTraje]);
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con su ropa normal.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21307,7 +21349,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
                         darArma(playerid, 41, 500);//Aerosol
-                        SetPlayerSkin(playerid, 71);
+                        cuenta[playerid][cSkinFacc] = 71;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se viste con uniforme de Cadete.", PlayerName(playerid));
@@ -21323,9 +21366,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 41, 1250);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        SetPlayerSkin(playerid, 280);
-                        if(cuenta[playerid][cMiembro] == 1 || cuenta[playerid][cLider] == 1){ SetPlayerSkin(playerid, 280); }
-                        if(cuenta[playerid][cMiembro] == 2 || cuenta[playerid][cLider] == 2){ SetPlayerSkin(playerid, 282); }
+                        cuenta[playerid][cSkinFacc] = 280;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        if(cuenta[playerid][cMiembro] == 1 || cuenta[playerid][cLider] == 1){ 
+                            cuenta[playerid][cSkinFacc] = 280;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
+                        if(cuenta[playerid][cMiembro] == 2 || cuenta[playerid][cLider] == 2){
+                            cuenta[playerid][cSkinFacc] = 282;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
                         format(string, sizeof(string), "* %s se viste con uniforme de Oficial.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21338,7 +21388,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 25, 150);//Escopeta
                         darArmadura(playerid, 100);
                         SetHP(playerid, 100);
-                        SetPlayerSkin(playerid, 282);
+                        cuenta[playerid][cSkinFacc] = 282;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con equipo de Agente.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21351,7 +21402,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 25, 150);//Escopeta
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        SetPlayerSkin(playerid, 265);
+                        cuenta[playerid][cSkinFacc] = 265;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con uniforme de Sargento.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21364,7 +21416,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 25, 150);//Escopeta
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        SetPlayerSkin(playerid, 281);
+                        cuenta[playerid][cSkinFacc] = 281;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con uniforme de Capitán.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21378,7 +21431,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 31, 400);//M4
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        if(cuenta[playerid][cMiembro] == 1 || cuenta[playerid][cLider] == 1){ SetPlayerSkin(playerid, 283); }
+                        if(cuenta[playerid][cMiembro] == 1 || cuenta[playerid][cLider] == 1){
+                            cuenta[playerid][cSkinFacc] = 283;
+                            SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
+                        }
                         format(string, sizeof(string), "* %s se viste con el traje de Comandante.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21392,7 +21448,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 34, 60);//Sniper
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        SetPlayerSkin(playerid, 285);
+                        cuenta[playerid][cSkinFacc] = 285;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con el equipo SWAT.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21404,7 +21461,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 43, 100);//Camara de Fotos
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        SetPlayerSkin(playerid, 250);
+                        cuenta[playerid][cSkinFacc] = 250;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con el equipo ANON.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21416,7 +21474,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 29, 300);//MP5
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        SetPlayerSkin(playerid, 299);
+                        cuenta[playerid][cSkinFacc] = 299;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con el equipo CROSS.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21427,7 +21486,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 24, 100);//Eagle
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        SetPlayerSkin(playerid, 284);
+                        cuenta[playerid][cSkinFacc] = 284;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con el equipo EAGLE.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21440,7 +21500,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 41, 500);//Aerosol
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
-                        SetPlayerSkin(playerid, 302);
+                        cuenta[playerid][cSkinFacc] = 302;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con el equipo WALKER.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21468,7 +21529,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         darArma(playerid, 3, 1);//Porra
                         darArma(playerid, 24, 100);//Eagle
                         darArma(playerid, 41, 500);//Aerosol
-                        SetPlayerSkin(playerid, 306);
+                        cuenta[playerid][cSkinFacc] = 306;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* %s se viste con uniforme femenino.", PlayerName(playerid));
@@ -21497,7 +21559,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         if(cuenta[playerid][cRango] < 2)return Mensaje(playerid, COLOR_GRIS2, "Rango insuficiente!");
                         darArma(playerid, 23, 200);
                         darArma(playerid, 43, 100);
-                        SetPlayerSkin(playerid, 166);
+                        cuenta[playerid][cSkinFacc] = 166;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         format(string, sizeof(string), "* Detective %s se viste con su uniforme.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
@@ -21506,7 +21569,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     {
                         if(cuenta[playerid][cRango] < 3)return Mensaje(playerid, COLOR_GRIS2, "Rango insuficiente!");
                         darArma(playerid, 24, 200);
-                        SetPlayerSkin(playerid, 165);
+                        cuenta[playerid][cSkinFacc] = 165;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* Guardaespaldas %s se viste con su uniforme.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
@@ -21516,7 +21580,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         if(cuenta[playerid][cRango] < 4)return Mensaje(playerid, COLOR_GRIS2, "Rango insuficiente!");
                         darArma(playerid, 23, 200);
                         darArma(playerid, 34, 30);
-                        SetPlayerSkin(playerid, 164);
+                        cuenta[playerid][cSkinFacc] = 164;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         darArmadura(playerid, 100);
                         format(string, sizeof(string), "* Agente %s se viste con su uniforme.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
@@ -21539,35 +21604,40 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 case 0:
                     {
                         SetHP(playerid, 100);
-                        SetPlayerSkin(playerid, 70);
+                        cuenta[playerid][cSkinFacc] = 70;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se pone su bata blanca y se desinfecta sus manos.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 1:
                     {
                         SetHP(playerid, 100);
-                        SetPlayerSkin(playerid, 274);
+                        cuenta[playerid][cSkinFacc] = 274;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste y guarda su radio.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 2:
                     {
                         SetHP(playerid, 100);
-                        SetPlayerSkin(playerid, 275);
+                        cuenta[playerid][cSkinFacc] = 275;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste y guarda su radio.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 3:
                     {
                         SetHP(playerid, 100);
-                        SetPlayerSkin(playerid, 276);
+                        cuenta[playerid][cSkinFacc] = 276;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste y guarda su radio.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 4:
                     {
                         SetHP(playerid, 100);
-                        SetPlayerSkin(playerid, 277);
+                        cuenta[playerid][cSkinFacc] = 277;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         darArma(playerid, 42, 250);
                         darArma(playerid, 6, 1);
                         format(string, sizeof(string), "* %s se viste y guarda su radio.", PlayerName(playerid));
@@ -21576,7 +21646,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 case 5:
                     {
                         SetHP(playerid, 100);
-                        SetPlayerSkin(playerid, 308);
+                        cuenta[playerid][cSkinFacc] = 308;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste y guarda su radio.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21598,19 +21669,22 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                 case 0:
                     {
-                        SetPlayerSkin(playerid, 253);
+                        cuenta[playerid][cSkinFacc] = 253;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se pone su traje de chófer.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 1:
                     {
-                        SetPlayerSkin(playerid, 255);
+                        cuenta[playerid][cSkinFacc] = 255;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se pone su traje de chófer.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 2:
                     {
-                        SetPlayerSkin(playerid, 261);
+                        cuenta[playerid][cSkinFacc] = 261;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se pone su traje de chófer.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21631,28 +21705,32 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                 case 0:
                     {
-                        SetPlayerSkin(playerid, 180);
+                        cuenta[playerid][cSkinFacc] = 180;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         darArma(playerid, 41, 1000);
                         format(string, sizeof(string), "* %s se viste con uniforme de ayudante.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 1:
                     {
-                        SetPlayerSkin(playerid, 50);
+                        cuenta[playerid][cSkinFacc] = 50;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         darArma(playerid, 41, 1000);
                         format(string, sizeof(string), "* %s se viste con uniforme de mecanico.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 2:
                     {
-                        SetPlayerSkin(playerid, 268);
+                        cuenta[playerid][cSkinFacc] = 268;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         darArma(playerid, 41, 1000);
                         format(string, sizeof(string), "* %s se viste con uniforme de ingeniero.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
                 case 3:
                     {
-                        SetPlayerSkin(playerid, 42);
+                        cuenta[playerid][cSkinFacc] = 42;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         format(string, sizeof(string), "* %s se viste con su uniforme de director.", PlayerName(playerid));
                         ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     }
@@ -21673,7 +21751,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 {
                 case 0:
                     {
-                        SetPlayerSkin(playerid, 165);
+                        cuenta[playerid][cSkinFacc] = 165;
+                        SetPlayerSkin(playerid, cuenta[playerid][cSkinFacc]);
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         darArma(playerid, 24, 150);
