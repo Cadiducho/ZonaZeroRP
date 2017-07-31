@@ -36,14 +36,17 @@ AntiDeAMX()
 /******************************************************************************/
 /******************************[- Definiciones -]******************************/
 /******************************************************************************/
-#undef MAX_PLAYERS
-#define MAX_PLAYERS (150)
 
 #define Version			"v1.7-pre"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
 #define Language        "Español - LS"
+
+#include "zz/config.pwn"
+
+#undef MAX_PLAYERS
+#define MAX_PLAYERS (150)
 
 #define ShowLoginDialog(%1,%2)			ShowPlayerDialog(%1, %2, DIALOG_STYLE_PASSWORD, "Bienvenido una vez más! - {EE6C68}ZonaZero Roleplay Nueva Generacion", "{FFFFFF}Un cordial saludo.\n\n{FFFFFF}Ingresa tu contraseña para ingresar legalmente al servidor.\n\n{FFFFFF}Web: {4AACAA}www.zzroleplay.com\n{FFFFFF}Facebook: {005982}https:www.facebook.com/groups/490455784620899/?ref=group_headern{FFFFFF}Discord: {B63221}https:discord.gg/pkH9aWM\n\n{FFFFFF}Recuerda ser activo en nuestro Foro!.", "Ingresar", "Salir")
 #define ShowRegisterDialog(%1,%2)		ShowPlayerDialog(%1, %2, DIALOG_STYLE_INPUT, "Registre una cuenta ahora! - {EE6C68}ZonaZero Roleplay Nueva Generacion", "{FFFFFF}Un cordial saludo.\n\n{FFFFFF}Tu cuenta no está registrada, ingresa una contraseña para registrarte legalmente.", "Registrar", "Salir")
@@ -4164,7 +4167,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     //Host, User, Base, Clave
-    servidor[mysqlControl] = mysql_connect("clientes.site.nfoservers.com","rableb","rableb_zonazero","VBs5uirQCi");
+    servidor[mysqlControl] = mysql_connect(SQL_Host,SQL_User, SQL_Database, SQL_Password);
     //servidor[mysqlControl] = mysql_connect("127.0.0.1", "root", "zonazero_original", "");
     if(!servidor[mysqlControl])SendRconCommand("exit");
     mysql_log(LOG_ERROR | LOG_WARNING);
@@ -13284,7 +13287,7 @@ command(jap, playerid, params[])
                     }
                     else
                     {
-                        format(string, sizeof(string), "%s dice: (Lenguaje desconocido para tí).", PlayerName(playerid));
+                        format(string, sizeof(string), "%s dice: (Lenguaje desconocido para ti).", PlayerName(playerid));
                         Mensaje(i, COLOR_FADE3, string);
                     }
                 }

@@ -9,3 +9,4 @@ plugins/
 /*.txt
 /*.amx
 /*.lst
+sources/zz/config.pwn
