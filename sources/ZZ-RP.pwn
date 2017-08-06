@@ -6792,8 +6792,296 @@ CallBack::UnSegundoStreamed()
     return 1;
 }
 
-CallBack::GuardarDatosMySQL(playerid)
-{
+CallBack::OnAccountLoad(playerid, FailPass) {
+    new Cache:R, tmp[256], string[128];
+    if(!cache_get_row_count())
+    {
+        ShowLoginDialog(playerid, DIALOGO_INGRESO);
+        Mensaje(playerid, COLOR_ROJO, "Contraseña Incorrecta!");
+        FailPass++;
+        if(FailPass >= 3) return Kick(playerid);
+        return 1;       
+    }
+    
+    cuenta[playerid][cUnico] = cache_get_field_content_int(0, "id");
+    cache_get_field_content(0, "clave", cuenta[playerid][cAcceso], 24);
+    cache_get_field_content(0, "clave2", cuenta[playerid][cAcceso2], 24);
+    cuenta[playerid][cNivel] = cache_get_field_content_int(0, "nivel");
+    cuenta[playerid][cEmpleado] = cache_get_field_content_int(0, "contrato");
+    cuenta[playerid][cAdministrador] = cache_get_field_content_int(0, "niveladmin");
+    cuenta[playerid][cZonaZeroCash] = cache_get_field_content_int(0, "zzcash");
+    cuenta[playerid][cHorasJugadas] = cache_get_field_content_int(0, "connectedtime");
+    cuenta[playerid][cAcento] = cache_get_field_content_int(0, "acento");
+    cuenta[playerid][cRegistro] = cache_get_field_content_int(0, "registro");
+    cuenta[playerid][cSexo] = cache_get_field_content_int(0, "sexo");
+    cuenta[playerid][cEdad] = cache_get_field_content_int(0, "edad");
+    cuenta[playerid][cOrigen] = cache_get_field_content_int(0, "origen");
+    cuenta[playerid][cCaminar] = cache_get_field_content_int(0, "estilocaminar");
+    cuenta[playerid][cCobro] = cache_get_field_content_int(0, "cobro");
+    cuenta[playerid][cEstereo] = cache_get_field_content_int(0, "stereo");
+    cuenta[playerid][cExperiencia] = cache_get_field_content_int(0, "respeto");
+    cuenta[playerid][cDinero] = cache_get_field_content_int(0, "dinero");
+    cuenta[playerid][cDineroBanco] = cache_get_field_content_int(0, "dinerobanco");
+    cuenta[playerid][cCheques] = cache_get_field_content_int(0, "cheques");
+    cuenta[playerid][cAsesinatos] = cache_get_field_content_int(0, "kills");
+    cuenta[playerid][cMuerte] = cache_get_field_content_int(0, "muertes");
+    cuenta[playerid][cArrestado] = cache_get_field_content_int(0, "arrestos");
+    cuenta[playerid][cLoteria] = cache_get_field_content_int(0, "lottonr");
+    cuenta[playerid][cTrabajo] = cache_get_field_content_int(0, "trabajo");
+    cuenta[playerid][cCarcel] = cache_get_field_content_int(0, "carcel");
+    cuenta[playerid][cTiempoCarcel] = cache_get_field_content_int(0, "tiempocarcel");
+    cuenta[playerid][cMateriales] = cache_get_field_content_int(0, "materiales");
+    cuenta[playerid][cDrogas] = cache_get_field_content_int(0, "drogas");
+    cuenta[playerid][cSpeed] = cache_get_field_content_int(0, "speed");
+    cuenta[playerid][cExtasis] = cache_get_field_content_int(0, "ectasy");
+    cuenta[playerid][cRitalin] = cache_get_field_content_int(0, "ritalin");
+    cuenta[playerid][cHeroina] = cache_get_field_content_int(0, "heroina");
+    cuenta[playerid][cMarihuana] = cache_get_field_content_int(0, "marihuana");
+    cuenta[playerid][cLider] = cache_get_field_content_int(0, "lider");
+    cuenta[playerid][cMiembro] = cache_get_field_content_int(0, "miembro");
+    cuenta[playerid][cRango] = cache_get_field_content_int(0, "rango");
+    cuenta[playerid][cTraje] = cache_get_field_content_int(0, "caracter");
+    cuenta[playerid][cVida] = cache_get_field_content_float(0, "salud");
+    cuenta[playerid][cArmadura] = cache_get_field_content_float(0, "chaleco");
+    cuenta[playerid][cInterior] = cache_get_field_content_int(0, "interior");
+    cuenta[playerid][cMundo] = cache_get_field_content_int(0, "virtualworld");
+    cuenta[playerid][cFaccOnDuty] = cache_get_field_content_int(0, "facconduty");
+    cuenta[playerid][cSkinFacc] = cache_get_field_content_int(0, "skinfaccion");
+    cuenta[playerid][cTelefono] = cache_get_field_content_int(0, "numerotelefonico");
+    cuenta[playerid][cSaldo] = cache_get_field_content_int(0, "minutos"); //minutos es el saldo, sí...
+    cuenta[playerid][cMinutos] = cache_get_field_content_int(0, "minutr"); //why not
+    cuenta[playerid][cHoras] = cache_get_field_content_int(0, "horas");
+    cuenta[playerid][cMensajes] = cache_get_field_content_int(0, "mtexto");
+    cuenta[playerid][cIpod] = cache_get_field_content_int(0, "ipod");
+    cuenta[playerid][cCoche] = cache_get_field_content_int(0, "auto");
+    cuenta[playerid][cCoche2] = cache_get_field_content_int(0, "auto2");
+    cuenta[playerid][cCoche3] = cache_get_field_content_int(0, "auto3");
+    cuenta[playerid][cCoche4] = cache_get_field_content_int(0, "auto4");
+    cuenta[playerid][cCasa] = cache_get_field_content_int(0, "casa");
+    cuenta[playerid][cNegocio] = cache_get_field_content_int(0, "negocio");
+    cuenta[playerid][cPosiciones][0] = cache_get_field_content_float(0, "posicionx");
+    cuenta[playerid][cPosiciones][1] = cache_get_field_content_float(0, "posiciony");
+    cuenta[playerid][cPosiciones][2] = cache_get_field_content_float(0, "posicionz");
+    cuenta[playerid][cLicenciaAuto] = cache_get_field_content_int(0, "licenciaauto");
+    cuenta[playerid][cLicenciaArma] = cache_get_field_content_int(0, "licenciaarma");
+    cuenta[playerid][cGafas] = cache_get_field_content_int(0, "gafas");
+    cuenta[playerid][cTutorial] = cache_get_field_content_int(0, "tutorial");
+
+    cache_get_field_content(0, "antecedente1", cuenta[playerid][cAntecedente1], 64);
+    cache_get_field_content(0, "antecedente2", cuenta[playerid][cAntecedente2], 64);
+    cache_get_field_content(0, "antecedente3", cuenta[playerid][cAntecedente3], 64);
+    cache_get_field_content(0, "nota1", cuenta[playerid][cNote1], 80);
+    cache_get_field_content(0, "nota2", cuenta[playerid][cNote2], 80);
+    cache_get_field_content(0, "nota3", cuenta[playerid][cNote3], 80);
+    cache_get_field_content(0, "nota4", cuenta[playerid][cNote4], 80);
+    cache_get_field_content(0, "nota5", cuenta[playerid][cNote5], 80);
+    cache_get_field_content(0, "sms1", cuenta[playerid][cSMS1], 80);
+    cache_get_field_content(0, "sms2", cuenta[playerid][cSMS2], 80);
+    cache_get_field_content(0, "sms3", cuenta[playerid][cSMS3], 80);
+    cache_get_field_content(0, "sms4", cuenta[playerid][cSMS4], 80);
+    cache_get_field_content(0, "sms5", cuenta[playerid][cSMS5], 80);
+
+    cuenta[playerid][cEncendedor] = cache_get_field_content_int(0, "encendedor");
+    cuenta[playerid][cCigarrillos] = cache_get_field_content_int(0, "cigarrillos");
+    cuenta[playerid][cMascara] = cache_get_field_content_int(0, "mascara");
+    cuenta[playerid][cAdvertencias] = cache_get_field_content_int(0, "advertencias");
+    cuenta[playerid][cAdminAdvertencia] = cache_get_field_content_int(0, "adminadver");
+    cuenta[playerid][cIdentificacion] = cache_get_field_content_int(0, "dni");
+    cuenta[playerid][cArma][0] = cache_get_field_content_int(0, "weap0");
+    cuenta[playerid][cMunicion][0] = cache_get_field_content_int(0, "ammo0");
+    cuenta[playerid][cArma][1] = cache_get_field_content_int(0, "weap1");
+    cuenta[playerid][cMunicion][1] = cache_get_field_content_int(0, "ammo1");
+    cuenta[playerid][cArma][2] = cache_get_field_content_int(0, "weap2");
+    cuenta[playerid][cMunicion][2] = cache_get_field_content_int(0, "ammo2");
+    cuenta[playerid][cArma][3] = cache_get_field_content_int(0, "weap3");
+    cuenta[playerid][cMunicion][3] = cache_get_field_content_int(0, "ammo3");
+    cuenta[playerid][cArma][4] = cache_get_field_content_int(0, "weap4");
+    cuenta[playerid][cMunicion][4] = cache_get_field_content_int(0, "ammo4");
+    cuenta[playerid][cArma][5] = cache_get_field_content_int(0, "weap5");
+    cuenta[playerid][cMunicion][5] = cache_get_field_content_int(0, "ammo5");
+    cuenta[playerid][cArma][6] = cache_get_field_content_int(0, "weap6");
+    cuenta[playerid][cMunicion][6] = cache_get_field_content_int(0, "ammo6");
+    cuenta[playerid][cArma][7] = cache_get_field_content_int(0, "weap7");
+    cuenta[playerid][cMunicion][7] = cache_get_field_content_int(0, "ammo7");
+    cuenta[playerid][cArma][8] = cache_get_field_content_int(0, "weap8");
+    cuenta[playerid][cMunicion][8] = cache_get_field_content_int(0, "ammo8");
+    cuenta[playerid][cArma][9] = cache_get_field_content_int(0, "weap9");
+    cuenta[playerid][cMunicion][9] = cache_get_field_content_int(0, "ammo9");
+    cuenta[playerid][cArma][10] = cache_get_field_content_int(0, "weap10");
+    cuenta[playerid][cMunicion][10] = cache_get_field_content_int(0, "ammo10");
+    cuenta[playerid][cArma][11] = cache_get_field_content_int(0, "weap11");
+    cuenta[playerid][cMunicion][11] = cache_get_field_content_int(0, "ammo11");
+    cuenta[playerid][cMaleta] = cache_get_field_content_int(0, "maleta");
+    cuenta[playerid][cMochila] = cache_get_field_content_int(0, "mochila");
+    cuenta[playerid][cCasco] = cache_get_field_content_int(0, "casco");
+    cuenta[playerid][cWofer] = cache_get_field_content_int(0, "miniwofer");
+    cuenta[playerid][cFamilia] = cache_get_field_content_int(0, "fam");
+    cuenta[playerid][cFamiliaRango] = cache_get_field_content_int(0, "famr");
+    cuenta[playerid][cDesert] = cache_get_field_content_int(0, "deagle");
+    cuenta[playerid][cEscopeta] = cache_get_field_content_int(0, "shotgun");
+    cuenta[playerid][cMP5] = cache_get_field_content_int(0, "mp5");
+    cuenta[playerid][cAK47] = cache_get_field_content_int(0, "ak47");
+    cuenta[playerid][cM4] = cache_get_field_content_int(0, "m4");
+    cuenta[playerid][cSniper] = cache_get_field_content_int(0, "sniper");
+    cuenta[playerid][cEstiloPelea] = cache_get_field_content_int(0, "fstyle");
+    cuenta[playerid][cLeccion] = cache_get_field_content_int(0, "leccion");
+    cuenta[playerid][cBusqueda] = cache_get_field_content_int(0, "busqueda");
+    cuenta[playerid][cRentado] = cache_get_field_content_int(0, "rent");
+    cuenta[playerid][cRobo] = cache_get_field_content_int(0, "rob");
+    cuenta[playerid][cDonador] = cache_get_field_content_int(0, "donate");
+    cuenta[playerid][cDonar][0] = cache_get_field_content_int(0, "donatedia");
+    cuenta[playerid][cDonar][1] = cache_get_field_content_int(0, "donatemes");
+    cuenta[playerid][cDonar][2] = cache_get_field_content_int(0, "donateyear");
+    cuenta[playerid][cBanDuda] = cache_get_field_content_int(0, "banduda");
+    cuenta[playerid][cSeguro] = cache_get_field_content_int(0, "seguro");
+    cuenta[playerid][cWalkie] = cache_get_field_content_int(0, "walkie");
+    cuenta[playerid][cCabeza] = cache_get_field_content_int(0, "head");
+    cuenta[playerid][cCasado] = cache_get_field_content_int(0, "married");
+    cache_get_field_content(0, "marriedto", cuenta[playerid][cPareja], 80);
+    cuenta[playerid][cEntrada] = cache_get_field_content_int(0, "entered");
+    cuenta[playerid][cPeces] = cache_get_field_content_int(0, "peces");
+    cuenta[playerid][cImplementos] = cache_get_field_content_int(0, "implementos");
+    cuenta[playerid][pagas] = cache_get_field_content_int(0, "pagas");
+    cuenta[playerid][cSilenciado] = cache_get_field_content_int(0, "fichas");
+    cuenta[playerid][cHambre] = cache_get_field_content_int(0, "hambre");
+    cuenta[playerid][cEnfermedad] = cache_get_field_content_int(0, "enfermedad");
+    cuenta[playerid][cEnfermedad2] = cache_get_field_content_int(0, "enfermedad2");
+    cuenta[playerid][cEnfermedad3] = cache_get_field_content_int(0, "enfermedad3");
+    cuenta[playerid][cCobrap] = cache_get_field_content_int(0, "cobrap");
+    cuenta[playerid][cPuntosRol] = cache_get_field_content_int(0, "scorerp");
+    cuenta[playerid][cTarjeta] = cache_get_field_content_int(0, "tarjeta");
+    cuenta[playerid][cADVRol] = cache_get_field_content_int(0, "advrol");
+    cuenta[playerid][cPack] = cache_get_field_content_int(0, "paquete");
+    cuenta[playerid][cPackID] = cache_get_field_content_int(0, "packtipo");
+
+    for(new i; i < MAX_SKILLS_WORK; i++)
+    {
+        new skillString[10];
+        format(skillString, sizeof(skillString), "skill%i", i);
+        cuenta[playerid][cSkills][i] = cache_get_field_content_int(0, skillString);
+    }
+
+    cuenta[playerid][cInv1][0] = cache_get_field_content_int(0, "inv10");
+    cuenta[playerid][cInv1][1] = cache_get_field_content_int(0, "inv11");
+    cuenta[playerid][cAHoras] = cache_get_field_content_int(0, "inv20");
+    cuenta[playerid][cAMinutos] = cache_get_field_content_int(0, "inv21");
+    cuenta[playerid][cMonedas] = cache_get_field_content_int(0, "monedas");
+
+    for(new i=1; i<=5; i++) {
+        new semillasString[10];
+        format(semillasString, sizeof(semillasString), "semillas%i", i);
+        cuenta[playerid][cSemillas][i-1] = cache_get_field_content_int(0, semillasString);
+    }
+
+    cuenta[playerid][cNavidad] = cache_get_field_content_int(0, "navidad");
+
+    cache_get_field_content(0, "janombre", cuenta[playerid][cCarcelAdmin], 24);
+    cache_get_field_content(0, "jrazon", cuenta[playerid][cCarcelAdmin], 64);
+
+    cuenta[playerid][cLicenciaVuelo] = cache_get_field_content_int(0, "licenciavuelo");
+    cuenta[playerid][cLicenciaBote] = cache_get_field_content_int(0, "licenciabote");
+    cuenta[playerid][cLicenciaMoto] = cache_get_field_content_int(0, "licenciamoto");
+    cuenta[playerid][cNegocio2] = cache_get_field_content_int(0, "negocio2");
+    cuenta[playerid][cCasa2] = cache_get_field_content_int(0, "casa2");
+    
+    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_juguetes WHERE nombre='%s'", Nombre(playerid));
+    R = mysql_query(servidor[mysqlControl], tmp, true);
+    if(cache_get_row_count(servidor[mysqlControl]))
+    {
+        for(new v=0; v < MAX_PLAYERTOYS; v++)
+        {
+            juguetes[playerid][v][ptModelID] = cache_get_row_int(0, v + 1, servidor[mysqlControl]);
+            juguetes[playerid][v][ptBone] = cache_get_row_int(0, v + 6, servidor[mysqlControl]);
+            juguetes[playerid][v][ptPosX] = cache_get_row_float(0, v + 11, servidor[mysqlControl]);
+            juguetes[playerid][v][ptPosY] = cache_get_row_float(0, v + 16, servidor[mysqlControl]);
+            juguetes[playerid][v][ptPosZ] = cache_get_row_float(0, v + 21, servidor[mysqlControl]);
+            juguetes[playerid][v][ptRotX] = cache_get_row_float(0, v + 26, servidor[mysqlControl]);
+            juguetes[playerid][v][ptRotY] = cache_get_row_float(0, v + 31, servidor[mysqlControl]);
+            juguetes[playerid][v][ptRotZ] = cache_get_row_float(0, v + 36, servidor[mysqlControl]);
+            juguetes[playerid][v][ptScaleX] = cache_get_row_float(0, v + 41, servidor[mysqlControl]);
+            juguetes[playerid][v][ptScaleY] = cache_get_row_float(0, v + 46, servidor[mysqlControl]);
+            juguetes[playerid][v][ptScaleZ] = cache_get_row_float(0, v + 51, servidor[mysqlControl]);
+        }
+    }
+    else
+    {
+        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_juguetes(nombre) VALUES ('%s')", Nombre(playerid));
+        mysql_query(servidor[mysqlControl], tmp, false);
+    }
+    cache_delete(R);
+    //
+    tmp[0] = '\0';
+    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_inventario WHERE unico=%d", cuenta[playerid][cUnico]);
+    R = mysql_query(servidor[mysqlControl], tmp, true);
+    if(cache_get_row_count(servidor[mysqlControl]))
+    {
+        for(new x=0;x<6;x++)
+        {
+            inventario[playerid][invArmas][x] = cache_get_row_int(0, x + 1, servidor[mysqlControl]);
+            inventario[playerid][invBalas][x] = cache_get_row_int(0, x + 7, servidor[mysqlControl]);
+        }
+        inventario[playerid][invBebida][0] = cache_get_row_int(0, 13, servidor[mysqlControl]);
+        inventario[playerid][invBebida][1] = cache_get_row_int(0, 14, servidor[mysqlControl]);
+    }
+    else
+    {
+        for(new x=0;x<6;x++)
+        {
+            inventario[playerid][invArmas][x] = 0;
+            inventario[playerid][invBalas][x] = 0;
+        }
+        inventario[playerid][invBebida][0] = 0;
+        inventario[playerid][invBebida][1] = 0;
+        
+        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_inventario(unico) VALUES ('%d')", cuenta[playerid][cUnico]);
+        mysql_query(servidor[mysqlControl], tmp);
+    }
+    cache_delete(R);
+    //
+    if(cuenta[playerid][cTutorial])
+    {
+        for(new p=0;p<5;p++) TextDrawHideForPlayer(playerid, Presentacion[p]);
+    }
+    ClearChatbox(playerid, 51);
+    
+    format(string, sizeof(string), "Bienvenido a {EE6C68}Zona Zero {FFFFFF}%s!", PlayerName(playerid));
+    Mensaje(playerid, COLOR_BLANCO, string);
+    Mensaje(playerid, COLOR_BLANCO, "Recuerda seguir los términos y condiciones que mantiene nuestro servidor para la buena estabilidad.");
+    
+    if(DobleOn)
+    {
+        Mensaje(playerid, COLOR_AZUL_CLARO, "Atención!:{FFFFFF} El sistema de doble experiencia esta activo, recuerda jugar para subir mas rapido de nivel.");
+    }
+    if(TripleOn)
+    {
+        Mensaje(playerid, COLOR_ROJO, "Atención!:{FFFFFF} Se ha activado el sistema de TRIPLE experiencia. Ahora subiras 3 veces mas rápido tus puntos de respeto.");
+    }
+    if(cuenta[playerid][cAdministrador])
+    {
+        format(string, sizeof(string), "{77B5D9}Atención!:{FFFFFF} Usted ingresó sesión con nivel administrativo %d.", cuenta[playerid][cAdministrador]);
+        Mensaje(playerid, -1, string);
+    }
+    if(cuenta[playerid][cFaccOnDuty])
+    {
+        Mensaje(playerid, COLOR_AZUL_CLARO, "Atención!:{FFFFFF} Estás de servicio en tu facción legal. Rolea acorde a esto.");
+    }
+    for(new i=0, t=GetMaxPlayers();i<t;i++)
+    {
+        if(IsPlayerConnected(i) && cuenta[i][cAdministrador]) continue;
+        ShowPlayerNameTagForPlayer(playerid, (Maskuse[i]) ? (i):(-1), 0);
+    }
+    
+    //Importante
+    booleano[gIngreso]{playerid} = true;
+    SpawnPlayer(playerid);
+    
+    tmp[0] = '\0';
+    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "UPDATE `zz_usuarios` SET `online`=1 WHERE `id` = '%d'", cuenta[playerid][cUnico]);
+    mysql_query(servidor[mysqlControl], tmp, false);
+    return 1;
+}
+
+CallBack::GuardarDatosMySQL(playerid) {
     new Float:poss[4];
     GetPlayerPos(playerid, poss[0], poss[1], poss[2]);
     GetPlayerFacingAngle(playerid, poss[3]);
@@ -17216,316 +17504,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 new FailPass = 0;
                 if(!strlen(inputtext))return ShowLoginDialog(playerid, DIALOGO_INGRESO);
-                new Cache:R, tmp[256];
+                new query[256];
                 
-                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_usuarios WHERE nombre='%s' AND clave=md5('%e') LIMIT 1;", Nombre(playerid), inputtext);
-                R = mysql_query(servidor[mysqlControl], tmp, true);
-                
-                if(!cache_get_row_count())
-                {
-                    ShowLoginDialog(playerid, DIALOGO_INGRESO);
-                    Mensaje(playerid, COLOR_ROJO, "Contraseña Incorrecta!");
-                    FailPass++;
-                    if(FailPass >= 3) return Kick(playerid);
-                    return 1;       
-                }
-                
-                cuenta[playerid][cUnico] = cache_get_field_content_int(0, "id");
-                cache_get_field_content(0, "clave", cuenta[playerid][cAcceso], 24);
-                cache_get_field_content(0, "clave2", cuenta[playerid][cAcceso2], 24);
-                cuenta[playerid][cNivel] = cache_get_field_content_int(0, "nivel");
-                cuenta[playerid][cEmpleado] = cache_get_field_content_int(0, "contrato");
-                cuenta[playerid][cAdministrador] = cache_get_field_content_int(0, "niveladmin");
-                cuenta[playerid][cZonaZeroCash] = cache_get_field_content_int(0, "zzcash");
-                cuenta[playerid][cHorasJugadas] = cache_get_field_content_int(0, "connectedtime");
-                cuenta[playerid][cAcento] = cache_get_field_content_int(0, "acento");
-                cuenta[playerid][cRegistro] = cache_get_field_content_int(0, "registro");
-                cuenta[playerid][cSexo] = cache_get_field_content_int(0, "sexo");
-                cuenta[playerid][cEdad] = cache_get_field_content_int(0, "edad");
-                cuenta[playerid][cOrigen] = cache_get_field_content_int(0, "origen");
-                cuenta[playerid][cCaminar] = cache_get_field_content_int(0, "estilocaminar");
-                cuenta[playerid][cCobro] = cache_get_field_content_int(0, "cobro");
-                cuenta[playerid][cEstereo] = cache_get_field_content_int(0, "stereo");
-                cuenta[playerid][cExperiencia] = cache_get_field_content_int(0, "respeto");
-                cuenta[playerid][cDinero] = cache_get_field_content_int(0, "dinero");
-                cuenta[playerid][cDineroBanco] = cache_get_field_content_int(0, "dinerobanco");
-                cuenta[playerid][cCheques] = cache_get_field_content_int(0, "cheques");
-                cuenta[playerid][cAsesinatos] = cache_get_field_content_int(0, "kills");
-                cuenta[playerid][cMuerte] = cache_get_field_content_int(0, "muertes");
-                cuenta[playerid][cArrestado] = cache_get_field_content_int(0, "arrestos");
-                cuenta[playerid][cLoteria] = cache_get_field_content_int(0, "lottonr");
-                cuenta[playerid][cTrabajo] = cache_get_field_content_int(0, "trabajo");
-                cuenta[playerid][cCarcel] = cache_get_field_content_int(0, "carcel");
-                cuenta[playerid][cTiempoCarcel] = cache_get_field_content_int(0, "tiempocarcel");
-                cuenta[playerid][cMateriales] = cache_get_field_content_int(0, "materiales");
-                cuenta[playerid][cDrogas] = cache_get_field_content_int(0, "drogas");
-                cuenta[playerid][cSpeed] = cache_get_field_content_int(0, "speed");
-                cuenta[playerid][cExtasis] = cache_get_field_content_int(0, "ectasy");
-                cuenta[playerid][cRitalin] = cache_get_field_content_int(0, "ritalin");
-                cuenta[playerid][cHeroina] = cache_get_field_content_int(0, "heroina");
-                cuenta[playerid][cMarihuana] = cache_get_field_content_int(0, "marihuana");
-                cuenta[playerid][cLider] = cache_get_field_content_int(0, "lider");
-                cuenta[playerid][cMiembro] = cache_get_field_content_int(0, "miembro");
-                cuenta[playerid][cRango] = cache_get_field_content_int(0, "rango");
-                cuenta[playerid][cTraje] = cache_get_field_content_int(0, "caracter");
-                cuenta[playerid][cVida] = cache_get_field_content_float(0, "salud");
-                cuenta[playerid][cArmadura] = cache_get_field_content_float(0, "chaleco");
-                cuenta[playerid][cInterior] = cache_get_field_content_int(0, "interior");
-                cuenta[playerid][cMundo] = cache_get_field_content_int(0, "virtualworld");
-                cuenta[playerid][cFaccOnDuty] = cache_get_field_content_int(0, "facconduty");
-                cuenta[playerid][cSkinFacc] = cache_get_field_content_int(0, "skinfaccion");
-                cuenta[playerid][cTelefono] = cache_get_field_content_int(0, "numerotelefonico");
-                cuenta[playerid][cSaldo] = cache_get_field_content_int(0, "minutos"); //minutos es el saldo, sí...
-                cuenta[playerid][cMinutos] = cache_get_field_content_int(0, "minutr"); //why not
-                cuenta[playerid][cHoras] = cache_get_field_content_int(0, "horas");
-                cuenta[playerid][cMensajes] = cache_get_field_content_int(0, "mtexto");
-                cuenta[playerid][cIpod] = cache_get_field_content_int(0, "ipod");
-                cuenta[playerid][cCoche] = cache_get_field_content_int(0, "auto");
-                cuenta[playerid][cCoche2] = cache_get_field_content_int(0, "auto2");
-                cuenta[playerid][cCoche3] = cache_get_field_content_int(0, "auto3");
-                cuenta[playerid][cCoche4] = cache_get_field_content_int(0, "auto4");
-                cuenta[playerid][cCasa] = cache_get_field_content_int(0, "casa");
-                cuenta[playerid][cNegocio] = cache_get_field_content_int(0, "negocio");
-                printf("Inicio posiciones;");
-                cuenta[playerid][cPosiciones][0] = cache_get_field_content_float(0, "posicionx");
-                cuenta[playerid][cPosiciones][1] = cache_get_field_content_float(0, "posiciony");
-                cuenta[playerid][cPosiciones][2] = cache_get_field_content_float(0, "posicionz");
-                cuenta[playerid][cLicenciaAuto] = cache_get_field_content_int(0, "licenciaauto");
-                cuenta[playerid][cLicenciaArma] = cache_get_field_content_int(0, "licenciaarma");
-                cuenta[playerid][cGafas] = cache_get_field_content_int(0, "gafas");
-                cuenta[playerid][cTutorial] = cache_get_field_content_int(0, "tutorial");
-
-                cache_get_field_content(0, "antecedente1", cuenta[playerid][cAntecedente1], 64);
-                cache_get_field_content(0, "antecedente2", cuenta[playerid][cAntecedente2], 64);
-                cache_get_field_content(0, "antecedente3", cuenta[playerid][cAntecedente3], 64);
-                cache_get_field_content(0, "nota1", cuenta[playerid][cNote1], 80);
-                cache_get_field_content(0, "nota2", cuenta[playerid][cNote2], 80);
-                cache_get_field_content(0, "nota3", cuenta[playerid][cNote3], 80);
-                cache_get_field_content(0, "nota4", cuenta[playerid][cNote4], 80);
-                cache_get_field_content(0, "nota5", cuenta[playerid][cNote5], 80);
-                cache_get_field_content(0, "sms1", cuenta[playerid][cSMS1], 80);
-                cache_get_field_content(0, "sms2", cuenta[playerid][cSMS2], 80);
-                cache_get_field_content(0, "sms3", cuenta[playerid][cSMS3], 80);
-                cache_get_field_content(0, "sms4", cuenta[playerid][cSMS4], 80);
-                cache_get_field_content(0, "sms5", cuenta[playerid][cSMS5], 80);
-
-                cuenta[playerid][cEncendedor] = cache_get_field_content_int(0, "encendedor");
-                cuenta[playerid][cCigarrillos] = cache_get_field_content_int(0, "cigarrillos");
-                cuenta[playerid][cMascara] = cache_get_field_content_int(0, "mascara");
-                cuenta[playerid][cAdvertencias] = cache_get_field_content_int(0, "advertencias");
-                cuenta[playerid][cAdminAdvertencia] = cache_get_field_content_int(0, "adminadver");
-                cuenta[playerid][cIdentificacion] = cache_get_field_content_int(0, "dni");
-                cuenta[playerid][cArma][0] = cache_get_field_content_int(0, "weap0");
-                cuenta[playerid][cMunicion][0] = cache_get_field_content_int(0, "ammo0");
-                cuenta[playerid][cArma][1] = cache_get_field_content_int(0, "weap1");
-                cuenta[playerid][cMunicion][1] = cache_get_field_content_int(0, "ammo1");
-                cuenta[playerid][cArma][2] = cache_get_field_content_int(0, "weap2");
-                cuenta[playerid][cMunicion][2] = cache_get_field_content_int(0, "ammo2");
-                cuenta[playerid][cArma][3] = cache_get_field_content_int(0, "weap3");
-                cuenta[playerid][cMunicion][3] = cache_get_field_content_int(0, "ammo3");
-                cuenta[playerid][cArma][4] = cache_get_field_content_int(0, "weap4");
-                cuenta[playerid][cMunicion][4] = cache_get_field_content_int(0, "ammo4");
-                cuenta[playerid][cArma][5] = cache_get_field_content_int(0, "weap5");
-                cuenta[playerid][cMunicion][5] = cache_get_field_content_int(0, "ammo5");
-                cuenta[playerid][cArma][6] = cache_get_field_content_int(0, "weap6");
-                cuenta[playerid][cMunicion][6] = cache_get_field_content_int(0, "ammo6");
-                cuenta[playerid][cArma][7] = cache_get_field_content_int(0, "weap7");
-                cuenta[playerid][cMunicion][7] = cache_get_field_content_int(0, "ammo7");
-                cuenta[playerid][cArma][8] = cache_get_field_content_int(0, "weap8");
-                cuenta[playerid][cMunicion][8] = cache_get_field_content_int(0, "ammo8");
-                cuenta[playerid][cArma][9] = cache_get_field_content_int(0, "weap9");
-                cuenta[playerid][cMunicion][9] = cache_get_field_content_int(0, "ammo9");
-                cuenta[playerid][cArma][10] = cache_get_field_content_int(0, "weap10");
-                cuenta[playerid][cMunicion][10] = cache_get_field_content_int(0, "ammo10");
-                cuenta[playerid][cArma][11] = cache_get_field_content_int(0, "weap11");
-                cuenta[playerid][cMunicion][11] = cache_get_field_content_int(0, "ammo11");
-                cuenta[playerid][cMaleta] = cache_get_field_content_int(0, "maleta");
-                cuenta[playerid][cMochila] = cache_get_field_content_int(0, "mochila");
-                cuenta[playerid][cCasco] = cache_get_field_content_int(0, "casco");
-                cuenta[playerid][cWofer] = cache_get_field_content_int(0, "miniwofer");
-                cuenta[playerid][cFamilia] = cache_get_field_content_int(0, "fam");
-                cuenta[playerid][cFamiliaRango] = cache_get_field_content_int(0, "famr");
-                cuenta[playerid][cDesert] = cache_get_field_content_int(0, "deagle");
-                cuenta[playerid][cEscopeta] = cache_get_field_content_int(0, "shotgun");
-                cuenta[playerid][cMP5] = cache_get_field_content_int(0, "mp5");
-                cuenta[playerid][cAK47] = cache_get_field_content_int(0, "ak47");
-                cuenta[playerid][cM4] = cache_get_field_content_int(0, "m4");
-                cuenta[playerid][cSniper] = cache_get_field_content_int(0, "sniper");
-                cuenta[playerid][cEstiloPelea] = cache_get_field_content_int(0, "fstyle");
-                cuenta[playerid][cLeccion] = cache_get_field_content_int(0, "leccion");
-                cuenta[playerid][cBusqueda] = cache_get_field_content_int(0, "busqueda");
-                cuenta[playerid][cRentado] = cache_get_field_content_int(0, "rent");
-                cuenta[playerid][cRobo] = cache_get_field_content_int(0, "rob");
-                cuenta[playerid][cDonador] = cache_get_field_content_int(0, "donate");
-                cuenta[playerid][cDonar][0] = cache_get_field_content_int(0, "donatedia");
-                cuenta[playerid][cDonar][1] = cache_get_field_content_int(0, "donatemes");
-                cuenta[playerid][cDonar][2] = cache_get_field_content_int(0, "donateyear");
-                cuenta[playerid][cBanDuda] = cache_get_field_content_int(0, "banduda");
-                cuenta[playerid][cSeguro] = cache_get_field_content_int(0, "seguro");
-                cuenta[playerid][cWalkie] = cache_get_field_content_int(0, "walkie");
-                cuenta[playerid][cCabeza] = cache_get_field_content_int(0, "head");
-                cuenta[playerid][cCasado] = cache_get_field_content_int(0, "married");
-                cache_get_field_content(0, "marriedto", cuenta[playerid][cPareja], 80);
-                cuenta[playerid][cEntrada] = cache_get_field_content_int(0, "entered");
-                cuenta[playerid][cPeces] = cache_get_field_content_int(0, "peces");
-                cuenta[playerid][cImplementos] = cache_get_field_content_int(0, "implementos");
-                cuenta[playerid][pagas] = cache_get_field_content_int(0, "pagas");
-                cuenta[playerid][cSilenciado] = cache_get_field_content_int(0, "fichas");
-                cuenta[playerid][cHambre] = cache_get_field_content_int(0, "hambre");
-                cuenta[playerid][cEnfermedad] = cache_get_field_content_int(0, "enfermedad");
-                cuenta[playerid][cEnfermedad2] = cache_get_field_content_int(0, "enfermedad2");
-                cuenta[playerid][cEnfermedad3] = cache_get_field_content_int(0, "enfermedad3");
-                cuenta[playerid][cCobrap] = cache_get_field_content_int(0, "cobrap");
-                cuenta[playerid][cPuntosRol] = cache_get_field_content_int(0, "scorerp");
-                cuenta[playerid][cTarjeta] = cache_get_field_content_int(0, "tarjeta");
-                cuenta[playerid][cADVRol] = cache_get_field_content_int(0, "advrol");
-                cuenta[playerid][cPack] = cache_get_field_content_int(0, "paquete");
-                cuenta[playerid][cPackID] = cache_get_field_content_int(0, "packtipo");
-
-                for(new i; i < MAX_SKILLS_WORK; i++)
-                {
-                    new skillString[10];
-                    format(skillString, sizeof(skillString), "skill%i", i);
-                    cuenta[playerid][cSkills][i] = cache_get_field_content_int(0, skillString);
-                }
-
-                cuenta[playerid][cInv1][0] = cache_get_field_content_int(0, "inv10");
-                cuenta[playerid][cInv1][1] = cache_get_field_content_int(0, "inv11");
-                cuenta[playerid][cAHoras] = cache_get_field_content_int(0, "inv20");
-                cuenta[playerid][cAMinutos] = cache_get_field_content_int(0, "inv21");
-                cuenta[playerid][cMonedas] = cache_get_field_content_int(0, "monedas");
-  
-                for(new i=1; i<=5; i++) {
-                    new semillasString[10];
-                    format(semillasString, sizeof(semillasString), "semillas%i", i);
-                    cuenta[playerid][cSemillas][i-1] = cache_get_field_content_int(0, semillasString);
-                }
-
-                cuenta[playerid][cNavidad] = cache_get_field_content_int(0, "navidad");
-
-                cache_get_field_content(0, "janombre", cuenta[playerid][cCarcelAdmin], 24);
-                cache_get_field_content(0, "jrazon", cuenta[playerid][cCarcelAdmin], 64);
-
-                cuenta[playerid][cLicenciaVuelo] = cache_get_field_content_int(0, "licenciavuelo");
-                cuenta[playerid][cLicenciaBote] = cache_get_field_content_int(0, "licenciabote");
-                cuenta[playerid][cLicenciaMoto] = cache_get_field_content_int(0, "licenciamoto");
-                cuenta[playerid][cNegocio2] = cache_get_field_content_int(0, "negocio2");
-                cuenta[playerid][cCasa2] = cache_get_field_content_int(0, "casa2");
-                cache_delete(R);
-                
-                /*new Consulta[126], Cache:R;
-                    mysql_format(servidor[mysqlControl], Consulta, sizeof(Consulta), "SELECT * FROM zz_bolsa WHERE unico=%d", cuenta[playerid][cUnico]);
-                    R = mysql_query(servidor[mysqlControl], Consulta, true);
-                    if(cache_get_row_count(servidor[mysqlControl]))
-                    {
-                        for(new v=0; v<8;v++)
-                        {
-                            acciones[playerid][aAccTipo][v] = cache_get_row_int(0, v + 1, servidor[mysqlControl]);
-                            acciones[playerid][aAccCantidad][v] = cache_get_row_int(0, v + 9, servidor[mysqlControl]);
-                        }
-                    }
-                    else
-                    {
-                        mysql_format(servidor[mysqlControl], Consulta, sizeof(Consulta), "INSERT INTO zz_bolsa(unico) VALUES ('%d')", cuenta[playerid][cUnico]);
-                        mysql_query(servidor[mysqlControl], Consulta);
-                    }
-                    cache_delete(R);
-                    */
-                tmp[0] = '\0';
-                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_juguetes WHERE nombre='%s'", Nombre(playerid));
-                R = mysql_query(servidor[mysqlControl], tmp, true);
-                if(cache_get_row_count(servidor[mysqlControl]))
-                {
-                    for(new v=0; v < MAX_PLAYERTOYS; v++)
-                    {
-                        juguetes[playerid][v][ptModelID] = cache_get_row_int(0, v + 1, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptBone] = cache_get_row_int(0, v + 6, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptPosX] = cache_get_row_float(0, v + 11, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptPosY] = cache_get_row_float(0, v + 16, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptPosZ] = cache_get_row_float(0, v + 21, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptRotX] = cache_get_row_float(0, v + 26, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptRotY] = cache_get_row_float(0, v + 31, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptRotZ] = cache_get_row_float(0, v + 36, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptScaleX] = cache_get_row_float(0, v + 41, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptScaleY] = cache_get_row_float(0, v + 46, servidor[mysqlControl]);
-                        juguetes[playerid][v][ptScaleZ] = cache_get_row_float(0, v + 51, servidor[mysqlControl]);
-                    }
-                }
-                else
-                {
-                    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_juguetes(nombre) VALUES ('%s')", Nombre(playerid));
-                    mysql_query(servidor[mysqlControl], tmp, false);
-                }
-                cache_delete(R);
-                //
-                tmp[0] = '\0';
-                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_inventario WHERE unico=%d", cuenta[playerid][cUnico]);
-                R = mysql_query(servidor[mysqlControl], tmp, true);
-                if(cache_get_row_count(servidor[mysqlControl]))
-                {
-                    for(new x=0;x<6;x++)
-                    {
-                        inventario[playerid][invArmas][x] = cache_get_row_int(0, x + 1, servidor[mysqlControl]);
-                        inventario[playerid][invBalas][x] = cache_get_row_int(0, x + 7, servidor[mysqlControl]);
-                    }
-                    inventario[playerid][invBebida][0] = cache_get_row_int(0, 13, servidor[mysqlControl]);
-                    inventario[playerid][invBebida][1] = cache_get_row_int(0, 14, servidor[mysqlControl]);
-                }
-                else
-                {
-                    for(new x=0;x<6;x++)
-                    {
-                        inventario[playerid][invArmas][x] = 0;
-                        inventario[playerid][invBalas][x] = 0;
-                    }
-                    inventario[playerid][invBebida][0] = 0;
-                    inventario[playerid][invBebida][1] = 0;
-                    
-                    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_inventario(unico) VALUES ('%d')", cuenta[playerid][cUnico]);
-                    mysql_query(servidor[mysqlControl], tmp);
-                }
-                cache_delete(R);
-                //
-                if(cuenta[playerid][cTutorial])
-                {
-                    for(new p=0;p<5;p++) TextDrawHideForPlayer(playerid, Presentacion[p]);
-                }
-                ClearChatbox(playerid, 51);
-                
-                format(string, sizeof(string), "Bienvenido a {EE6C68}Zona Zero {FFFFFF}%s!", PlayerName(playerid));
-                Mensaje(playerid, COLOR_BLANCO, string);
-                Mensaje(playerid, COLOR_BLANCO, "Recuerda seguir los términos y condiciones que mantiene nuestro servidor para la buena estabilidad.");
-                
-                if(DobleOn)
-                {
-                    Mensaje(playerid, COLOR_AZUL_CLARO, "Atención!:{FFFFFF} El sistema de doble experiencia esta activo, recuerda jugar para subir mas rapido de nivel.");
-                }
-                if(TripleOn)
-                {
-                    Mensaje(playerid, COLOR_ROJO, "Atención!:{FFFFFF} Se ha activado el sistema de TRIPLE experiencia. Ahora subiras 3 veces mas rápido tus puntos de respeto.");
-                }
-                if(cuenta[playerid][cAdministrador])
-                {
-                    format(string, sizeof(string), "{77B5D9}Atención!:{FFFFFF} Usted ingresó sesión con nivel administrativo %d.", cuenta[playerid][cAdministrador]);
-                    Mensaje(playerid, -1, string);
-                }
-                if(cuenta[playerid][cFaccOnDuty])
-                {
-                    Mensaje(playerid, COLOR_AZUL_CLARO, "Atención!:{FFFFFF} Estás de servicio en tu facción legal. Rolea acorde a esto.");
-                }
-                for(new i=0, t=GetMaxPlayers();i<t;i++)
-                {
-                    if(IsPlayerConnected(i) && cuenta[i][cAdministrador]) continue;
-                    ShowPlayerNameTagForPlayer(playerid, (Maskuse[i]) ? (i):(-1), 0);
-                }
-                
-                //Importante
-                booleano[gIngreso]{playerid} = true;
-                SpawnPlayer(playerid);
-                
-                tmp[0] = '\0';
-                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "UPDATE `zz_usuarios` SET `online`=1 WHERE `id` = '%d'", cuenta[playerid][cUnico]);
-                mysql_query(servidor[mysqlControl], tmp, false);
+                mysql_format(servidor[mysqlControl], query, sizeof(query), "SELECT * FROM zz_usuarios WHERE nombre='%s' AND clave=md5('%e') LIMIT 1;", Nombre(playerid), inputtext);
+				mysql_tquery(servidor[mysqlControl], query, "OnAccountLoad", "ii", playerid, FailPass);
                 
             }
         }
