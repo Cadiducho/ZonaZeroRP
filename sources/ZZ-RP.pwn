@@ -25,6 +25,9 @@
 #include 	<progressbar>
 #include 	<SetVehicleAttachedObject[inc]>
 
+#include    "lib/textlist.inc"
+#include    "lib/mdialog.inc"
+
 AntiDeAMX()
 {
     new a[][] = {"Unarmed (Fist)", "Brass K"};
@@ -2061,7 +2064,12 @@ enum _@en@cuenta
     cSMS2[80], 
     cSMS3[80], 
     cSMS4[80], 
-    cSMS5[80], 
+    cSMS5[80],   
+    cMotivoBusqueda1[90], 
+    cMotivoBusqueda2[90], 
+    cMotivoBusqueda3[90], 
+    cMotivoBusqueda4[90], 
+    cMotivoBusqueda5[90], 
     cEncendedor, 
     cCigarrillos, 
     cMascara, 
@@ -2143,7 +2151,8 @@ enum _@en@cuenta
     selecciono, 
     selecciono2, 
     objetos[2], 
-    temporiz
+    temporiz,
+    mirandoMotivosDe //sospechosos
     
 };
 new cuenta[MAX_PLAYERS][_@en@cuenta];
@@ -3325,9 +3334,9 @@ public OnPlayerEnterCheckpoint(playerid)
             SetVehicleHealth(GetPlayerVehicleID(playerid), 300);
             SetVehicleToRespawn(GetPlayerVehicleID(playerid));
             ganaDinero(playerid, dinerorobado);
-            cuenta[playerid][cBusqueda] += 2;
+            darMotivoBusqueda(playerid, "Robo de vehículo");
             cuenta[playerid][cRobo] = gettime() + 3600;
-            Mensaje(playerid, COLOR_GRIS2, "Usted ha recibido +2 nivel de busqueda por el robo.");
+            Mensaje(playerid, COLOR_GRIS2, "¡Ahora se te busca por un delito de robo!");
             //ZZCASH
             switch(cuenta[playerid][cDonador])
             {
@@ -3343,8 +3352,8 @@ public OnPlayerEnterCheckpoint(playerid)
         {
             TextoInformatico(15, playerid, "~r~Usted ha fallado en robar el vehiculo");
             
-            cuenta[playerid][cBusqueda] += 2;
-            Mensaje(playerid, COLOR_GRIS2, "Usted ha recibido +2 nivel de busqueda por el robo fallido.");
+            darMotivoBusqueda(playerid, "Robo de vehículo");
+            Mensaje(playerid, COLOR_GRIS2, "¡Ahora se te busca por un delito de robo!");
             //ZZCASH
             switch(cuenta[playerid][cDonador])
             {
@@ -3867,8 +3876,8 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
             TextoInformatico(15, playerid, "~r~Usted ha fallado en robar el vehiculo");
 
             DisablePlayerCheckpoint(playerid);
-            cuenta[playerid][cBusqueda] += 2;
-            Mensaje(playerid, COLOR_GRIS2, "Usted ha recibido +2 nivel de busqueda por el robo fallido.");
+            darMotivoBusqueda(playerid, "Robo en de vehículo");
+            Mensaje(playerid, COLOR_GRIS2, "¡Ahora se te busca por un delito de robo!");
             //ZZCASH
             switch(cuenta[playerid][cDonador])
             {
@@ -5832,9 +5841,9 @@ CallBack::transCargamento(playerid, trabid)
                     TextoInformatico(15, playerid, string);
                     
                     ganaDinero(playerid, dinerorobado);
-                    cuenta[playerid][cBusqueda] += 3;
+                    darMotivoBusqueda(playerid, "Robo en negocio");
                     cuenta[playerid][cRobo] = gettime() + 1800;
-                    Mensaje(playerid, COLOR_GRIS2, "Usted ha recibido +3 nivel de busqueda por el robo.");
+                    Mensaje(playerid, COLOR_GRIS2, "¡Ahora se te busca por el robo de este negocio!");
                     
                     cuenta[playerid][selecciono] = 0;
                     cuenta[playerid][selecciono2] = 0;
@@ -5844,8 +5853,8 @@ CallBack::transCargamento(playerid, trabid)
                 {
                     cuenta[playerid][selecciono] = 0;
                     cuenta[playerid][selecciono2] = 0;
-                    cuenta[playerid][cBusqueda] += 2;
-                    Mensaje(playerid, COLOR_GRIS2, "Usted ha recibido +2 nivel de busqueda por el robo fallido.");
+                    darMotivoBusqueda(playerid, "Robo en negocio");
+                    Mensaje(playerid, COLOR_GRIS2, "¡Ahora se te busca por el robo de este negocio!");
                     TextoInformatico(20, playerid, "~r~Usted ha fallado al intentar robar este negocio.");
                 }
             }
@@ -5862,9 +5871,9 @@ CallBack::transCargamento(playerid, trabid)
                     TextoInformatico(15, playerid, string);
                     
                     ganaDinero(playerid, dinerorobado);
-                    cuenta[playerid][cBusqueda] += 2;
+                    darMotivoBusqueda(playerid, "Robo en vivienda");
                     cuenta[playerid][cRobo] = gettime() + 1200;
-                    Mensaje(playerid, COLOR_GRIS2, "Usted ha recibido +2 nivel de busqueda por el robo.");
+                    Mensaje(playerid, COLOR_GRIS2, "¡Ahora se te busca por el robo de esta vivienda!");
                     
                     SetPosEx(playerid, casa[i][hEntrancex], casa[i][hEntrancey], casa[i][hEntrancez], 0, 0, 0);
                     cuenta[playerid][cEntrada] = -1;
@@ -5880,8 +5889,8 @@ CallBack::transCargamento(playerid, trabid)
                     
                     cuenta[playerid][selecciono] = 0;
                     cuenta[playerid][selecciono2] = 0;
-                    cuenta[playerid][cBusqueda] += 1;
-                    Mensaje(playerid, COLOR_GRIS2, "Usted ha recibido +1 nivel de busqueda por el robo fallido.");
+                    darMotivoBusqueda(playerid, "Robo en vivienda");
+                    Mensaje(playerid, COLOR_GRIS2, "¡Ahora se te busca por el robo de esta casa!");
                     TextoInformatico(20, playerid, "~r~Usted ha fallado al intentar robar esta casa.");
                 }
             }
@@ -6880,6 +6889,11 @@ CallBack::OnAccountLoad(playerid, FailPass) {
     cache_get_field_content(0, "sms3", cuenta[playerid][cSMS3], 80);
     cache_get_field_content(0, "sms4", cuenta[playerid][cSMS4], 80);
     cache_get_field_content(0, "sms5", cuenta[playerid][cSMS5], 80);
+    cache_get_field_content(0, "busqueda1", cuenta[playerid][cMotivoBusqueda1], 90);
+    cache_get_field_content(0, "busqueda2", cuenta[playerid][cMotivoBusqueda2], 90);
+    cache_get_field_content(0, "busqueda3", cuenta[playerid][cMotivoBusqueda3], 90);
+    cache_get_field_content(0, "busqueda4", cuenta[playerid][cMotivoBusqueda4], 90);
+    cache_get_field_content(0, "busqueda5", cuenta[playerid][cMotivoBusqueda5], 90);
 
     cuenta[playerid][cEncendedor] = cache_get_field_content_int(0, "encendedor");
     cuenta[playerid][cCigarrillos] = cache_get_field_content_int(0, "cigarrillos");
@@ -7163,11 +7177,13 @@ CallBack::GuardarDatosMySQL(playerid) {
     antecedente1='%s', antecedente2='%s', antecedente3='%s', \
     nota1='%s', nota2='%s', nota3='%s', nota4='%s', nota5='%s', \
     sms1='%s', sms2='%s', sms3='%s', sms4='%s', sms5='%s', \
+    busqueda1='%s', busqueda2='%s', busqueda3='%s', busqueda4='%s', busqueda5='%s', \
     marriedto='%s', \
     ultconn='%s' WHERE id='%d'", 
     cuenta[playerid][cAntecedente1], cuenta[playerid][cAntecedente2], cuenta[playerid][cAntecedente3], 
     cuenta[playerid][cNote1], cuenta[playerid][cNote2], cuenta[playerid][cNote3], cuenta[playerid][cNote4], cuenta[playerid][cNote5], 
     cuenta[playerid][cSMS1], cuenta[playerid][cSMS2], cuenta[playerid][cSMS3], cuenta[playerid][cSMS4], cuenta[playerid][cSMS5], 
+    cuenta[playerid][cMotivoBusqueda1], cuenta[playerid][cMotivoBusqueda2], cuenta[playerid][cMotivoBusqueda3], cuenta[playerid][cMotivoBusqueda4], cuenta[playerid][cMotivoBusqueda5], 
     cuenta[playerid][cPareja], 
     string, cuenta[playerid][cUnico]);
     //Tercera tmp
@@ -9228,23 +9244,92 @@ command(lspd, playerid, params[]) {
     format(string, sizeof(string), "Hay %d policías de servicio", encontro);
     return Mensaje(playerid, COLOR_BUSCADO, string);
 }
-COMMAND:sospechosos(playerid, params[])
-{
-    if(Team_LSPD(playerid) || Team_FBI(playerid))
-    {
-        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_ROJO, "No estas en servicio.");
-        new encontro, string[126];
-        
-        Mensaje(playerid, COLOR_VERDE, "Sospechosos más buscados");
-        for(new i=0, t=GetMaxPlayers(); i<t; i++)
-        {
-            if(!cuenta[i][cBusqueda])continue;
-            format(string, sizeof(string), "{ffffff}Nombre: {ff0000}%s {ffffff}Nivel de Busqueda: {FF7F00}%d", PlayerName(i), cuenta[i][cBusqueda]);
-            Mensaje(playerid, COLOR_BUSCADO, string);
-            encontro++;
+
+TextListCreate:textList_sospechosos(playerid) {
+    cuenta[playerid][cBusqueda] = 5;
+    new encontro;
+    new items[MAX_PLAYERS][TEXTLIST_MAX_ITEM_NAME];
+    new items_bg_colors[TEXTLIST_MAX_ITEMS];
+    for(new id=0; id < MAX_PLAYERS; id++) {
+        if(!cuenta[id][cBusqueda]) continue;
+        format(items[id], TEXTLIST_MAX_ITEM_NAME, "%s", PlayerName(id));
+        switch (cuenta[id][cBusqueda]) {
+        case 1: {
+                items_bg_colors[id] = COLOR_AMARILLO;
+            }
+        case 2: {
+                items_bg_colors[id] = COLOR_NARANJA;
+            }
+        case 3: {
+                items_bg_colors[id] = COLOR_ROJO;
+            }
+        case 4: {
+                items_bg_colors[id] = COLOR_PURPURA;
+            }
+        case 5: {
+                items_bg_colors[id] = COLOR_VIOLETA;
+            }
+        default: {
+                items_bg_colors[id] = COLOR_VERDE;
+            }
         }
-        if(!encontro) Mensaje(playerid, COLOR_BUSCADO, "Sospechosos no encontrados.");
-    }else return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No perteneces a ningún departamento de seguridad.");
+        
+        encontro++;
+    }
+
+    if(encontro) { 
+        TextList_Open(playerid, TextList:textList_sospechosos, items, encontro,
+	              "Lista de sospechosos",
+	              "Salir",
+	              .lists_bg_color = items_bg_colors);
+    } else {
+        Mensaje(playerid, COLOR_BUSCADO, "Sospechosos no encontrados.");
+    }
+}
+
+TextListResponse:textList_sospechosos(playerid, TextListType:response, itemid, itemvalue[]) {
+    if (response == TextList_ListItem) {
+        cuenta[playerid][mirandoMotivosDe] = ObtenerIdDelNombre(itemvalue);
+        TextList_Close(playerid);
+        PlayerPlaySound(playerid, 1083, 0.0, 0.0, 0.0);
+        Dialog_Show(playerid, Dialog:suspectAntecedentes);
+	} else if (response == TextList_Button1 || response == TextList_Cancel) {
+		TextList_Close(playerid);
+        PlayerPlaySound(playerid, 1084, 0.0, 0.0, 0.0);
+	}
+	
+	return 1;
+}
+DialogCreate:suspectAntecedentes(playerid) {
+    new suspectid = cuenta[playerid][mirandoMotivosDe];
+    new title[128];
+    new motivos[90 * 5];
+    format(title, sizeof(title), "%s es buscad%s por: ", PlayerName(suspectid), (cuenta[suspectid][cSexo] == 1 ? "o" : "a"));
+    
+    strcat(motivos, cuenta[suspectid][cMotivoBusqueda1]);
+    strcat(motivos, "\n");
+    strcat(motivos, cuenta[suspectid][cMotivoBusqueda2]);
+    strcat(motivos, "\n");
+    strcat(motivos, cuenta[suspectid][cMotivoBusqueda3]);
+    strcat(motivos, "\n");
+    strcat(motivos, cuenta[suspectid][cMotivoBusqueda4]);
+    strcat(motivos, "\n");
+    strcat(motivos, cuenta[suspectid][cMotivoBusqueda5]);
+        
+	Dialog_Open(playerid, Dialog:suspectAntecedentes, DIALOG_STYLE_LIST, title, motivos, "Volver", "");
+}
+
+DialogResponse:suspectAntecedentes(playerid, response, listitem, inputtext[]) {
+	if (response) {
+		TextList_Show(playerid, TextList:textList_sospechosos);
+	}
+	return 1;
+}
+COMMAND:sospechosos(playerid, params[]) {
+    if (!(Team_LSPD(playerid) || Team_FBI(playerid))) return Mensaje(playerid, COLOR_AMARILLO, "{FFFFFF} No perteneces a ningún departamento de seguridad.");
+    if (!cuenta[playerid][cFaccOnDuty]) return Mensaje(playerid, COLOR_ROJO, "No estás en servicio."); 
+    
+    TextList_Show(playerid, TextList:textList_sospechosos);
     return 1;
 }
 COMMAND:su(playerid, params[])
@@ -9258,10 +9343,7 @@ COMMAND:su(playerid, params[])
         if(!IsPlayerConnected(usuario))return Mensaje(playerid, COLOR_GRIS2, "Este jugador no esta conectado.");
         if(Team_LSPD(usuario) || Team_FBI(usuario))return Mensaje(playerid, COLOR_GRIS2, "Este jugador pertenece a la justicia.");
         
-        cuenta[usuario][cBusqueda]++;
-        
-        SendRadioMessage(1, TEAM_RADIO_COLOR, "** Central: se ha encontrado un nuevo sospechoso, para más información miren sus ordenadores.");
-        SendRadioMessage(9, TEAM_RADIO_COLOR, "** Central: se ha encontrado un nuevo sospechoso, para más información miren sus ordenadores.");
+        darMotivoBusqueda(playerid, crimen);
         
         new string[64];
         ClearChatbox(playerid, 21);
@@ -9313,6 +9395,12 @@ COMMAND:limpiar(playerid, params[])
             {
                 cuenta[usuario][cBusqueda] = 0; 
                 format(string, sizeof(string), "%s canceló el nivel de búsqueda de %s", PlayerName(playerid), PlayerName(usuario));
+                
+                format(cuenta[usuario][cMotivoBusqueda1], 64, "Vacio");
+                format(cuenta[usuario][cMotivoBusqueda2], 64, "Vacio");
+                format(cuenta[usuario][cMotivoBusqueda3], 64, "Vacio");
+                format(cuenta[usuario][cMotivoBusqueda4], 64, "Vacio");
+                format(cuenta[usuario][cMotivoBusqueda5], 64, "Vacio");
                 Mensaje(playerid, COLOR_VERDE, string);
                 Mensaje(usuario, COLOR_VERDE, string);
             }
@@ -9321,6 +9409,11 @@ COMMAND:limpiar(playerid, params[])
                 format(cuenta[usuario][cAntecedente1], 64, "Ninguno");
                 format(cuenta[usuario][cAntecedente2], 64, "Ninguno");
                 format(cuenta[usuario][cAntecedente3], 64, "Ninguno");
+                format(cuenta[usuario][cMotivoBusqueda1], 64, "Vacio");
+                format(cuenta[usuario][cMotivoBusqueda2], 64, "Vacio");
+                format(cuenta[usuario][cMotivoBusqueda3], 64, "Vacio");
+                format(cuenta[usuario][cMotivoBusqueda4], 64, "Vacio");
+                format(cuenta[usuario][cMotivoBusqueda5], 64, "Vacio");
                 cuenta[usuario][cBusqueda] = 0; 
                 format(string, sizeof(string), "%s limpió los antecedentes y la búsqueda de %s", PlayerName(playerid), PlayerName(usuario));
                 Mensaje(playerid, COLOR_VERDE, string);
@@ -31735,6 +31828,20 @@ COMMAND:tban(playerid, params[])
 *	Hora Venezolana.
 *
 */
+Funcion.darMotivoBusqueda(playerid, motivo[]) {
+    if (cuenta[playerid][cBusqueda] < 5) {
+        cuenta[playerid][cBusqueda] += 1;
+        switch (cuenta[playerid][cBusqueda]) {
+            case 1: format(cuenta[playerid][cMotivoBusqueda1], 90, motivo);
+            case 2: format(cuenta[playerid][cMotivoBusqueda2], 90, motivo);
+            case 3: format(cuenta[playerid][cMotivoBusqueda3], 90, motivo);
+            case 4: format(cuenta[playerid][cMotivoBusqueda4], 90, motivo);
+            case 5: format(cuenta[playerid][cMotivoBusqueda5], 90, motivo);
+        }
+        SendRadioMessage(1, TEAM_RADIO_COLOR, "** Central: se ha encontrado un nuevo sospechoso, para más información miren sus ordenadores.");
+        SendRadioMessage(9, TEAM_RADIO_COLOR, "** Central: se ha encontrado un nuevo sospechoso, para más información miren sus ordenadores.");
+    }
+}
 Funcion.ObtenerFecha()
 {
     new fecha[64], date[6];
@@ -32633,8 +32740,14 @@ Funcion.ObtenerIdDelNombre(const partedelnombre[])
     new inombre[MAX_PLAYER_NAME];
     for(new i=0, t=GetMaxPlayers();i<t;i++)
     {
-        GetPlayerName(i, inombre, sizeof(inombre));
-        if(!strfind(inombre, partedelnombre, true)) return i;
+        GetPlayerName(i, inombre, 24);
+        new query[MAX_PLAYER_NAME];
+        strmid(query, partedelnombre, 0, strlen(partedelnombre), MAX_PLAYER_NAME);
+        for(new j = 0; j < MAX_PLAYER_NAME; j++)
+        {
+            if (query[j] == ' ') query[j] = '_';
+        }
+        if(!strfind(inombre, query, true)) return i;
     }
     return -1;
 }
