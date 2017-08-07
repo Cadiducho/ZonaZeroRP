@@ -32422,7 +32422,7 @@ Funcion.obtenerNivel(playerid, skillid)
     case 161 .. 200: inivel = 7;
     case 201 .. 280: inivel = 8;
     case 281 .. 370: inivel = 9;
-    case 371 .. 1000: inivel = 10;
+    default: inivel = 10;
     }
     return inivel;
 }
