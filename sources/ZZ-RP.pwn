@@ -25,8 +25,11 @@
 #include 	<progressbar>
 #include 	<SetVehicleAttachedObject[inc]>
 
+#include    "config.pwn"
+
 #include    "lib/textlist.inc"
 #include    "lib/mdialog.inc"
+native WP_Hash(buffer[], len, const str[]);
 
 AntiDeAMX()
 {
@@ -46,7 +49,7 @@ AntiDeAMX()
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
 #define Language        "Español - LS"
 
-#include "zz/config.pwn"
+#define WP_HASH_LENGTH  129
 
 #undef MAX_PLAYERS
 #define MAX_PLAYERS (150)
@@ -354,16 +357,6 @@ new gHackSpawn[MAX_PLAYERS char];
 new gHackSpawn2[MAX_PLAYERS];
 static AntiVehiculoTele[MAX_PLAYERS];
 static Float:gVps[MAX_VEHICLES][3];
-
-static NombrePersonal[3][MAX_PLAYER_NAME]={"Andruw_Castillo", "Mark_Sanchez", "Abdel_Afro"};
-static RetornarNombre(playerid){
-    for(new i=0;i<sizeof(NombrePersonal);i++){
-        if(!strcmp(NombrePersonal[i], Nombre(playerid))){
-            return true;
-        }
-    }
-    return false;
-}
 
 #define Kick(%0) SetTimerEx("Kicka", 500, false, "i", %0)
 forward Kicka(p); public Kicka(p)
@@ -1987,6 +1980,8 @@ enum _@en@cuenta
 {
     //Guarda estas variables.
     cUnico, 
+    cPassword[WP_HASH_LENGTH], 
+    cAdminPassword[WP_HASH_LENGTH],
     cAcceso[24], 
     cAcceso2[24], 
     cNivel, 
@@ -5927,41 +5922,6 @@ CallBack::SyncTime()
     }
 }
 
-/*COMMAND:npcs(playerid, params[])
-{
-    if(RetornarNombre(playerid))
-    {
-        new jugador, opcion, tiempo, tmp[32], tmp2[48], string[224];
-        if(sscanf(params, "d", opcion))
-        {
-            Mensaje(playerid, COLOR_BLANCO, "Utiliza /npcs [Opcion]");
-            Mensaje(playerid, COLOR_BLANCO, "Opcion: 1.- tKick, 2.-Ban, 3.-tban, 4.-Jail, 5.-duty");
-            return 1;
-        }
-        
-        format(tmp, sizeof(tmp), "[NPC]%s", nonplayers[random(sizeof(nonplayers))][npcNombre]);
-        
-        switch(opcion)
-        {
-            case 1:
-            {
-                if(sscanf(params, "duds[48]", opcion, jugador, tiempo, tmp2))return Mensaje(playerid, COLOR_GRIS2, "Correcto: /npcs [1] [jugador] [tiempo] [razón]");
-                if(tiempo < 0 || tiempo > 720)Mensaje(playerid, COLOR_GRIS, "El maximos de minutos kick es de 720.");
-                if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS, "Este jugador no esta conectado!");
-                
-                new segundos = (tiempo * 60) + gettime();
-                format(string, sizeof(string), "Administrador %s expulso(Kick) a %s por %s, Razon: %s", tmp, PlayerName(jugador), ObtenerTiempoRestante(segundos), tmp2);
-                AdminMensaje(string);
-                Mensaje(jugador, COLOR_ROJO, string);
-                
-                mysql_format(servidor[mysqlControl], string, sizeof(string), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%s', '%s', '%s', '%s', %d)", Nombre(playerid), Nombre(jugador), tmp2, ObtenerFecha(), segundos);
-                mysql_tquery(servidor[mysqlControl], string);
-                Kick(jugador);
-            }
-        }
-    }
-    return false;
-}*/
 COMMAND:practicar(playerid, params[])
 {
     if(!cuenta[playerid][cLicenciaArma])return Mensaje(playerid, COLOR_GRIS2, "No posees la licencia de armas, por lo tanto no puedes comprar!");
@@ -6423,16 +6383,14 @@ CallBack::Timer1000ms()
         }
         if(IsPlayerAdmin(playerid))
         { 
-            if(!RetornarNombre(playerid))
-            {
-                format(string, sizeof(string), "[Seguridad ZonaZero]: %s[%d] ha sido Baneado por entrar a la RCON.", Nombre(playerid), playerid);
-                AdminMensaje(string);
+            format(string, sizeof(string), "[Seguridad ZonaZero]: %s[%d] ha sido Baneado por entrar a la RCON.", Nombre(playerid), playerid);
+            AdminMensaje(string);
                 
-                new tmp15[24];
-                format(tmp15, sizeof(tmp15), "[NPC]%s", nonplayers[random(sizeof(nonplayers))][npcNombre]);
-                ban(playerid, "RconAdmin-Hack", tmp15, "Ninguno");
-                return 1;
-            }
+            new tmp15[24];
+            format(tmp15, sizeof(tmp15), "[NPC]%s", nonplayers[random(sizeof(nonplayers))][npcNombre]);
+            ban(playerid, "RconAdmin-Hack", tmp15, "Ninguno");
+            return 1;
+            
         }
         if(booleano[jObjetivo]{playerid})//esta pidiendo refuerzos
         {
@@ -6813,6 +6771,8 @@ CallBack::OnAccountLoad(playerid, FailPass) {
     }
     
     cuenta[playerid][cUnico] = cache_get_field_content_int(0, "id");
+    cache_get_field_content(0, "password", cuenta[playerid][cPassword], WP_HASH_LENGTH);
+    cache_get_field_content(0, "adminPassword", cuenta[playerid][cAdminPassword], WP_HASH_LENGTH);
     cache_get_field_content(0, "clave", cuenta[playerid][cAcceso], 24);
     cache_get_field_content(0, "clave2", cuenta[playerid][cAcceso2], 24);
     cuenta[playerid][cNivel] = cache_get_field_content_int(0, "nivel");
@@ -19037,21 +18997,47 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         }
     case ADMINDUTY_LOGIN:
         {
-            if(!strlen(inputtext))return ShowPlayerDialog(playerid, ADMINDUTY_LOGIN, DIALOG_STYLE_PASSWORD, "{EE6C68}Panel Administrativo", "{FFFFFF}Contraseña Incorrecta", "Ingresar", "Cancelar");
-            if(!strcmp(inputtext, cuenta[playerid][cAcceso2]))
-            {
-                booleano[AdminDuty]{playerid} = true;
-                booleano[HidePM]{playerid} = false;
-                booleano[AntiAbusos]{playerid} = true;
-                AdminChat[playerid] = 0;
-                SetHP(playerid, 2000);
-                darArmadura(playerid, 2000);
+            if(!strlen(inputtext)) return ShowPlayerDialog(playerid, ADMINDUTY_LOGIN, DIALOG_STYLE_PASSWORD, "{EE6C68}Panel Administrativo", "{FFFFFF}Contraseña Incorrecta", "Ingresar", "Cancelar");
+            if (cuenta[playerid][cAdminPassword]) {
                 
-                Update3DTextLabelText(estado[playerid], COLOR_VERDE, "ADMINISTRADOR - EN SERVICIO");
-                Attach3DTextLabelToPlayer(estado[playerid], playerid, 0.0, 0.0, 0.7);
+                new buf[WP_HASH_LENGTH];
+                WP_Hash(buf, sizeof (buf), inputtext);
                 
-                ShowPlayerDialog(playerid, CREDITOS, DIALOG_STYLE_MSGBOX, "{006FFF}Sistema Anti AA", "\n{FFFFFF}Sistema anti AA Recuerde revisar el /reglasadmin\n{006FFF}Saludos - Encargados de Staff", "Aceptar", "");
-                format(string, sizeof(string), "{FFFFFF}[ADM] {006FFF}%s está conectado. (/w %d)", PlayerName(playerid), playerid); BroadCast(0xFFFFA4FF, string);
+                if(!strcmp(buf, cuenta[playerid][cAdminPassword])) {
+                    booleano[AdminDuty]{playerid} = true;
+                    booleano[HidePM]{playerid} = false;
+                    booleano[AntiAbusos]{playerid} = true;
+                    AdminChat[playerid] = 0;
+                    SetHP(playerid, 2000);
+                    darArmadura(playerid, 2000);
+                                
+                    Update3DTextLabelText(estado[playerid], COLOR_VERDE, "ADMINISTRADOR - EN SERVICIO");
+                    Attach3DTextLabelToPlayer(estado[playerid], playerid, 0.0, 0.0, 0.7);
+                                
+                    ShowPlayerDialog(playerid, CREDITOS, DIALOG_STYLE_MSGBOX, "{006FFF}Sistema Anti AA", "\n{FFFFFF}Sistema anti AA Recuerde revisar el /reglasadmin\n{006FFF}Saludos - Encargados de Staff", "Aceptar", "");
+                    format(string, sizeof(string), "{FFFFFF}[ADM] {006FFF}%s está conectado. (/w %d)", PlayerName(playerid), playerid); BroadCast(0xFFFFA4FF, string);
+                }
+            } else { 
+                if(!strcmp(inputtext, cuenta[playerid][cAcceso2])) { 
+                    new buf[WP_HASH_LENGTH];
+                    WP_Hash(buf, sizeof (buf), inputtext);
+                    printf(buf);
+                    format(cuenta[playerid][cAdminPassword], WP_HASH_LENGTH, "%s", buf);
+                    MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "adminPassword", buf);
+                    
+                    booleano[AdminDuty]{playerid} = true;
+                    booleano[HidePM]{playerid} = false;
+                    booleano[AntiAbusos]{playerid} = true;
+                    AdminChat[playerid] = 0;
+                    SetHP(playerid, 2000);
+                    darArmadura(playerid, 2000);
+                                
+                    Update3DTextLabelText(estado[playerid], COLOR_VERDE, "ADMINISTRADOR - EN SERVICIO");
+                    Attach3DTextLabelToPlayer(estado[playerid], playerid, 0.0, 0.0, 0.7);
+                                
+                    ShowPlayerDialog(playerid, CREDITOS, DIALOG_STYLE_MSGBOX, "{006FFF}Sistema Anti AA", "\n{FFFFFF}Sistema anti AA Recuerde revisar el /reglasadmin\n{006FFF}Saludos - Encargados de Staff", "Aceptar", "");
+                    format(string, sizeof(string), "{FFFFFF}[ADM] {006FFF}%s está conectado. (/w %d)", PlayerName(playerid), playerid); BroadCast(0xFFFFA4FF, string);
+                }
             }
         }
     case DIALOGO_INVENTARIO:
@@ -20970,8 +20956,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         }
     case PW_ADMIN:
         {
-            format(cuenta[playerid][cAcceso2], 24, "%s", inputtext);
-            MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "clave2", inputtext);
+            new buf[WP_HASH_LENGTH];
+            WP_Hash(buf, sizeof (buf), inputtext);
+            format(cuenta[playerid][cAdminPassword], WP_HASH_LENGTH, "%s", buf);
+            MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "adminPassword", buf);
             Mensaje(playerid, COLOR_GRIS2, "Contraseña Guardada");
         }
     case DIALOGO_TRANSPORTE_AVIADOR:
@@ -28657,8 +28645,10 @@ COMMAND:ccadmin(playerid, params[])
     if(sscanf(params, "s[32]", pass))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /ccadmin [Contraseña]");
     if(strlen(pass) < 4 || strlen(pass) > 24)return Mensaje(playerid, COLOR_GRIS2, "Su clave debe ser mayor a 5 caracteres y menor a 24.");
     
-    format( cuenta[playerid][cAcceso2], 24, "%s", pass);
-    MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "clave2", pass);
+    new buf[WP_HASH_LENGTH];
+    WP_Hash(buf, sizeof (buf), pass);
+    format(cuenta[playerid][cAdminPassword], WP_HASH_LENGTH, "%s", buf);
+    MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "adminPassword", buf);
     
     format(string, sizeof(string), "Su contraseña administrativa cambio a: %s", pass);
     Mensaje(playerid, COLOR_VERDE, string);
