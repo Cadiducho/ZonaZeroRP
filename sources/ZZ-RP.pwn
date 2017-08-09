@@ -8952,6 +8952,7 @@ command(despedir, playerid, params[])
         format(string, sizeof(string), "  Despediste a %s", PlayerName(params[0]));
         Mensaje(playerid, COLOR_BLANCO, string);
         cuenta[params[0]][cMiembro] = 0;
+        cuenta[params[0][cFaccOnDuty] = 0;
         cuenta[params[0]][cRango] = 0;
         UpdatePlayerStat(params[0]);
         SetPlayerSkin(params[0], 299);
@@ -10831,6 +10832,7 @@ COMMAND:darlider(playerid, params[])
     default: return Mensaje(playerid, COLOR_ROJO, "Esa faccion no existe.");
     }
     
+    cuenta[jugador][cFaccOnDuty] = 0;
     cuenta[jugador][cMiembro] = idunico;
     cuenta[jugador][cLider] = idunico;
     SetPlayerSkin(jugador, cuenta[jugador][cTraje]);
@@ -13481,6 +13483,7 @@ command(salirfaccion, playerid, params[])
     cuenta[playerid][cMiembro] = 0;
     cuenta[playerid][cLider] = 0;
     cuenta[playerid][cRango] = 0;
+    cuenta[playerid][cFaccOnDuty] = 0;
     GameTextForPlayer(playerid, "HAZ SALIDO DE TU FACCION, AHORA ERES UN CIVIL", 3000, 3);
     SetPlayerSkin(playerid, 299);
     return 1;
@@ -27074,7 +27077,7 @@ CallBack::ConfirmarCuenta(playerid)
 CallBack::ActualizarBolsa(playerid)
 {
     new consulta[1024];
-    format(consulta, sizeof(consulta), "UPDATE zz_bolsa SET empresa0=%d, empresa1=%d, empresa2=%d, empresa3=%d, empresa4=%d, empresa5=%d, empresa6=%d, empresa7=%d, cantidad0=%d, cantidad1=%d, cantidad2=%d, cantidad3=%d, cantidad4=%d, cantidad5=%d, cantidad6=%d, cantidad7=%d WHERE unico='%d'", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_bolsa SET empresa0=%d, empresa1=%d, empresa2=%d, empresa3=%d, empresa4=%d, empresa5=%d, empresa6=%d, empresa7=%d, cantidad0=%d, cantidad1=%d, cantidad2=%d, cantidad3=%d, cantidad4=%d, cantidad5=%d, cantidad6=%d, cantidad7=%d WHERE unico='%d'", 
     acciones[playerid][aAccTipo][0], 
     acciones[playerid][aAccTipo][1], 
     acciones[playerid][aAccTipo][2], 
@@ -27098,7 +27101,7 @@ CallBack::ActualizarBolsa(playerid)
 CallBack::ActualizarFamilia(famid)
 {
     new consulta[1024];
-    format(consulta, sizeof(consulta), "UPDATE zz_familias SET focupado=%d, fnombre='%s', frango1='%s', frango2='%s', frango3='%s', frango4='%s', frango5='%s', frango6='%s', fposx=%f, fposy=%f, fposz=%f WHERE fslot=%d;", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_familias SET focupado=%d, fnombre='%e', frango1='%e', frango2='%e', frango3='%e', frango4='%e', frango5='%e', frango6='%e', fposx=%f, fposy=%f, fposz=%f WHERE fslot=%d;", 
     familias[famid][fOcupado], 
     familias[famid][fNombre], 
     familias[famid][fRango0], 
@@ -27117,7 +27120,7 @@ CallBack::ActualizarFamilia(famid)
 CallBack::ActualizarFaccion(Ifaccid)
 {
     new consulta[1128];
-    format(consulta, sizeof(consulta), "UPDATE zz_ilegalfacciones SET ifuso=%d, ifnombre='%s', ifrango0='%s', ifrango1='%s', ifrango2='%s', ifrango3='%s', ifrango4='%s', ifrango5='%s', ifbobeda=%d, ifarma0=%d, ifarma1=%d, ifarma2=%d, ifarma3=%d, ifarma4=%d, ifarma5=%d, ifarma6=%d, ifarma7=%d, ifarma8=%d, ifarma9=%d, ifarma10=%d, ifarma11=%d, ifarma12=%d, ifarma13=%d, ifarma14=%d, ifarma15=%d, ifarma16=%d, ifarma17=%d, ifarma18=%d, ifarma19=%d, ifdroga0=%d, ifdroga1=%d, ifdroga2=%d, ifdroga3=%d, ifdroga4=%d, ifdroga5=%d, ifdroga6=%d, ifdroga7=%d, ifdroga8=%d, ifdroga9=%d, ifdroga10=%d, ifdroga11=%d, ifdroga12=%d, ifdroga13=%d, ifdroga14=%d, ifdroga15=%d, ifdroga16=%d, ifdroga17=%d, ifdroga18=%d, ifdroga19=%d, ifposx=%f, ifposy=%f, ifposz=%f, ifbposx=%f, ifbposy=%f, ifbposz=%f, ifcolor=%d WHERE ifid=%d;", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_ilegalfacciones SET ifuso=%d, ifnombre='%e', ifrango0='%e', ifrango1='%e', ifrango2='%e', ifrango3='%e', ifrango4='%e', ifrango5='%e', ifbobeda=%d, ifarma0=%d, ifarma1=%d, ifarma2=%d, ifarma3=%d, ifarma4=%d, ifarma5=%d, ifarma6=%d, ifarma7=%d, ifarma8=%d, ifarma9=%d, ifarma10=%d, ifarma11=%d, ifarma12=%d, ifarma13=%d, ifarma14=%d, ifarma15=%d, ifarma16=%d, ifarma17=%d, ifarma18=%d, ifarma19=%d, ifdroga0=%d, ifdroga1=%d, ifdroga2=%d, ifdroga3=%d, ifdroga4=%d, ifdroga5=%d, ifdroga6=%d, ifdroga7=%d, ifdroga8=%d, ifdroga9=%d, ifdroga10=%d, ifdroga11=%d, ifdroga12=%d, ifdroga13=%d, ifdroga14=%d, ifdroga15=%d, ifdroga16=%d, ifdroga17=%d, ifdroga18=%d, ifdroga19=%d, ifposx=%f, ifposy=%f, ifposz=%f, ifbposx=%f, ifbposy=%f, ifbposz=%f, ifcolor=%d WHERE ifid=%d;", 
     IFacciones[Ifaccid][If@usada], 
     IFacciones[Ifaccid][If@nombre], 
     IFacciones[Ifaccid][If@rango0], 
@@ -27181,7 +27184,7 @@ CallBack::ActualizarFaccion(Ifaccid)
 CallBack::ActualizarMaletas(i)
 {
     new consulta[1024];
-    format(consulta, sizeof(consulta), "UPDATE zz_maletas SET arma1=%d, arma2=%d, arma3=%d, arma4=%d, arma5=%d, arma6=%d, arma7=%d, arma8=%d, chaleco=%d, droga1=%d, droga2=%d, droga3=%d, droga4=%d, droga5=%d WHERE vehicleid=%d", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_maletas SET arma1=%d, arma2=%d, arma3=%d, arma4=%d, arma5=%d, arma6=%d, arma7=%d, arma8=%d, chaleco=%d, droga1=%d, droga2=%d, droga3=%d, droga4=%d, droga5=%d WHERE vehicleid=%d", 
     maletero[i][marma][0], 
     maletero[i][marma][1], 
     maletero[i][marma][2], 
@@ -27202,7 +27205,7 @@ CallBack::ActualizarMaletas(i)
 CallBack::ActualizaAutoFacc(i)
 {
     new consulta[256];
-    format(consulta, sizeof(consulta), "UPDATE zz_autosfacc SET faccion=%d, col1=%d, col2=%d, posx=%f, posy=%f, posz=%f, posa=%f, modelo=%d WHERE idunico=%d", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_autosfacc SET faccion=%d, col1=%d, col2=%d, posx=%f, posy=%f, posz=%f, posa=%f, modelo=%d WHERE idunico=%d", 
     Autosfacc[i][af@faccion], 
     Autosfacc[i][af@colores][0], 
     Autosfacc[i][af@colores][1], 
@@ -27218,7 +27221,7 @@ CallBack::ActualizaAutoFacc(i)
 CallBack::ActualizaVehiculo(idx)
 {
     new consulta[1024];
-    format(consulta, sizeof(consulta), "UPDATE zz_coches SET modelo=%d, propietario='%s', nombre='%s', ocupado=%d, posicionx=%f, posiciony=%f, posicionz=%f, posiciona=%f, color1=%d, color2=%d, precio=%d, seguro=%d, bateria=%d, spoiler=%d, hood=%d, roof=%d, sideskirt=%d, nitrogeno=%d, lamps=%d, exhaust=%d, ruedas=%d, hidraulico=%d, paintjob=%d, frontbump=%d, rearbump=%d, vents=%d, embargo=%d, multa=%d, placa='%s', gasolina=%d, alarma=%d, tiempo=%d, gps=%d WHERE carid=%d", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_coches SET modelo=%d, propietario='%e', nombre='%e', ocupado=%d, posicionx=%f, posiciony=%f, posicionz=%f, posiciona=%f, color1=%d, color2=%d, precio=%d, seguro=%d, bateria=%d, spoiler=%d, hood=%d, roof=%d, sideskirt=%d, nitrogeno=%d, lamps=%d, exhaust=%d, ruedas=%d, hidraulico=%d, paintjob=%d, frontbump=%d, rearbump=%d, vents=%d, embargo=%d, multa=%d, placa='%e', gasolina=%d, alarma=%d, tiempo=%d, gps=%d WHERE carid=%d", 
     autos[idx][cModel], 
     autos[idx][cOwner], 
     autos[idx][cName], 
@@ -27259,7 +27262,7 @@ CallBack::ActualizaVehiculo(idx)
 CallBack::ActualizaCasa(idx)
 {
     new consulta[1024];
-    format(consulta, sizeof(consulta), "UPDATE zz_casas SET ocupado=%d, propietario='%s', ubicacion='%s', nombre='%s', entradax=%f, entraday=%f, entradaz=%f, salidax=%f, saliday=%f, salidaz=%f, interior=%d, nivel=%d, precio=%d, seguro=%d, cuartos=%d, renta=%d, rentabil=%d, arma=%d, municion=%d, materiales=%d, drogas=%d, speed=%d, ectasi=%d, ritalin=%d, heroina=%d, marihuana=%d, world=%d, tiempo=%d WHERE casaid=%d;", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_casas SET ocupado=%d, propietario='%e', ubicacion='%e', nombre='%e', entradax=%f, entraday=%f, entradaz=%f, salidax=%f, saliday=%f, salidaz=%f, interior=%d, nivel=%d, precio=%d, seguro=%d, cuartos=%d, renta=%d, rentabil=%d, arma=%d, municion=%d, materiales=%d, drogas=%d, speed=%d, ectasi=%d, ritalin=%d, heroina=%d, marihuana=%d, world=%d, tiempo=%d WHERE casaid=%d;", 
     casa[idx][hOwned], 
     casa[idx][hOwner], 
     casa[idx][hUbicacion], 
@@ -27294,7 +27297,7 @@ CallBack::ActualizaCasa(idx)
 }
 CallBack::ActualizaNegocio(bizzid){
     new consulta[1024];
-    format(consulta, sizeof(consulta), "UPDATE zz_negocios SET owned=%d, owner='%s', name='%s', extortion='%s', entrancex=%.4f, entrancey=%.4f, entrancez=%.4f, exitx=%.4f, exity=%.4f, exitz=%.4f, interior=%d, levelneeded=%d, buyprice=%d, till=%d, tillx=%d, productos=%d, costoentrada=%d, tiempo=%d, ubicacion='%s', empresa='%s' WHERE negocioid = %d;", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_negocios SET owned=%d, owner='%s', name='%s', extortion='%s', entrancex=%.4f, entrancey=%.4f, entrancez=%.4f, exitx=%.4f, exity=%.4f, exitz=%.4f, interior=%d, levelneeded=%d, buyprice=%d, till=%d, tillx=%d, productos=%d, costoentrada=%d, tiempo=%d, ubicacion='%s', empresa='%s' WHERE negocioid = %d;", 
     negocio[bizzid][bOwned], 
     negocio[bizzid][bOwner], 
     negocio[bizzid][bName], 
@@ -27322,7 +27325,7 @@ CallBack::ActualizaNegocio(bizzid){
 CallBack::ActualizarReja(rejaid)
 {
     new consulta[1024];
-    format(consulta, sizeof(consulta), "UPDATE zz_rejas SET modelo=%d, cobra=%d, faccion=%d, aposx=%f, aposy=%f, aposz=%f, arotx=%f, aroty=%f, arotz=%f, cposx=%f, cposy=%f, cposz=%f, crotx=%f, croty=%f, crotz=%f WHERE unico=%d;", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_rejas SET modelo=%d, cobra=%d, faccion=%d, aposx=%f, aposy=%f, aposz=%f, arotx=%f, aroty=%f, arotz=%f, cposx=%f, cposy=%f, cposz=%f, crotx=%f, croty=%f, crotz=%f WHERE unico=%d;", 
     rejas[rejaid][reModelo], 
     rejas[rejaid][reCobra], 
     rejas[rejaid][reFacion], 
@@ -27812,12 +27815,12 @@ COMMAND:cambiarnombre(playerid, params[])
     
     new tmp[24];
     mysql_real_escape_string(usuario, tmp, servidor[mysqlControl]);
-    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "SELECT nombre FROM zz_usuarios WHERE nombre ='%s';", tmp);
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "SELECT nombre FROM zz_usuarios WHERE nombre ='%e';", tmp);
     mysql_query(servidor[mysqlControl], consulta, true);
     
     if(!cache_get_row_count())
     {
-        mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_usuarios SET nombre='%s' WHERE id='%d';", tmp, cuenta[playerid][cUnico]);
+        mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_usuarios SET nombre='%e' WHERE id='%d';", tmp, cuenta[playerid][cUnico]);
         mysql_query(servidor[mysqlControl], consulta, false);		
         
         cuenta[playerid][cDonar][1] = 0;
@@ -28637,7 +28640,7 @@ COMMAND:ccjugador(playerid, params[])
     
     //A eliminar: actualizar viejas contraseñas para el login temporal
     new query[256];
-    mysql_format(servidor[mysqlControl], query, sizeof(query), "UPDATE %s SET %s=md5('%s') WHERE nombre='%e'", "zz_usuarios", "clave", pass, Nombre(playerid));
+    mysql_format(servidor[mysqlControl], query, sizeof(query), "UPDATE zz_usuarios SET clave=md5('%e') WHERE nombre='%e'", pass, Nombre(playerid));
     mysql_query(servidor[mysqlControl], query, false);
     //-----------
     
@@ -31641,7 +31644,7 @@ COMMAND:jailoff(playerid, params[])
     if(!booleano[AntiAbusos]{playerid})return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No puedes usar este comando sin estar en OnDuty.");
     if(sscanf(params, "ds[24]p< >s[64]", tiempo, inombre, razon))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /jailoff [Tiempo] [Nombre_Apellido] [Razon]");
     
-    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT id FROM zz_usuarios WHERE nombre = '%s';", inombre);
+    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT id FROM zz_usuarios WHERE nombre = '%e';", inombre);
     R = mysql_query(servidor[mysqlControl], tmp, true);
     
     if(cache_get_row_count(servidor[mysqlControl]))
@@ -31651,7 +31654,7 @@ COMMAND:jailoff(playerid, params[])
         format(string, sizeof(string), "{FF0000}CMD-OFF: {FFFFFF}%s encarceló a %s por %d minuto(s), razón: %s", PlayerName(playerid), inombre, tiempo, razon);
         AdminMensaje(string);
         
-        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "UPDATE zz_usuarios SET carcel=1, tiempocarcel=%d, janombre='%s', jrazon='%s' WHERE id=%d", tiempo * 60, Nombre(playerid), razon, jailid);
+        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "UPDATE zz_usuarios SET carcel=1, tiempocarcel=%d, janombre='%e', jrazon='%s' WHERE id=%d", tiempo * 60, Nombre(playerid), razon, jailid);
         mysql_query(servidor[mysqlControl], tmp, false);
     }
     else
@@ -31735,7 +31738,7 @@ COMMAND:banip(playerid, params[])
         if(!booleano[AntiAbusos]{playerid})return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No puedes usar este comando sin estar en OnDuty.");
         if(sscanf(params, "s[16]s[48]", ip, razon))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /banip [Dirección de IP][Razón]");
         
-        mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "INSERT INTO zz_tablaip(ipaddress, razon, fecha) VALUES('%s', '%s', '%s');", ip, razon, ObtenerFecha());
+        mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "INSERT INTO zz_tablaip(ipaddress, razon, fecha) VALUES('%e', '%e', '%e');", ip, razon, ObtenerFecha());
         mysql_query(servidor[mysqlControl], consulta, false);
         
         format(consulta, sizeof(consulta), "Administrador %s prohibio la IP: %s Razón: %s", Nombre(playerid), ip, razon);
@@ -31788,7 +31791,7 @@ COMMAND:tkick(playerid, params[])
         AdminMensaje(string);
         Mensaje(user, COLOR_ROJO, string);
         
-        mysql_format(servidor[mysqlControl], string, sizeof(string), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%s', '%s', '%s', '%s', %d)", Nombre(playerid), Nombre(user), razon, ObtenerFecha(), segundos);
+        mysql_format(servidor[mysqlControl], string, sizeof(string), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%e', '%e', '%e', '%e', %d)", Nombre(playerid), Nombre(user), razon, ObtenerFecha(), segundos);
         mysql_tquery(servidor[mysqlControl], string);
         Kick(user);
     }
@@ -31813,7 +31816,7 @@ COMMAND:tban(playerid, params[])
         AdminMensaje(string);
         Mensaje(user, COLOR_ROJO, string);
         
-        mysql_format(servidor[mysqlControl], string, sizeof(string), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%s', '%s', '%s', '%s', %d)", Nombre(playerid), Nombre(user), razon, ObtenerFecha(), segundos);
+        mysql_format(servidor[mysqlControl], string, sizeof(string), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%e', '%e', '%e', '%e', %d)", Nombre(playerid), Nombre(user), razon, ObtenerFecha(), segundos);
         mysql_tquery(servidor[mysqlControl], string);
         Kick(user);
     }
@@ -32494,7 +32497,7 @@ Funcion.ban(playerid, razon[], admin[], codigo[])
     TextDrawShowForPlayer(playerid, TextdBan[1]);
     TextDrawShowForPlayer(playerid, TextdBan[2]);
     
-    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_tablaip(ipaddress, razon, fecha, nombre) VALUES('%s', '%s', '%s', '%s');", tmp2, razon, ObtenerFecha(), Nombre(playerid));
+    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_tablaip(ipaddress, razon, fecha, nombre) VALUES('%e', '%e', '%e', '%e');", tmp2, razon, ObtenerFecha(), Nombre(playerid));
     mysql_query(servidor[mysqlControl], tmp, false);
     return Kick(playerid);
 }
