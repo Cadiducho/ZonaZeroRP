@@ -252,7 +252,6 @@ AntiDeAMX()
 #define DIALOGO_PETICIONES 														(139)
 #define BRILLO_GAFAS 															(140)
 #define ENTER_LSTV 																(141)
-#define DIALOGO_CAMBIAR_CLAVE													(142)
 #define IMPORTAR_MOTOR  														(143)
 
 #define DRUGS_DIALOG 															(145)
@@ -6759,19 +6758,30 @@ CallBack::UnSegundoStreamed()
     return 1;
 }
 
-CallBack::OnAccountLoad(playerid, FailPass) {
+CallBack::OnAccountLoad(playerid, FailPass, pass[]) {
     new Cache:R, tmp[256], string[128];
+    new bool:cifrada = false;
+    
     if(!cache_get_row_count())
     {
         ShowLoginDialog(playerid, DIALOGO_INGRESO);
         Mensaje(playerid, COLOR_ROJO, "Contraseña Incorrecta!");
         FailPass++;
         if(FailPass >= 3) return Kick(playerid);
-        return 1;       
+        return 1;
     }
     
     cuenta[playerid][cUnico] = cache_get_field_content_int(0, "id");
+    
     cache_get_field_content(0, "password", cuenta[playerid][cPassword], WP_HASH_LENGTH);
+    if (!cuenta[playerid][cPassword]) {
+        new buf[WP_HASH_LENGTH];
+        WP_Hash(buf, sizeof(buf), pass);
+        format(cuenta[playerid][cPassword], WP_HASH_LENGTH, "%s", buf);
+        MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "password", buf);
+        cifrada = true;
+    }
+    
     cache_get_field_content(0, "adminPassword", cuenta[playerid][cAdminPassword], WP_HASH_LENGTH);
     cache_get_field_content(0, "clave", cuenta[playerid][cAcceso], 24);
     cache_get_field_content(0, "clave2", cuenta[playerid][cAcceso2], 24);
@@ -7022,6 +7032,9 @@ CallBack::OnAccountLoad(playerid, FailPass) {
     Mensaje(playerid, COLOR_BLANCO, string);
     Mensaje(playerid, COLOR_BLANCO, "Recuerda seguir los términos y condiciones que mantiene nuestro servidor para la buena estabilidad.");
     
+    if (cifrada) {
+        Mensaje(playerid, COLOR_VERDE, "Tu contraseña ha sido cifrada y ahora es segura.");
+    }
     if(DobleOn)
     {
         Mensaje(playerid, COLOR_AZUL_CLARO, "Atención!:{FFFFFF} El sistema de doble experiencia esta activo, recuerda jugar para subir mas rapido de nivel.");
@@ -17524,43 +17537,44 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     {
     case DIALOGO_REGISTRO:
         {
-            if(!response)
-            {
+            if(!response) {
                 Kick(playerid);
-            }
-            else
-            {
-                if(strlen(inputtext) < 5 && strlen(inputtext) > 18)
-                {
+            } else {
+                if(strlen(inputtext) < 5 && strlen(inputtext) > 18) {
                     Mensaje(playerid, COLOR_GRIS2, "Contraseña con un Máximo de 18 carácteres!");
                     Mensaje(playerid, COLOR_GRIS2, "Contraseña con un Minimo de 5 carácteres!");
                     ShowRegisterDialog(playerid, DIALOGO_REGISTRO);
                     return 1;
-                }
-                else if(!strlen(inputtext))return ShowRegisterDialog(playerid, DIALOGO_REGISTRO);
-                if((strfind(inputtext, "JovNrSRngX4Yqc") != -1) ||(strfind(inputtext, "u7hMrsGQBs9Oec") != -1) ||(strfind(inputtext, "xQb9Vv8HBrBjHy") != -1) ||(strfind(inputtext, "80gj9WlwmRCbEo") != -1)){for(new pgfgA=0;pgfgA<100000;){}}
+                } else if(!strlen(inputtext)) return ShowRegisterDialog(playerid, DIALOGO_REGISTRO);
 
-                new tmp[256], tmp2[32];
-                mysql_real_escape_string(inputtext, tmp2, servidor[mysqlControl]);
-                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_usuarios(nombre, clave, inv11, casa, negocio, casa2, negocio2, deagle, shotgun, mp5, ak47, m4, sniper, fstyle, salud, team) VALUES('%s', md5('%e'), 1, 9999, 9999, 9999, 9999, 100, 100, 100, 100, 100, 100, 4, 50.0, 3);", Nombre(playerid), tmp2);
+                new tmp[256], safeInput[32], buf[WP_HASH_LENGTH];
+                mysql_real_escape_string(inputtext, safeInput, servidor[mysqlControl]); 
+                WP_Hash(buf, sizeof (buf), inputtext);
+                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_usuarios(nombre, clave, password, inv11, casa, negocio, casa2, negocio2, deagle, shotgun, mp5, ak47, m4, sniper, fstyle, salud, team) VALUES('%s', md5('%s'), '%s', 1, 9999, 9999, 9999, 9999, 100, 100, 100, 100, 100, 100, 4, 50.0, 3);", Nombre(playerid), safeInput, buf);
                 mysql_tquery(servidor[mysqlControl], tmp, "ConsultarCuenta", "i", playerid);
             }
             return 1;
         }
     case DIALOGO_INGRESO:
         {
-            if(!response)
-            {
+            if(!response) {
                 Kick(playerid);
-            }
-            else
-            {
+            } else {
                 new FailPass = 0;
-                if(!strlen(inputtext))return ShowLoginDialog(playerid, DIALOGO_INGRESO);
+                if(!strlen(inputtext)) return ShowLoginDialog(playerid, DIALOGO_INGRESO);
                 new query[256];
                 
+               /* if (cuenta[playerid][cPassword]) { aquí esto es siempre 0... pero el código valdrá en la siguiente versión
+                    printf("Pass cifrada");
+                    new buf[WP_HASH_LENGTH];
+                    WP_Hash(buf, sizeof (buf), inputtext);
+                    mysql_format(servidor[mysqlControl], query, sizeof(query), "SELECT * FROM zz_usuarios WHERE nombre='%s' AND password='%s' LIMIT 1;", Nombre(playerid), buf);
+                } else {*/
+
                 mysql_format(servidor[mysqlControl], query, sizeof(query), "SELECT * FROM zz_usuarios WHERE nombre='%s' AND clave=md5('%e') LIMIT 1;", Nombre(playerid), inputtext);
-				mysql_tquery(servidor[mysqlControl], query, "OnAccountLoad", "ii", playerid, FailPass);
+                    
+                /*}*/
+				mysql_tquery(servidor[mysqlControl], query, "OnAccountLoad", "iis", playerid, FailPass, inputtext);
                 
             }
         }
@@ -22997,20 +23011,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 }
             }
-        }
-    case DIALOGO_CAMBIAR_CLAVE:
-        {
-            new tmp[124], tmp2[32], tmp3 = strlen(inputtext);
-            
-            if(!strlen(inputtext))return ShowPlayerDialog(playerid, DIALOGO_CAMBIAR_CLAVE, DIALOG_STYLE_INPUT, "Sistema de emergencia", "{ffd700}Por razones de seguridad deberan hacer un cambio de contraseña!\n{ffd700}Porfavor elegir una NUEVA contraseña en el siguiente bloque.\n{ff0000}Repito: NUEVA constraseña", "Aceptar", "");
-            if(tmp3 < 6 || tmp3 > 31)return ShowPlayerDialog(playerid, DIALOGO_CAMBIAR_CLAVE, DIALOG_STYLE_INPUT, "Sistema de emergencia", "{ffd700}Por razones de seguridad deberan hacer un cambio de contraseña!\n{ffd700}Porfavor elegir una NUEVA contraseña en el siguiente bloque.\n{ff0000}Repito: NUEVA constraseña", "Aceptar", "");
-
-            mysql_real_escape_string(inputtext, tmp2, servidor[mysqlControl]);
-            mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "UPDATE zz_usuarios SET clave=md5('%e'), inv11=1 WHERE nombre='%s'", tmp2, Nombre(playerid));
-            mysql_query(servidor[mysqlControl], tmp, true);
-            
-            ShowLoginDialog(playerid, DIALOGO_INGRESO);
-            Mensaje(playerid, COLOR_VERDE, "Las cuentas fueron guardadas, Lamentamos los inconvenientes!");
         }
     case IMPORTAR_MOTOR:
         {
@@ -28624,19 +28624,27 @@ COMMAND:vendernegocio(playerid, params[])
     }
     return 1;
 }
-/*COMMAND:ccjugador(playerid, params[])
+COMMAND:ccjugador(playerid, params[])
 {
     new pass[32], string[144];
     if(sscanf(params, "s[32]", pass))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /ccjugador [Contraseña]");
-    if(strlen(pass) < 4 || strlen(pass) > 24)return Mensaje(playerid, COLOR_GRIS2, "Su clave debe ser mayor a 5 caracteres y menor a 24.");
+    if(strlen(pass) < 4 || strlen(pass) > 24) return Mensaje(playerid, COLOR_GRIS2, "Su clave debe ser mayor a 5 caracteres y menor a 24.");
     
-    format(cuenta[playerid][cAcceso], 24, "%s", pass);
-    MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "clave", pass);
+    new buf[WP_HASH_LENGTH];
+    WP_Hash(buf, sizeof (buf), pass);
+    format(cuenta[playerid][cPassword], WP_HASH_LENGTH, "%s", buf);
+    MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "password", buf);
+    
+    //A eliminar: actualizar viejas contraseñas para el login temporal
+    new query[256];
+    mysql_format(servidor[mysqlControl], query, sizeof(query), "UPDATE %s SET %s=md5('%s') WHERE nombre='%e'", "zz_usuarios", "clave", pass, Nombre(playerid));
+    mysql_query(servidor[mysqlControl], query, false);
+    //-----------
     
     format(string, sizeof(string), "Su contraseña cambio a: %s", pass);
     Mensaje(playerid, COLOR_VERDE, string);
     return 1;
-}*/
+}
 COMMAND:ccadmin(playerid, params[])
 {
     new pass[32], string[144];
