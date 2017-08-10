@@ -1845,6 +1845,7 @@ enum _@en@booleano
     AntiAbusos, 
     AdminDuty, 
     gMurio, 
+    gPuedeAceptarMuerte, 
     NewUsed, 
     Facturing, 
     MsgL4L, 
@@ -2003,6 +2004,9 @@ enum _@en@cuenta
     cCheques, 
     cAsesinatos, 
     cMuerte, 
+    Float:cMuertePosX, 
+    Float:cMuertePosY, 
+    Float:cMuertePosZ, 
     cArrestado, 
     cLoteria, 
     cTrabajo, 
@@ -2592,17 +2596,30 @@ public OnPlayerSpawn(playerid)
                         if(!cuenta[playerid][cCarcel])
                         {
                             booleano[gMurio]{playerid} = false;
-                            Mensaje(playerid, COLOR_CIAN, "Te has recuperado exsitósamente de tu accidente.");
-                            Mensaje(playerid, COLOR_CIAN, "Te hemos transladado al hospital.");
-                            Mensaje(playerid, COLOR_CIAN, "Desafortunadamente tienes amnesia, no recuerdas nada.");
-                            SetPosEx(playerid, -2671.2676, 509.5787, 48.0791, 272.0, 0, 0);
-                            SetPlayerStats(playerid);
                             
-                            if(!cuenta[playerid][cSeguro])
-                            { 
-                                pierdeDinero(playerid, 100);
-                                Mensaje(playerid, COLOR_VERDE, "* No tienes seguro, te cobramos 100$. Compre uno en el Hospital.");
+                            SetPlayerPos(playerid, cuenta[playerid][cMuertePosX], cuenta[playerid][cMuertePosY], cuenta[playerid][cMuertePosZ]);
+                            SetPlayerCameraPos(playerid, cuenta[playerid][cMuertePosX], cuenta[playerid][cMuertePosY], cuenta[playerid][cMuertePosZ]+5);
+                            SetPlayerCameraLookAt(playerid, cuenta[playerid][cMuertePosX], cuenta[playerid][cMuertePosY], cuenta[playerid][cMuertePosZ]);
+                            TogglePlayerControllable(playerid,false);
+                            ApplyAnimation(playerid, "WUZI", "CS_Dead_Guy", 4.0, 0, 0, 0, 1, 0);
+                            
+                            new tiempoAceptar = 1200000;
+                            new bool:hayMedicos;
+                            for (new i=0, t=GetMaxPlayers(); i<t; i++) {
+                                if (Team_SAMUR(i) && cuenta[i][cFaccOnDuty]) {
+                                    hayMedicos = true;
+                                    break;
+                                }
                             }
+                            if(hayMedicos) {
+                                tiempoAceptar = 3000000;
+                            }
+                            SetTimerEx("PermitirAceptarMuerte", tiempoAceptar, false, "i", playerid);
+                            Mensaje(playerid, COLOR_CIAN, "------------------ Aviso -----------------");
+                            Mensaje(playerid, COLOR_CIAN, "Estás desangrándote hasta morir y no puedes moverte.");
+                            Mensaje(playerid, COLOR_CIAN, "¡Los médicos pueden salvarte la vida!");
+                            Mensaje(playerid, COLOR_CIAN, "Podrás usar /aceptarmuerte en 5 minutos, 2 si no hay médicos disponibles.");
+                            Mensaje(playerid, COLOR_CIAN, "-------------------------------------------");
                         }
                     }
                 }
@@ -2773,6 +2790,11 @@ public OnPlayerDeath(playerid, killerid, reason)
     cuenta[playerid][cArmadura] = 0;
     cuenta[playerid][cMuerte]++;
     //
+    new Float:pX, Float:pY, Float:pZ;
+    GetPlayerPos(playerid, pX, pY, pZ);
+    cuenta[playerid][cMuertePosX] = pX;
+    cuenta[playerid][cMuertePosY] = pY;
+    cuenta[playerid][cMuertePosZ] = pZ;
     booleano[gMurio]{playerid} = true;
     //
     InAmbu[playerid] = 0;
@@ -9218,6 +9240,27 @@ command(lspd, playerid, params[]) {
     new string[128];
     format(string, sizeof(string), "Hay %d policías de servicio", encontro);
     return Mensaje(playerid, COLOR_BUSCADO, string);
+}
+
+command(aceptarmuerte, playerid, params[]) {
+    if (booleano[gMurio]{playerid} && booleano[gPuedeAceptarMuerte]{playerid}) {
+        booleano[gMurio]{playerid} = false;
+        booleano[gPuedeAceptarMuerte]{playerid} = false;
+        
+        Mensaje(playerid, COLOR_CIAN, "Te has recuperado exsitósamente de tu accidente.");
+        Mensaje(playerid, COLOR_CIAN, "Te hemos transladado al hospital.");
+        Mensaje(playerid, COLOR_CIAN, "Desafortunadamente tienes amnesia, no recuerdas nada.");
+        SetPosEx(playerid, -2671.2676, 509.5787, 48.0791, 272.0, 0, 0);
+        SetPlayerStats(playerid);
+                           
+        if(!cuenta[playerid][cSeguro]) { 
+            pierdeDinero(playerid, 100);
+            Mensaje(playerid, COLOR_VERDE, "* No tienes seguro, te cobramos 100$. Compre uno en el Hospital.");
+        }
+    } else {
+        Mensaje(playerid, COLOR_CIAN, "No puedes aceptar tu muerte ahora.");
+    }
+    return 1;
 }
 
 TextListCreate:textList_sospechosos(playerid) {
@@ -24638,6 +24681,11 @@ CallBack::CambiarPagina(playerid)
             SetPlayerFacingAngle(playerid, 2.2963);
         }
     }
+    return 1;
+}
+CallBack::PermitirAceptarMuerte(playerid) {
+    booleano[gPuedeAceptarMuerte]{playerid} = false;
+    Mensaje(playerid, COLOR_CIAN, "Ahora tienes disponible /aceptarmuerte.");
     return 1;
 }
 CallBack::HideInfoForPlayer(playerid)
