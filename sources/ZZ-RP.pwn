@@ -1448,27 +1448,28 @@ enum _@en@trabajos
     trabCmds[64], 
     trabNivel, 
     trabHoras, 
-    trabSkin, 
+    trabSkinHom, 
+    trabSkinMuj,
     trabLic    /*1.-Moto 2.-Auto 3.-Avion 4.-Bote 5.-Armas 0.-Nada*/
 };
 new static trabajos[][_@en@trabajos] =  
 {
-    {{4000.0, 0.0, 0.0}, "Desempleado", 0, 0, 0}, 
-    {{1278.4047, -979.6494, 38.3699}, "Transportador de Valores", "/servicio /finservicio /transportar", 3, 1, 164, 2}, 
-    {{1956.7324, -2183.4846, 13.5469}, "Aviador", "/servicio /finservicio /pilotear", 4, 1, 61, 3}, 
-    {{2205.6633, -2667.1572, 14.8642}, "Camionero", "/servicio /finservicio /cargar", 1, 1, 6, 2}, 
-    {{2481.8337, -1536.7006, 24.0952}, "Barrendero", "/servicio /finservicio /limpiarcalle", 1, 1, 8, 2}, 
-    {{1156.9833, -1770.1492, 16.5938}, "Conductor de Bus", "/servicio /finservicio /recorrido", 1, 1, 253, 2}, 
-    {{-382.4231, -1438.8834, 25.7266}, "Agricultor", "/servicio /finservicio /cosechar", 1, 1, 158, 2}, 
-    {{2102.3757, -1809.8839, 13.5547}, "Pizzero", "/servicio /finservicio /pizza", 1, 1, 155, 1}, 
-    {{1685.7495, -1944.5226, 13.5469}, "Conductor de Trenes", "/servicio /finservicio /ruta", 2, 1, 261, 2}, 
-    {{1766.1532, -1903.4260, 13.5665}, "Taxista", "/servicio /finservicio /tarifa", 4, 1, 7, 2}, 
-    {{2190.5740, -1997.0985, 13.5469}, "Basurero", "/servicio /finservicio /basura", 1, 1, 6, 2}, 
-    {{60.2410, -1720.7347, 7.5172}, "Pescador", "/servicio /finservicio /pescar", 2, 1, 128, 4}, 
-    {{2530.5439, -880.4722, 87.6618}, "Minero", "/servicio /finservicio", 3, 1, 27, 0}, 
-    {{2170.7991, -1736.3546, 13.5919}, "Carpintero", "/servicio /finservicio", 3, 1, 1, 0}, 
-    {{1266.1512, -1259.9255, 13.1965}, "Obrero", "/servicio /finservicio", 2, 1, 260, 0}, 
-    {{2609.1614, -2192.2715, -0.2188}, "Ladron", "/robar /vender", 5, 1, 0, 0}
+    {{4000.0, 0.0, 0.0}, "Desempleado", 0, 0, 0, 0}, 
+    {{1278.4047, -979.6494, 38.3699}, "Transportador de Valores", "/servicio /finservicio /transportar", 3, 1, 164, 141, 2}, 
+    {{1956.7324, -2183.4846, 13.5469}, "Aviador", "/servicio /finservicio /pilotear", 4, 1, 61, 150, 3}, 
+    {{2205.6633, -2667.1572, 14.8642}, "Camionero", "/servicio /finservicio /cargar", 1, 1, 6, 11, 2}, 
+    {{2481.8337, -1536.7006, 24.0952}, "Barrendero", "/servicio /finservicio /limpiarcalle", 1, 1, 8, 69, 2}, 
+    {{1156.9833, -1770.1492, 16.5938}, "Conductor de Bus", "/servicio /finservicio /recorrido", 1, 1, 253, 9, 2}, 
+    {{-382.4231, -1438.8834, 25.7266}, "Agricultor", "/servicio /finservicio /cosechar", 1, 1, 158, 31, 2}, 
+    {{2102.3757, -1809.8839, 13.5547}, "Pizzero", "/servicio /finservicio /pizza", 1, 1, 155, 88, 1}, 
+    {{1685.7495, -1944.5226, 13.5469}, "Conductor de Trenes", "/servicio /finservicio /ruta", 2, 1, 261, 9, 2}, 
+    {{1766.1532, -1903.4260, 13.5665}, "Taxista", "/servicio /finservicio /tarifa", 4, 1, 7, 93, 2}, 
+    {{2190.5740, -1997.0985, 13.5469}, "Basurero", "/servicio /finservicio /basura", 1, 1, 6, 11, 2}, 
+    {{60.2410, -1720.7347, 7.5172}, "Pescador", "/servicio /finservicio /pescar", 2, 1, 128, 131, 4}, 
+    {{2530.5439, -880.4722, 87.6618}, "Minero", "/servicio /finservicio", 3, 1, 27, 151, 0}, 
+    {{2170.7991, -1736.3546, 13.5919}, "Carpintero", "/servicio /finservicio", 3, 1, 1, 298, 0}, 
+    {{1266.1512, -1259.9255, 13.1965}, "Obrero", "/servicio /finservicio", 2, 1, 260, 157, 0}, 
+    {{2609.1614, -2192.2715, -0.2188}, "Ladron", "/robar /vender", 5, 1, 0, 0, 0}
 };
 //transportador de valores
 new transCoches[3];
@@ -8952,7 +8953,7 @@ command(despedir, playerid, params[])
         format(string, sizeof(string), "  Despediste a %s", PlayerName(params[0]));
         Mensaje(playerid, COLOR_BLANCO, string);
         cuenta[params[0]][cMiembro] = 0;
-        cuenta[params[0][cFaccOnDuty] = 0;
+        cuenta[params[0]][cFaccOnDuty] = 0;
         cuenta[params[0]][cRango] = 0;
         UpdatePlayerStat(params[0]);
         SetPlayerSkin(params[0], 299);
@@ -16594,7 +16595,11 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
                                     if(!cuenta[playerid][servicio])
                                     {
                                         cuenta[playerid][servicio] = true;
-                                        SetPlayerSkin(playerid, trabajos[k][trabSkin]);
+                                        if (cuenta[playerid][cSexo] == 1) {
+                                            SetPlayerSkin(playerid, trabajos[k][trabSkinHom]);
+                                        } else {
+                                            SetPlayerSkin(playerid, trabajos[k][trabSkinMuj]);
+                                        }
                                         format(string, sizeof(string), "{008000}INFO: {FFFFFF}Puede comenzar a trabajar como {008000}%s.", trabajos[k][trabNombre]);
                                         Mensaje(playerid, COLOR_BLANCO, string);
                                         Mensaje(playerid, COLOR_ROJO, "[!] {FFFFFF}Use {AA3333}/finservicio {FFFFFF}cuando halla dejado de trabajar para recibir su pago!");
@@ -31548,20 +31553,32 @@ COMMAND:unban(playerid, params[])
         if(sscanf(params, "s[32]", tmp2))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /unban [Usuario o IP]");
         
         mysql_real_escape_string(tmp2, tmp3, servidor[mysqlControl]);
-        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_tablaip WHERE ipaddress='%e' OR nombre='%e' LIMIT 1;", tmp3, tmp3);
+        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT `nombre` FROM zz_tablaip WHERE ipaddress='%e' OR nombre='%e' LIMIT 1;", tmp3, tmp3);
         R = mysql_query(servidor[mysqlControl], tmp, true);
         
-        if(cache_get_row_count())
-        {
+        if(cache_get_row_count()) {
             mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "DELETE FROM zz_tablaip WHERE ipaddress='%e' OR nombre='%e';", tmp3, tmp3);
             mysql_query(servidor[mysqlControl], tmp, false);
             
             format(tmp, sizeof(tmp), "El administrador %s desbaneo al Usuario/IP %s del servidor.", Nombre(playerid), tmp3);
             MensajeAdmin(0xFF9562FF, tmp, 1);
-        } 
-        else
-        {
-            Mensaje(playerid, COLOR_ROJO, "No se encontro Usuario/IP intente nuevamente!");
+            cache_delete(R);
+        } else {
+            cache_delete(R);
+            //nueva query
+            tmp[0] = '\0';
+            mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT `nombrejugador` FROM zz_bantmp WHERE nombrejugador='%e' LIMIT 1;", tmp3);
+            R = mysql_query(servidor[mysqlControl], tmp, true);
+            
+            if(cache_get_row_count()) {
+                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "DELETE FROM zz_bantmp WHERE nombrejugador='%e'", tmp3);
+                mysql_query(servidor[mysqlControl], tmp, false);
+                
+                format(tmp, sizeof(tmp), "El administrador %s desbaneo al Usuario/IP %s del servidor.", Nombre(playerid), tmp3);
+                MensajeAdmin(0xFF9562FF, tmp, 1);
+            } else {
+                Mensaje(playerid, COLOR_ROJO, "No se encontro Usuario/IP intente nuevamente!");
+            }
         }
         cache_delete(R);
     }else Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
