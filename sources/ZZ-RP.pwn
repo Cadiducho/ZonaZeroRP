@@ -333,7 +333,6 @@ AntiDeAMX()
 #define SPECIAL_ACTION_PISSING 													(68)
 #define VEHICULOS_COMPRABLES													(800)
 #define MAXIMAS_REJAS															(50)
-#define neondialog                                                              (8131)
 #define CASINO                                                                  (2431)
 
 //Activar/Desactivar la navidad.
@@ -12890,23 +12889,25 @@ command(sacarsangre, playerid, params[])
 }
 
 command(rescatar, playerid, params[]){
-    new player, Float:health, string[128];
-    if(!sscanf(params, "u", player)){
+    new target, Float:health, string[128];
+    if(!sscanf(params, "u", target)){
         if(!Team_SAMUR(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres médico!");
-        if(IsPlayerConnected(player)){
-            if(dDistanciaJugador(4.0, playerid, player)){
-                GetPlayerHealth(player, health);
-                if(health < 15.1){
-                    booleano[Rescued]{player} = true;
-                    booleano[gMurio]{player} = false;
-                    SetHP(player, 35.0);
-                    ClearAnimations(player);
-                    format(string, sizeof(string), "* Médico %s reanima a %s que se encontraba inconsciente", PlayerName(playerid), PlayerName(player));
+        if(IsPlayerConnected(target)){
+            if(dDistanciaJugador(4.0, playerid, target)){
+                GetPlayerHealth(target, health);
+                if(health < 15.1 || booleano[gMurio]{target} || booleano[gPuedeAceptarMuerte]{target}){
+                    booleano[Rescued]{target} = true;
+                    booleano[gMurio]{target} = false;
+                    booleano[gPuedeAceptarMuerte]{target} = false;
+                    TogglePlayerControllable(target, true);
+                    SetHP(target, 35.0);
+                    ClearAnimations(target);
+                    format(string, sizeof(string), "* Médico %s reanima a %s que se encontraba inconsciente", PlayerName(playerid), PlayerName(target));
                     ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
-                    format(string, sizeof(string), "{FF2200}Atención{FFFFFF}: %s está herido, si los servicios médicos no hacen nada en menos de 4 minutos, morirá.", PlayerName(player));
-                    Mensaje(player, COLOR_BLANCO, string);
+                    format(string, sizeof(string), "{FF2200}Atención{FFFFFF}: %s está herido, los servicios médicos deben hacer algo!", PlayerName(target));
+                    Mensaje(target, COLOR_BLANCO, string);
                     Mensaje(playerid, COLOR_BLANCO, string);
-                    ClearAnimations(player);
+                    ClearAnimations(target);
                 }else return Mensaje(playerid, COLOR_GRIS2, "Este jugador tiene vida suficiente!");
             }else return Mensaje(playerid, COLOR_GRIS2, "El jugador debe estar cerca de usted");
         }else return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado");
@@ -13449,16 +13450,6 @@ command(remolcar, playerid, params[])
 {
     if(!Team_LSPD(playerid) && cuenta[playerid][cRango] >= 3)return Mensaje(playerid, COLOR_ROJO, "No eres de la Policia Local o mayor a rango 3!");
     Remolcar(playerid);
-    return 1;
-}
-
-CMD:neon(playerid, params[])
-{
-    if(Team_Mecanicos(playerid))
-    {
-        if(!IsPlayerInAnyVehicle(playerid)) return SendClientMessage(playerid, -1, "No estás en un vehículo");
-        ShowPlayerDialog(playerid, neondialog, DIALOG_STYLE_LIST, "Neones", "Azul\nRojo\nVerde\nBlanco\nRosa\nAmarillo\nRojo Especial\nVerde Especial\nAzul Especial\nEliminar Neon", "Seleccionar", "Cancelar");
-    } else SendClientMessage(playerid, -1, "No eres mecánico");
     return 1;
 }
 
@@ -17493,92 +17484,6 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
-    if(dialogid == neondialog)
-    {
-        if(response)
-        {
-            if(listitem == 0)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon", CreateObject(18648,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon1", CreateObject(18648,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon1"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 1)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon2", CreateObject(18647,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon3", CreateObject(18647,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon2"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon3"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 2)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon4", CreateObject(18649,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon5", CreateObject(18649,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon4"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon5"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 3)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon6", CreateObject(18652,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon7", CreateObject(18652,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon6"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon7"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 4)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon8", CreateObject(18651,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon9", CreateObject(18651,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon8"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon9"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 5)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon10", CreateObject(18650,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon11", CreateObject(18650,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon10"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon11"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 6)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon12", CreateObject(18653,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon13", CreateObject(18653,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon12"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon13"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 7)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon14", CreateObject(18654,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon15", CreateObject(18654,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon14"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon15"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 8)
-            {
-                SetPVarInt(playerid, "Status", 1);
-                SetPVarInt(playerid, "neon16", CreateObject(18655,0,0,0,0,0,0));
-                SetPVarInt(playerid, "neon17", CreateObject(18655,0,0,0,0,0,0));
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon16"), GetPlayerVehicleID(playerid), -0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-                AttachObjectToVehicle(GetPVarInt(playerid, "neon17"), GetPlayerVehicleID(playerid), 0.8, 0.0, -0.70, 0.0, 0.0, 0.0);
-            }
-            if(listitem == 9)
-            {
-                DestroyObject(GetPVarInt(playerid, "neon")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon1")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon2")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon3"));
-                DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon4")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon5")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon6")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon7"));
-                DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon8")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon9")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon10")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon13"));
-                DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon14")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon15")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon16")); DeletePVar(playerid, "Status"); DestroyObject(GetPVarInt(playerid, "neon17"));
-                DeletePVar(playerid, "Status");
-            }
-        }
-    }
     new Float:cx, Float:cy, Float:cz;
     new idcar = GetPlayerVehicleID(playerid), string[128], giveplayerid;
     
