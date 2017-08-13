@@ -2137,7 +2137,6 @@ enum _@en@cuenta
     pAnilloDia, 
     pGaraje, 
     pHelper, 
-    pScripter, 
     pTimeCar, 
     pTimeCar2, 
     pFlyLic, 
@@ -8009,19 +8008,6 @@ command(encenderb , playerid, params[])
     ShowPlayerDialog(playerid, DIALOG_WOOFER, DIALOG_STYLE_INPUT, "{8ED5E1}Woofer - Musica", "{FFFFFF}Para colocar el bomboox de acepte e ingrese un url .mp3", "Ok", "Cancel");
     return 1;
 }
-command(irposzzcomandoocultoxd, playerid, params[])
-{
-    if (cuenta[playerid][cAdministrador] < 4 || cuenta[playerid][pScripter] == 0)
-    {
-        new Float: pos[3], int;
-        if(sscanf(params, "fffd", pos[0], pos[1], pos[2], int))return Mensaje(playerid, COLOR_AMARILLO, "» {FFFFFF}/irpos [X] [Y] [Z] [Interior]");
-        Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} Fuiste teletransportado a la posición seleccionada.");
-        SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
-        SetPlayerInterior(playerid, int);
-        return 1;
-    }else Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No estás autorizado al comando.");
-    return 1;
-}
 command(cfumar, playerid, params[])
 {
     if(cNicotina[playerid] == 1) 					return Mensaje(playerid, COLOR_AMARILLO, 	"»{FFFFFF} No tienes ganas de fumar.");
@@ -10275,7 +10261,6 @@ COMMAND:ah2014(playerid, params[])
         Mensaje(playerid, COLOR_GRIS, "[*] /eliminarreja: {FFFFFF}Eliminar rejas, recuerda el ID");
         Mensaje(playerid, COLOR_GRIS, "[*] /editarreja: {FFFFFF}Edita rejas, ponte cerca de la rejas");
         Mensaje(playerid, COLOR_GRIS, "[*] /crearreja: {FFFFFF}Crea una reja! No uses ID`s repetidas");
-        Mensaje(playerid, COLOR_GRIS, "[*] /andruw: {FFFFFF}Sala de eventos!");
         Mensaje(playerid, COLOR_GRIS, "[*] /descongelartodos: {FFFFFF}");
         return 1;
     }
@@ -12531,19 +12516,6 @@ command(lv, playerid, params[]){
     }
     else{
         SetPosEx(playerid, 1694.6566, 1453.4523, 10.7632, 0, 0 , 0);
-        return 1;
-    }
-}
-command(andruw, playerid, params[])
-{
-    if(cuenta[playerid][cAdministrador] < 2014)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
-    if(!booleano[AntiAbusos]{playerid}){
-        Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No puedes usar este comando sin estar en OnDuty."); return 1;}
-    if(GetPlayerState(playerid) == 2){
-        return SetVehiclePosEx(GetPlayerVehicleID(playerid), 167.1930, 1756.2183, 733.0817);
-    }
-    else{
-        SetPosEx(playerid, 167.1930, 1756.2183, 733.0817, 0, 0 , 0);
         return 1;
     }
 }
