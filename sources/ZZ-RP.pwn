@@ -13,29 +13,26 @@
 /******************************************************************************/
 /*******************************[- Librerias -]********************************/
 /******************************************************************************/
-#include	<a_samp>
-#include 	<a_zones>
-#include    <a_mysql>
-#include 	<bot>
-#include	<zcmd>
-#include	<sscanf2>
-#include	<streamer>
-#include 	<seif_walk>
-#include 	<mSelection>
-#include 	<progressbar>
-#include 	<SetVehicleAttachedObject[inc]>
+#include <a_samp>
+#include <a_zones>
+#include <a_mysql>
 
-#include    "config.pwn"
+#include "config.pwn"
 
-#include    "lib/textlist.inc"
-#include    "lib/mdialog.inc"
+#include "lib/textlist.inc"
+#include "lib/mdialog.inc"
+#include "lib/textlist.inc"
+#include "lib/mdialog.inc"
+#include "lib/bot.inc"
+#include "lib/zcmd"
+#include "lib/sscanf2"
+#include "lib/streamer"
+#include "lib/seif_walk"
+#include "lib/mSelection"
+#include "lib/progressbar"
+#include "lib/SetVehicleAttachedObject"
+
 native WP_Hash(buffer[], len, const str[]);
-
-AntiDeAMX()
-{
-    new a[][] = {"Unarmed (Fist)", "Brass K"};
-    #pragma unused a
-}
 
 #pragma tabsize 0
 #pragma dynamic 15000
@@ -4185,10 +4182,9 @@ public OnGameModeExit(){
 
 public OnGameModeInit()
 {
-    AntiDeAMX();
     //Host, User, Base, Clave
     servidor[mysqlControl] = mysql_connect(SQL_Host,SQL_User, SQL_Database, SQL_Password);
-    //servidor[mysqlControl] = mysql_connect("127.0.0.1", "root", "zonazero_original", "");
+    
     if(!servidor[mysqlControl])SendRconCommand("exit");
     mysql_log(LOG_ERROR | LOG_WARNING);
 
