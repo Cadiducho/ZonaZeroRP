@@ -17469,7 +17469,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     return 1;
                 } else if(!strlen(inputtext)) return ShowRegisterDialog(playerid, DIALOGO_REGISTRO);
 
-                new tmp[256], safeInput[32], buf[WP_HASH_LENGTH];
+                new tmp[300], safeInput[32], buf[WP_HASH_LENGTH];
                 mysql_real_escape_string(inputtext, safeInput, servidor[mysqlControl]); 
                 WP_Hash(buf, sizeof (buf), inputtext);
                 mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_usuarios(nombre, clave, password, inv11, casa, negocio, casa2, negocio2, deagle, shotgun, mp5, ak47, m4, sniper, fstyle, salud, team) VALUES('%s', md5('%s'), '%s', 1, 9999, 9999, 9999, 9999, 100, 100, 100, 100, 100, 100, 4, 50.0, 3);", Nombre(playerid), safeInput, buf);
