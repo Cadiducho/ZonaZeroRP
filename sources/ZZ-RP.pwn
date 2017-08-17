@@ -5,7 +5,7 @@
     *	Desarrollador:		    Cadiducho	
     *   Antiguos Creditos:      Parka, Lucas Clemente(lolking), Sergio Mitnick. Desarrolladores de Ciudad Prohibida
     *   Mappers:                Javier_Cardenas.
-    *	Version:				1.0
+    *	Version:				1.0.1
     *
     *	Principal: ZZ-RP.pwn
     *
@@ -40,7 +40,7 @@ native WP_Hash(buffer[], len, const str[]);
 /******************************[- Definiciones -]******************************/
 /******************************************************************************/
 
-#define Version			"v1.0.0"
+#define Version			"v1.0.1"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
@@ -4174,14 +4174,23 @@ public OnPlayerRequestClass(playerid, classid)
 }
 
 public OnGameModeExit(){
+    for (new i=0, t=GetMaxPlayers(); i<t; i++) {
+        if(booleano[gIngreso]{i}) {
+            GuardarDatosMySQL(i);
+        }
+    }
+    SaveAllHouses();
+    SaveAllVehicles();
+    SaveAllBussines();
+    printf("Datos guardados");
+    
     new year, month, day;
     getdate(year, month, day);
     printf("Gamemode ZonaZero Finalizado. [%d/%d/%d]", day, month, year);
     return 1;
 }
 
-public OnGameModeInit()
-{
+public OnGameModeInit() {
     //Host, User, Base, Clave
     servidor[mysqlControl] = mysql_connect(SQL_Host,SQL_User, SQL_Database, SQL_Password);
     
@@ -7081,6 +7090,34 @@ CallBack::OnAccountLoad(playerid, FailPass, pass[]) {
     return 1;
 }
 
+CallBack::SaveFullPlayer(playerid) {
+    GuardarDatosMySQL(playerid);
+
+    if(cuenta[playerid][cCasa] != 9999) {
+        ActualizaCasa(cuenta[playerid][cCasa]);
+    }		
+    if(cuenta[playerid][cCasa2] != 9999) {
+        ActualizaCasa(cuenta[playerid][cCasa2]);
+    }
+    if(cuenta[playerid][cNegocio] != 9999) {
+        ActualizaNegocio(cuenta[playerid][cNegocio]);
+    }
+    if(cuenta[playerid][cNegocio2] != 9999) {
+        ActualizaNegocio(cuenta[playerid][cNegocio2]);
+    }
+    if(cuenta[playerid][cCoche]) {
+        ActualizaVehiculo(cuenta[playerid][cCoche]);
+    }
+    if(cuenta[playerid][cCoche2]) {
+        ActualizaVehiculo(cuenta[playerid][cCoche2]);
+    }
+    if(cuenta[playerid][cCoche3]) {
+        ActualizaVehiculo(cuenta[playerid][cCoche3]);
+    }
+    if(cuenta[playerid][cCoche4]) {
+        ActualizaVehiculo(cuenta[playerid][cCoche4]);
+    }
+}
 CallBack::GuardarDatosMySQL(playerid) {
     new Float:poss[4];
     GetPlayerPos(playerid, poss[0], poss[1], poss[2]);
@@ -17359,40 +17396,8 @@ public OnPlayerDisconnect(playerid, reason)
     {
         mysql_format(servidor[mysqlControl], Consulta, sizeof(Consulta), "UPDATE `zz_usuarios` SET `online`=0 WHERE `id` = '%d'", cuenta[playerid][cUnico]);
         mysql_query(servidor[mysqlControl], Consulta, false);
-        GuardarDatosMySQL(playerid);
         
-        if(cuenta[playerid][cCasa] != 9999)
-        {
-            ActualizaCasa(cuenta[playerid][cCasa]);
-        }		
-        if(cuenta[playerid][cCasa2] != 9999)
-        {
-            ActualizaCasa(cuenta[playerid][cCasa2]);
-        }
-        if(cuenta[playerid][cNegocio] != 9999)
-        {
-            ActualizaNegocio(cuenta[playerid][cNegocio]);
-        }
-        if(cuenta[playerid][cNegocio2] != 9999)
-        {
-            ActualizaNegocio(cuenta[playerid][cNegocio2]);
-        }
-        if(cuenta[playerid][cCoche])
-        {
-            ActualizaVehiculo(cuenta[playerid][cCoche]);
-        }
-        if(cuenta[playerid][cCoche2])
-        {
-            ActualizaVehiculo(cuenta[playerid][cCoche2]);
-        }
-        if(cuenta[playerid][cCoche3])
-        {
-            ActualizaVehiculo(cuenta[playerid][cCoche3]);
-        }
-        if(cuenta[playerid][cCoche4])
-        {
-            ActualizaVehiculo(cuenta[playerid][cCoche4]);
-        }
+        SaveFullPlayer(playerid);
     }
     return 1;
 }
@@ -27182,6 +27187,12 @@ CallBack::ActualizaVehiculo(idx)
     mysql_query(servidor[mysqlControl], consulta, false);
     return 1;
 }
+stock SaveAllVehicles() {
+    for (new vehid = 0; vehid < sizeof(autos); vehid++) {
+		ActualizaVehiculo(vehid);
+	}
+    return 1;
+}
 CallBack::ActualizaCasa(idx)
 {
     new consulta[1024];
@@ -27218,6 +27229,12 @@ CallBack::ActualizaCasa(idx)
     mysql_query(servidor[mysqlControl], consulta, false);
     return 1;
 }
+stock SaveAllHouses() {
+    for (new housid = 0; housid < sizeof(casa); housid++) {
+		ActualizaCasa(housid);
+	}
+    return 1;
+}
 CallBack::ActualizaNegocio(bizzid){
     new consulta[1024];
     mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_negocios SET owned=%d, owner='%s', name='%s', extortion='%s', entrancex=%.4f, entrancey=%.4f, entrancez=%.4f, exitx=%.4f, exity=%.4f, exitz=%.4f, interior=%d, levelneeded=%d, buyprice=%d, till=%d, tillx=%d, productos=%d, costoentrada=%d, tiempo=%d, ubicacion='%s', empresa='%s' WHERE negocioid = %d;", 
@@ -27243,6 +27260,12 @@ CallBack::ActualizaNegocio(bizzid){
     negocio[bizzid][bEmpresa], 
     negocio[bizzid][bID]);
     mysql_query(servidor[mysqlControl], consulta, false);
+    return 1;
+}
+stock SaveAllBussines() {
+    for (new bissid = 0; bissid < sizeof(negocio); bissid++) {
+		ActualizaNegocio(bissid);
+	}
     return 1;
 }
 CallBack::ActualizarReja(rejaid)
@@ -27677,39 +27700,7 @@ COMMAND:guardarcuenta(playerid, params[])
 {
     if(booleano[gIngreso]{playerid})
     {
-        GuardarDatosMySQL(playerid);
-        if(cuenta[playerid][cCasa] != 9999)
-        {
-            ActualizaCasa(cuenta[playerid][cCasa]);
-        }		
-        if(cuenta[playerid][cCasa2] != 9999)
-        {
-            ActualizaCasa(cuenta[playerid][cCasa2]);
-        }
-        if(cuenta[playerid][cNegocio] != 9999)
-        {
-            ActualizaNegocio(cuenta[playerid][cNegocio]);
-        }
-        if(cuenta[playerid][cNegocio2] != 9999)
-        {
-            ActualizaNegocio(cuenta[playerid][cNegocio2]);
-        }
-        if(cuenta[playerid][cCoche])
-        {
-            ActualizaVehiculo(cuenta[playerid][cCoche]);
-        }
-        if(cuenta[playerid][cCoche2])
-        {
-            ActualizaVehiculo(cuenta[playerid][cCoche2]);
-        }
-        if(cuenta[playerid][cCoche3])
-        {
-            ActualizaVehiculo(cuenta[playerid][cCoche3]);
-        }
-        if(cuenta[playerid][cCoche4])
-        {
-            ActualizaVehiculo(cuenta[playerid][cCoche4]);
-        }
+        SaveFullPlayer(playerid);
         Mensaje(playerid, COLOR_VERDE, "Sus datos fueron guardados exitosamente.");
     }
     return 1;
