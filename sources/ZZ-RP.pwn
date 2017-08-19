@@ -5,7 +5,7 @@
     *	Desarrollador:		    Cadiducho	
     *   Antiguos Creditos:      Parka, Lucas Clemente(lolking), Sergio Mitnick. Desarrolladores de Ciudad Prohibida
     *   Mappers:                Javier_Cardenas.
-    *	Version:				1.0.1
+    *	Version:				1.0.3
     *
     *	Principal: ZZ-RP.pwn
     *
@@ -40,7 +40,7 @@ native WP_Hash(buffer[], len, const str[]);
 /******************************[- Definiciones -]******************************/
 /******************************************************************************/
 
-#define Version			"v1.0.1"
+#define Version			"v1.0.3"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
@@ -130,7 +130,6 @@ native WP_Hash(buffer[], len, const str[]);
 #define DIALOGO_IMPUESTO_CASAS													(20)
 #define DIALOGO_IMPUESTO_NEGOCIOS												(21)
 #define DIALOGO_IMPUESTO_AUTOS													(22)
-#define DIALOGO_TRABAJO_UBICACION 												(23)
 #define DNI_CONFIRM     														(24)
 #define DIALOGO_PAQUETES_PREMIUM												(25)
 #define DIALOGO_BARRENDERO														(26)
@@ -209,13 +208,6 @@ native WP_Hash(buffer[], len, const str[]);
 #define DIALOGO_BOVEDA_SACAR													(99)
 #define DIALOGO_SANTIAGO                                                        (100)
 
-
-
-
-
-
-
-
 #define DIALOG_LSPD_ELEVATOR   													(109)
 #define DIALOGO_FACCION_EDITAR													(110)
 #define DIALOGO_FACCION_A														(111)
@@ -275,9 +267,6 @@ native WP_Hash(buffer[], len, const str[]);
 #define DIALOG_ESTADO   														(165)
 #define DIALOG_REG_ESTADO   													(166)
 
-
-
-
 #define	GPS_DIALOG  															(171)
 #define BARES       															(172)
 #define EMERGENCIAS 															(173)
@@ -285,18 +274,12 @@ native WP_Hash(buffer[], len, const str[]);
 #define LUGARPUBLICO    														(175)
 #define SERVICIOS       														(176)
 
-
-
-
 #define DELE_BUY_SEX    														(181)
 #define DELE_BUY_SEXM   														(182)
 #define DELE_BUY_SEXF   														(183)
 #define DELE_BUY_SEXJ   														(184)
 #define DIALOGO_QUITAR_EXTORCION  												(185)
 #define TIENDA_ELECTRONICA 														(186)
-
-
-
 
 #define DIALOGO_KICK                                                            (191)
 #define DIALOGO_PUBLICIDAD                                                      (192)
@@ -1467,6 +1450,7 @@ new static trabajos[][_@en@trabajos] =
     {{1266.1512, -1259.9255, 13.1965}, "Obrero", "/servicio /finservicio", 2, 1, 260, 157, 0}, 
     {{2609.1614, -2192.2715, -0.2188}, "Ladron", "/robar /vender", 5, 1, 0, 0, 0}
 };
+
 //transportador de valores
 new transCoches[3];
 enum _@en@trabTransportador
@@ -2384,6 +2368,7 @@ new CochesGobierno[9];
 new CochesRenta[37];
 new CochesFortCarson[5];
 
+
 main(){}
 /*
 *	Devolucines de llamadas Streamer y SA-MP
@@ -2471,7 +2456,11 @@ public OnPlayerSpawn(playerid)
                 {
                 case false:
                     {
-                        SetPosEx(playerid, cuenta[playerid][cPosiciones][0], cuenta[playerid][cPosiciones][1], cuenta[playerid][cPosiciones][2] + 1, 0, cuenta[playerid][cInterior], cuenta[playerid][cMundo]);
+                        if (cuenta[playerid][cPosiciones][0] != 0 && cuenta[playerid][cPosiciones][1] != 0 && cuenta[playerid][cPosiciones][2] != 0) {
+                            SetPosEx(playerid, cuenta[playerid][cPosiciones][0], cuenta[playerid][cPosiciones][1], cuenta[playerid][cPosiciones][2] + 1, 0, cuenta[playerid][cInterior], cuenta[playerid][cMundo]);
+                        } else {
+                            SetPosEx(playerid, 1529.6, -1691.2, 13.3, 0, 0 , 0);
+                        }
                         
                         SetHP(playerid, (!cuenta[playerid][cVida])?(50.0):(cuenta[playerid][cVida]));
                         darArmadura(playerid, cuenta[playerid][cArmadura]);
@@ -2976,24 +2965,6 @@ IsAtHotdog(playerid)
         else if(IsPlayerInRangeOfPoint(playerid, 5.0, 1589.6941, -1288.7108, 17.5133)) return 1;
         else if(IsPlayerInRangeOfPoint(playerid, 5.0, 1100.6458, -1383.2819, 13.7813)) return 1;
         else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1301.0686, -1248.4834, 13.5469)) return 1;
-    }
-    return 0;
-}
-
-IsAtMap(playerid)
-{
-    if(IsPlayerConnected(playerid)){
-        if(IsPlayerInRangeOfPoint(playerid, 5.0, 1181.39, -1317.95, 13.62))         return 1;
-        else if(IsPlayerInRangeOfPoint(playerid, 5.0, 772.53, -1327.30, 13.35))   return 1;
-        else if(IsPlayerInRangeOfPoint(playerid, 5.0, 1813.88, -1901.38, 13.36))   return 1;
-        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1639.07, -2187.55, 13.37))  return 1;
-        else if(IsPlayerInRangeOfPoint(playerid, 5.0, 1839.23, -1422.26, 13.38))   return 1;
-        else if(IsPlayerInRangeOfPoint(playerid, 5.0, 1193.81, -1156.84, 23.69))   return 1;
-        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 456.63, -1494.42, 30.89))  return 1;
-        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1450.84, -1026.94, 23.62))  return 1;
-        else if(IsPlayerInRangeOfPoint(playerid, 5.0, 2089.01, -1824.00, 13.34))   return 1;
-        else if(IsPlayerInRangeOfPoint(playerid, 5.0, 1718.75, -1866.16, 13.57))   return 1;
-        else if(IsPlayerInRangeOfPoint(playerid, 5.0, 1271.5137, -994.5891, 35.6477))   return 1;
     }
     return 0;
 }
@@ -4204,6 +4175,8 @@ public OnGameModeInit() {
     CargarNegocios();
     CargarRejas();
     
+    Mapas_OnGameModeInit();
+    
     skinb = LoadModelSelectionMenu("bincos.txt");
     skinInicio = LoadModelSelectionMenu("bincos.txt");
     for(new x=0;x<sizeof(armasventa);x++)
@@ -4963,17 +4936,7 @@ public OnGameModeInit() {
     //CNN [FACCION]
     CreateDynamic3DTextLabel("Privado -{8AC56A} Oficina LSTV\n{FFFFFF}Pulsa Y", 0xFFFFFFFF, 759.8471, -1358.7413, 13.9899, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);
     CreateDynamicPickup(1242, 1, 759.8471, -1358.7413, 13.9899);
-    //Guias Publicas [MAPAS]
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1181.4065, -1318.3972, 13.6281, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Hospital
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 772.0750, -1327.3168, 13.5469, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//CNN
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1813.9435, -1901.8436, 13.5730, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Unity
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1839.1881, -1421.8048, 13.5625, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Skate Park
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1193.3491, -1156.8507, 23.8864, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Avenida Casino
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 456.6184, -1493.9646, 31.0939, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Binco Caro
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 2089.0627, -1823.5455, 13.5469, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Pizza
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1718.7406, -1865.7048, 13.5723, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Unity Respawn
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1451.2942, -1026.9141, 23.8281, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Ex-Banco
-    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1484.2769, -1741.2511, 13.5469, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Nuevo Banco    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1271.5137, -994.5891, 35.6477, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Nuevo Banco
+    
 
     //Iconos del Minimapa
     CreateDynamicMapIcon(1185.0560, -1323.9019, 13.5730, 22, 0, 0, 0); // Hospital
@@ -7126,9 +7089,14 @@ CallBack::GuardarDatosMySQL(playerid) {
     
     new tmp[2048];
     
-    cuenta[playerid][cMundo] = GetPlayerVirtualWorld(playerid);
-    cuenta[playerid][cInterior] = GetPlayerInterior(playerid);
-    GetPlayerPos(playerid, cuenta[playerid][cPosiciones][0], cuenta[playerid][cPosiciones][1], cuenta[playerid][cPosiciones][2]);
+    if (poss[0] != 0 && poss[1] != 0 && poss[2] != 0) {
+        cuenta[playerid][cMundo] = GetPlayerVirtualWorld(playerid);
+        cuenta[playerid][cInterior] = GetPlayerInterior(playerid);
+        cuenta[playerid][cPosiciones][0] = poss[0];
+        cuenta[playerid][cPosiciones][1] = poss[1];
+        cuenta[playerid][cPosiciones][2] = poss[2];
+    }
+    
     GetPlayerArmour(playerid, cuenta[playerid][cArmadura]);
     GetPlayerHealth(playerid, cuenta[playerid][cVida]);
     
@@ -9843,13 +9811,97 @@ command(changeit, playerid, params[]){
     } else Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     return 1;
 }
-command(mapa, playerid, params[])
-{
-    if(!IsAtMap(playerid))return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No estas delante de un mapa.");
-    ShowPlayerDialog(playerid, DIALOGO_MAPA, DIALOG_STYLE_LIST, "{018CFE}Puntos de interes", "{FFFFFF}» Ayuntamiento\n» Comisaria\n» Taller\n» Licencieria\n» Binco\n» 24-7 Vinewood\n» 24-7 Unity\n» 24-7\n» Deposito de la LSPD\n» Banco\n» Consecionaria\n» Casino\n» Pista de Karting\n» Localizador de Vehiculos\n» Tienda de Electronica\n» Cabina de Anuncios (/ad)\n» Prision Federal\n» Trabajos", "Aceptar", "Salir");
+Mapas_OnGameModeInit() {
+	//Guias Publicas [MAPAS]
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1181.4065, -1318.3972, 13.6281, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Hospital
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 772.0750, -1327.3168, 13.5469, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//CNN
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1813.9435, -1901.8436, 13.5730, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Unity
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1839.1881, -1421.8048, 13.5625, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Skate Park
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1193.3491, -1156.8507, 23.8864, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Avenida Casino
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 456.6184, -1493.9646, 31.0939, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Binco Caro
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 2089.0627, -1823.5455, 13.5469, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Pizza
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1718.7406, -1865.7048, 13.5723, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Unity Respawn
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1451.2942, -1026.9141, 23.8281, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Ex-Banco
+    CreateDynamic3DTextLabel("Guía Pública de la ciudad!\n{868FD9}/mapa", -1, 1484.2769, -1741.2511, 13.5469, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);	//Nuevo Banco    
+}
+
+IsAtMap(playerid) {
+	if (IsPlayerConnected(playerid)){
+        if (IsPlayerInRangeOfPoint(playerid, 5.0, 1181.39, -1317.95, 13.62))         return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 772.53, -1327.30, 13.35))   return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1813.88, -1901.38, 13.36))   return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1639.07, -2187.55, 13.37))  return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1839.23, -1422.26, 13.38))   return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1193.81, -1156.84, 23.69))   return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 456.63, -1494.42, 30.89))  return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1450.84, -1026.94, 23.62))  return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 2089.01, -1824.00, 13.34))   return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1718.75, -1866.16, 13.57))   return 1;
+        else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1271.5137, -994.5891, 35.6477))   return 1;
+    }
+    return 0;
+}
+
+DialogCreate:mapa(playerid) {
+	Dialog_Open(playerid, Dialog:mapa, DIALOG_STYLE_LIST, "{018CFE}Puntos de interes", 
+        "{FFFFFF}» Ayuntamiento\n» Comisaria\n» Taller\n» Licencieria\n» Binco\n» 24-7 Vinewood\n» 24-7 Unity\n» 24-7 Ayuntamiento\n» Deposito de la LSPD\n» Banco\n» Consecionaria\n» Casino\n» Pista de Karting\n» Localizador de Vehiculos\n» Tienda de Electronica\n» Cabina de Anuncios (/ad)\n» Prision Federal\n» Trabajos",
+        "Aceptar", "Salir");
+}
+
+DialogCreate:ubicacionTrabajos(playerid) {
+    new str[50 * sizeof(trabajos)];
+    for(new i=1; i<sizeof(trabajos); i++) {
+        format(str, sizeof(str), "%s\n{FFA500}Nivel: %d\t{ffffff}%s", str, trabajos[i][trabNivel], trabajos[i][trabNombre]);
+    }
+    Dialog_Open(playerid, Dialog:ubicacionTrabajos, DIALOG_STYLE_LIST, "Trabajos de la ciudad", 
+    str, 
+    "Aceptar", "Atras");
+}
+
+DialogResponse:ubicacionTrabajos(playerid, response, listitem, inputtext[]) {
+    if (response) {
+        new listid = listitem + 1;
+        SetPlayerCheckpoint(playerid, trabajos[listid][trabPos][0], trabajos[listid][trabPos][1], trabajos[listid][trabPos][2], 4.0);
+    } else {
+        Dialog_Show(playerid, Dialog:mapa);
+    }
     return 1;
 }
 
+DialogResponse:mapa(playerid, response, listitem, inputtext[]) {
+	if (response) {
+        switch (listitem) {
+            case 0: SetPlayerCheckpoint(playerid, 1481.0374, -1772.3131, 18.7958, 3.0);  // Ayuntamiento
+            case 1: SetPlayerCheckpoint(playerid, 1545.8611, -1680.0559, 13.5612, 3.0);  // LSPD
+            case 2: SetPlayerCheckpoint(playerid, 2240.9753, -2218.4404, 13.5469, 3.0);  // Taller de Los Santos
+            case 3: SetPlayerCheckpoint(playerid, 2073.2747, -1914.5770, 13.3648, 3.0);  // Licencieria
+            case 4: SetPlayerCheckpoint(playerid, 2266.3047, -1666.6727, 15.3930, 3.0);  // Binco
+            case 5: SetPlayerCheckpoint(playerid, 1318.7915, -899.3480, 39.5781, 3.0);   // 24-7 Vinewood
+            case 6: SetPlayerCheckpoint(playerid, 1812.9063, -1883.0615, 13.5781, 3.0);  // 24-7 Unity
+            case 7: SetPlayerCheckpoint(playerid, 1351.0753, -1750.7668, 13.3648, 3.0);  // 24-7 Ayuntamiento
+            case 8: SetPlayerCheckpoint(playerid, 2421.8948, -2077.9514, 13.5538, 3.0);  // Deposito de la LSPD
+            case 9: SetPlayerCheckpoint(playerid, 1271.5137, -994.5891, 35.6477, 3.0);  // Banco
+            case 10: SetPlayerCheckpoint(playerid, 558.4728, -1277.1632, 17.2482, 3.0);  // Consecionaria
+            case 11: SetPlayerCheckpoint(playerid, 1020.6985, -1123.0210, 23.8680, 3.0); // Casino
+            case 12: SetPlayerCheckpoint(playerid, 2430.1338, -2483.2861, 13.8590, 3.0); // Pista de Karting
+            case 13: SetPlayerCheckpoint(playerid, 2111.7705, -1910.9108, 13.5681, 3.0); // Localizador de Vehiculos
+            case 14: SetPlayerCheckpoint(playerid, 1780.8955, -1719.8694, 13.5415, 3.0); // Tienda de Electronica
+            case 15: SetPlayerCheckpoint(playerid, 1088.3285, -1379.8683, 13.8077, 3.0); // Cabina de anuncios
+            case 16: SetPlayerCheckpoint(playerid, 2047.1602, -2095.8225, 13.5469, 3.0); // Prision Federal
+            case 17: {
+                
+            }
+        }
+        Mensaje(playerid, COLOR_BLANCO, "{FFFFFF}Se marcó la ubicación en el minimapa en forma de checkpoint (punto rojo).");
+    }
+    return 1;
+}
+
+command(mapa, playerid, params[]) {
+    if(!IsAtMap(playerid)) return Mensaje(playerid, COLOR_AMARILLO, "¡No estas delante de un mapa!");
+	Dialog_Show(playerid, Dialog:mapa);
+	return 1;
+}
 command(desrentarveh, playerid, params[])
 {
     if(HireKey[playerid] == 9999)return Mensaje(playerid, COLOR_GRIS2, "No has rentado ningún vehículo!");
@@ -16632,10 +16684,10 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
                                     if(!cuenta[playerid][servicio])
                                     {
                                         cuenta[playerid][servicio] = true;
-                                        if (cuenta[playerid][cSexo] == 1) {
-                                            SetPlayerSkin(playerid, trabajos[k][trabSkinHom]);
+                                        if (cuenta[playerid][cSexo] == 2) {
+                                            SetPlayerSkin(playerid, trabajos[k][trabSkinMuj]);   
                                         } else {
-                                            SetPlayerSkin(playerid, trabajos[k][trabSkinMuj]);
+                                            SetPlayerSkin(playerid, trabajos[k][trabSkinHom]);
                                         }
                                         format(string, sizeof(string), "{008000}INFO: {FFFFFF}Puede comenzar a trabajar como {008000}%s.", trabajos[k][trabNombre]);
                                         Mensaje(playerid, COLOR_BLANCO, string);
@@ -23383,50 +23435,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             TextoInformatico(10, playerid, string);
             return 1;
         }
-    case DIALOGO_MAPA:
-        {
-            if(response)
-            {
-                switch(listitem)
-                {
-                case 0: SetPlayerCheckpoint(playerid, 1481.0374, -1772.3131, 18.7958, 3.0);  // Ayuntamiento
-                case 1: SetPlayerCheckpoint(playerid, 1545.8611, -1680.0559, 13.5612, 3.0);  // LSPD
-                case 2: SetPlayerCheckpoint(playerid, 2240.9753, -2218.4404, 13.5469, 3.0);  // Taller de Los Santos
-                case 3: SetPlayerCheckpoint(playerid, 2073.2747, -1914.5770, 13.3648, 3.0);  // Licencieria
-                case 4: SetPlayerCheckpoint(playerid, 2266.3047, -1666.6727, 15.3930, 3.0);  // Binco
-                case 5: SetPlayerCheckpoint(playerid, 1318.7915, -899.3480, 39.5781, 3.0);   // 24-7 Vinewood
-                case 6: SetPlayerCheckpoint(playerid, 1812.9063, -1883.0615, 13.5781, 3.0);  // 24-7 Unity
-                case 7: SetPlayerCheckpoint(playerid, 1351.0753, -1750.7668, 13.3648, 3.0);  // 24-7 Ayuntamiento
-                case 8: SetPlayerCheckpoint(playerid, 2421.8948, -2077.9514, 13.5538, 3.0);  // Deposito de la LSPD
-                case 9: SetPlayerCheckpoint(playerid, 1271.5137, -994.5891, 35.6477, 3.0);  // Banco
-                case 10: SetPlayerCheckpoint(playerid, 558.4728, -1277.1632, 17.2482, 3.0);  // Consecionaria
-                case 11: SetPlayerCheckpoint(playerid, 1020.6985, -1123.0210, 23.8680, 3.0); // Casino
-                case 12: SetPlayerCheckpoint(playerid, 2430.1338, -2483.2861, 13.8590, 3.0); // Pista de Karting
-                case 13: SetPlayerCheckpoint(playerid, 2111.7705, -1910.9108, 13.5681, 3.0); // Localizador de Vehiculos
-                case 14: SetPlayerCheckpoint(playerid, 1780.8955, -1719.8694, 13.5415, 3.0); // Tienda de Electronica
-                case 15: SetPlayerCheckpoint(playerid, 1088.3285, -1379.8683, 13.8077, 3.0); // Cabina de anuncios
-                case 16: SetPlayerCheckpoint(playerid, 2047.1602, -2095.8225, 13.5469, 3.0); // Prision Federal
-                case 17:
-                    {
-                        new str[50 * sizeof(trabajos)];
-                        for(new i=1; i<sizeof(trabajos); i++)
-                        {
-                            format(str, sizeof(str), "%s\n{FFA500}Nivel: %d\t{ffffff}%s", str, trabajos[i][trabNivel], trabajos[i][trabNombre]);
-                        }
-                        ShowPlayerDialog(playerid, DIALOGO_TRABAJO_UBICACION, DIALOG_STYLE_LIST, "Trabajos de la ciudad", str, "Aceptar", "Atras");
-                    }
-                }Mensaje(playerid, COLOR_BLANCO, "{FFFFFF}Se marcó la ubicación en el minimapa en forma de checkpoint (punto rojo).");
-            }
-        }
-    case DIALOGO_TRABAJO_UBICACION:
-        {
-            if(!response)return ShowPlayerDialog(playerid, DIALOGO_MAPA, DIALOG_STYLE_LIST, "{018CFE}Puntos de interes", "{FFFFFF}» Ayuntamiento\n» Juzgados\n» Comisaria de Los Santos\n» Taller\n» Licencieria\n» Binco\n» 24-7 Vinewood\n» 24-7 Unity\n» 24-7\n» Deposito de la LSPD\n» Joyeria\n» Banco\n» Grotti\n» Cyber\n» Biblioteca\n» Baño Público\n» Iglesia\n» Casino\n» Trabajos", "Aceptar", "Salir");
-            if(response)
-            {
-                new listid = listitem + 1;
-                SetPlayerCheckpoint(playerid, trabajos[listid][trabPos][0], trabajos[listid][trabPos][1], trabajos[listid][trabPos][2], 4.0);
-            }
-        }
     case GPS_DIALOG:
         {
             if(response)
@@ -27708,9 +27716,6 @@ COMMAND:guardarcuenta(playerid, params[])
 
 COMMAND:comandovip(playerid, params[])
 {
-    if(cuenta[playerid][cDinero] < 501)return Mensaje(playerid, COLOR_ROJO, "Para usar este comando necesita 501$ en mano!");
-    cuenta[playerid][cDinero] -= 501;
-    Mensaje(playerid, COLOR_AMARILLO2, "Se le han descontado 501$, disfrute de sus funciones VIP");
     ShowPlayerDialog(playerid, DIALOGO_SANTIAGO, DIALOG_STYLE_LIST, "Comando VIP - Premiums", "50 Vida {008000}[10 ZZCASH]\n80 Vida {008000}[15 ZZCASH]\n100 Vida + 100 Armadura {008000}[30 ZZCASH]\nFull GAS + Bateria + Reparacion {008000}[65 ZZCASH]\nEscopeta - 30 Balas {008000}[25 ZZCASH]\nDesert - 40 Balas {008000}[50 ZZCASH]\nAK47 - 60 Balas {008000}[125 ZZCASH]\nM4A1 - 60 Balas {008000}[145 ZZCASH]\nMP5 - 90 Balas {008000}[85 ZZCASH]\nSniper - 5 Balas {008000}[350 ZZCASH]\nLimpieza de Antecedentes {008000}[1500 ZZCASH]\nImpuesto Coche 1 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 2 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 3 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 4 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Casa 1 pagado por 2 meses {008000}[7000 ZZCASH]\nImpuesto Casa 2 pagado por 2 meses {008000}[7000 ZZCASH]\nImpuesto Negocio 1 pagado por 2 meses {008000}[8000 ZZCASH]\nImpuesto Negocio 2 pagado por 2 meses {008000}[8000 ZZCASH]", "Aceptar", "Cancelar");
     return 1;
 }
@@ -32302,6 +32307,17 @@ Funcion.VenderAuto(x)
     autos[x][cEmbargo] = 0;
     autos[x][cMulta] = 0;
     SetVehicleVirtualWorld(x, 1);
+    
+    maletero[x][mbloqueo] = false;
+    for (new i = 0; i < 8; i++) {
+        maletero[x][marma][i] = 0;
+    }
+    maletero[x][mchaleco] = 0;
+    for (new i = 0; i < 5; i++) {
+        maletero[x][mdrogas][i] = 0;
+    }
+    ActualizarMaletas(x);
+
     ActualizaVehiculo(x);
     return 1;
 }
