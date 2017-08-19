@@ -5352,42 +5352,13 @@ CallBack::respawnAutos20s(playerid, tipo)
     //
     switch(tipo)
     {
-    case 0:
-        {
-            for(new x=1;x<MAX_VEHICLES;x++)
-            {
-                if(EsCochePolicial(x))
-                {
+    case 0: {
+            for (new x=1;x<MAX_VEHICLES;x++) {
+                if (EsCochePolicial(x) || SAMD_Vehicle(x) || Mecanico_Vehicle(x) || CNN_Vehicle(x) || FBI_Vehicle(x) || Gobierno_Vehicle(x) || EsFortCarson(x)) {
                     spawnAuto(!enUso{x} ? (x) : (0));
                 }
-                if(SAMD_Vehicle(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(Mecanico_Vehicle(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(CNN_Vehicle(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(FBI_Vehicle(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(Gobierno_Vehicle(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(EsFortCarson(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                for(new i=0; i<sizeof(Autosfacc); i++)
-                {
-                    if(Autosfacc[i][af@carid] == x)
-                    {
+                for (new i=0; i<sizeof(Autosfacc); i++) {
+                    if(Autosfacc[i][af@carid] == x) {
                         spawnAuto(!enUso{x} ? (x) : (0));
                     }
                 }
@@ -5396,48 +5367,9 @@ CallBack::respawnAutos20s(playerid, tipo)
             format(tmp, sizeof(tmp), "El administrador %s hizo un respawn de autos de faccion [SIN USO]", PlayerName(playerid));
             AdminMensaje(tmp);
         }
-    case 1:
-        {
-            for(new x=1;x<MAX_VEHICLES;x++)
-            {
-                if(transAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(aviadorAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(camioneroAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(barrenderoAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(busesAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(agricultorAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(pizzaAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(taxiAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(basureroAuto(x))
-                {
-                    spawnAuto(!enUso{x} ? (x) : (0));
-                }
-                if(pescadorAuto(x))
-                {
+    case 1: {
+            for(new x=1;x<MAX_VEHICLES;x++) {
+                if (transAuto(x) || aviadorAuto(x) || camioneroAuto(x) || barrenderoAuto(x) || busesAuto(x) || agricultorAuto(x) || pizzaAuto(x) || taxiAuto(x) || basureroAuto(x) || pescadorAuto(x) || tren == x) {
                     spawnAuto(!enUso{x} ? (x) : (0));
                 }
             }
@@ -5445,12 +5377,9 @@ CallBack::respawnAutos20s(playerid, tipo)
             format(tmp, sizeof(tmp), "El administrador %s hizo un respawn de autos de Trabajo [SIN USO]", PlayerName(playerid));
             AdminMensaje(tmp);
         }
-    case 2:
-        {
-            for(new x=1;x<MAX_VEHICLES;x++)
-            {
-                if(Hire_Vehicle(x))
-                {
+    case 2: {
+            for (new x=1;x<MAX_VEHICLES;x++) {
+                if (Hire_Vehicle(x)) {
                     spawnAuto(!enUso{x} ? (x) : (0));
                 }
             }
