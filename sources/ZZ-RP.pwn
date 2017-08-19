@@ -1409,11 +1409,11 @@ new static obtenerLicencia[][_@en@obtenerLicencia] =
     {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 90, 1, false}, 
     {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 91, 1, false}, 
     {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 92, 1, false}, 
-    {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 93, 1, false}, 
-    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 94, 1, false}, 
-    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 95, 1, false}, 
-    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 96, 1, false}, 
-    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 97, 1, false}, 
+    {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 93, 1, false},  
+    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 94, 1, false},  
+    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 95, 1, false},  
+    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 96, 1, false},  
+    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 97, 1, false},  
     {593, {426.7948, 2501.7593, 16.9445, 88.0809}, 98, 0, false}, 
     {593, {426.7948, 2501.7593, 16.9445, 88.0809}, 99, 0, false}, 
     {473, {58.0547, -1221.8842, -0.5517, 324.8833}, 100, 0, false}, 
@@ -17779,12 +17779,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             }
             return 1;
         }
-    case DIALOGO_OBTENER_LICENCIA:
-        {
-            if(response)
-            {
-                switch(listitem)
-                {
+    case DIALOGO_OBTENER_LICENCIA: {
+            if(response) {
+                new bool:licenciero = false;
+                switch(listitem) {
                 case 0:
                     {
                         if(cuenta[playerid][cLicenciaMoto])return Mensaje(playerid, COLOR_ROJO, "Usted ya posee licencia de conducir moto.");
@@ -17800,9 +17798,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 PutPlayerInVehicleEx(playerid, obtenerLicencia[i][cocheExamen], 0);
                                 comenzarPrueba(playerid);
                                 pierdeDinero(playerid, 250);
+                                licenciero = true;
                                 break;
                             }
                         }
+                        if (!licenciero) Mensaje(playerid, COLOR_GRIS, "¡Todos los instructores están ocupados!");
                     }
                 case 1:
                     {
@@ -17819,9 +17819,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 PutPlayerInVehicleEx(playerid, obtenerLicencia[i][cocheExamen], 0);
                                 comenzarPrueba(playerid);
                                 pierdeDinero(playerid, 450);
-                                break;
+                                licenciero = true;
+                                return 1;
                             }
                         }
+                        if (!licenciero) Mensaje(playerid, COLOR_GRIS, "¡Todos los instructores están ocupados!");
                     }
                 case 2:
                     {
@@ -17838,9 +17840,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 PutPlayerInVehicleEx(playerid, obtenerLicencia[i][cocheExamen], 0);
                                 comenzarPrueba(playerid);
                                 pierdeDinero(playerid, 7000);
-                                break;
+                                licenciero = true;
+                                return 1;
                             }
                         }
+                        if (!licenciero) Mensaje(playerid, COLOR_GRIS, "¡Todos los instructores están ocupados!");
                     }
                 case 3:
                     {
@@ -17857,9 +17861,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 PutPlayerInVehicleEx(playerid, obtenerLicencia[i][cocheExamen], 0);
                                 comenzarPrueba(playerid);
                                 pierdeDinero(playerid, 2500);
-                                break;
+                                return 1;
                             }
                         }
+                        Mensaje(playerid, COLOR_GRIS, "¡Todos los instructores están ocupados!");
                     }
                 }
             }
@@ -28166,6 +28171,23 @@ COMMAND:licencias(playerid, params[])
     ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
     return 1;
 }
+command(terminarprueba, playerid, params[]) {
+    if (enteroChar[lictipo]{playerid} != 255) {
+        SetPosEx(playerid, 2048.1421, -1908.2161, 13.5469, 267.6207, 0, 0);
+        terminarPrueba(playerid);
+        Mensaje(playerid, COLOR_AMARILLO, "Has salido de la prueba de licencias.");
+        switch (enteroChar[lictipo]{playerid}) {
+            case 0: MoneyGiveToPlayer(playerid, 125);
+            case 1: MoneyGiveToPlayer(playerid, 225);     
+            case 2: MoneyGiveToPlayer(playerid, 3500);
+            case 3: MoneyGiveToPlayer(playerid, 1250);
+        }
+        Mensaje(playerid, COLOR_AMARILLO, "Se te ha devuelto la mitad del precio del exámen.");
+    } else {
+        Mensaje(playerid, COLOR_AMARILLO, "No estás haciendo una prueba de licencias.");
+    }
+    return 1;
+}
 COMMAND:cajero(playerid, params[])
 {
     if(!cuenta[playerid][cTarjeta])return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} Usted no tiene una tarjeta de crédito, saque una en el banco.");
@@ -32864,4 +32886,4 @@ Funcion.pescadorAuto(vehicleid) {
 }
 
 //
-#include "zz_mapas.pwn"
+#include "zz_mapas.pwn"
