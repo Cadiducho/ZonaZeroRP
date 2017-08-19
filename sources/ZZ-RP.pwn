@@ -1737,7 +1737,6 @@ new ClothesID																	[MAX_PLAYERS];
 new ClothesPrice																[MAX_PLAYERS];
 new TEL_INPUT_ID																[MAX_PLAYERS];
 new TEL_NUMBER																	[MAX_PLAYERS];
-new patines																		[MAX_PLAYERS];
 new BuyNarco																	[MAX_PLAYERS];
 new NarcoSellPrice																[MAX_PLAYERS];
 new NarcoSellArm																[MAX_PLAYERS];
@@ -2060,6 +2059,7 @@ enum _@en@cuenta
     cMaleta, 
     cMochila, 
     cCasco, 
+    cPatines, 
     cWofer, 
     cFamilia, 
     cFamiliaRango, 
@@ -6812,6 +6812,7 @@ CallBack::OnAccountLoad(playerid, FailPass, pass[]) {
     cuenta[playerid][cMaleta] = cache_get_field_content_int(0, "maleta");
     cuenta[playerid][cMochila] = cache_get_field_content_int(0, "mochila");
     cuenta[playerid][cCasco] = cache_get_field_content_int(0, "casco");
+    cuenta[playerid][cPatines] = cache_get_field_content_int(0, "patines");
     cuenta[playerid][cWofer] = cache_get_field_content_int(0, "miniwofer");
     cuenta[playerid][cFamilia] = cache_get_field_content_int(0, "fam");
     cuenta[playerid][cFamiliaRango] = cache_get_field_content_int(0, "famr");
@@ -7045,7 +7046,7 @@ CallBack::GuardarDatosMySQL(playerid) {
     auto=%d, auto2=%d, auto3=%d, auto4=%d, casa=%d, casa2=%d, negocio=%d, negocio2=%d, licenciaauto=%d, licenciaarma=%d, gafas=%d, tutorial=%d, \
     encendedor=%d, cigarrillos=%d, mascara=%d, advertencias=%d, adminadver=%d, dni=%d, weap0=%d, ammo0=%d, weap1=%d, ammo1=%d, \
     weap2=%d, ammo2=%d, weap3=%d, ammo3=%d, weap4=%d, ammo4=%d, weap5=%d, ammo5=%d, weap6=%d, ammo6=%d, weap7=%d, ammo7=%d, \
-    weap8=%d, ammo8=%d, weap9=%d, ammo9=%d, weap10=%d, ammo10=%d, weap11=%d, ammo11=%d, maleta=%d, mochila=%d, casco=%d, miniwofer=%d, fam=%d, famr=%d, deagle=%d, shotgun=%d, mp5=%d, \
+    weap8=%d, ammo8=%d, weap9=%d, ammo9=%d, weap10=%d, ammo10=%d, weap11=%d, ammo11=%d, maleta=%d, mochila=%d, casco=%d, patines=%d, miniwofer=%d, fam=%d, famr=%d, deagle=%d, shotgun=%d, mp5=%d, \
     ak47=%d, m4=%d, sniper=%d, fstyle=%d, leccion=%d, busqueda=%d, rent=%d, rob=%d, donate=%d, donatedia=%d, donatemes=%d, donateyear=%d, banduda=%d, \
     seguro=%d, walkie=%d WHERE id = '%d'", 
     cuenta[playerid][cNivel], cuenta[playerid][cEmpleado], cuenta[playerid][cAdministrador], cuenta[playerid][cZonaZeroCash], 
@@ -7064,7 +7065,7 @@ CallBack::GuardarDatosMySQL(playerid) {
     cuenta[playerid][cArma][2], cuenta[playerid][cMunicion][2], cuenta[playerid][cArma][3], cuenta[playerid][cMunicion][3], cuenta[playerid][cArma][4], cuenta[playerid][cMunicion][4], 
     cuenta[playerid][cArma][5], cuenta[playerid][cMunicion][5], cuenta[playerid][cArma][6], cuenta[playerid][cMunicion][6], cuenta[playerid][cArma][7], cuenta[playerid][cMunicion][7], 
     cuenta[playerid][cArma][8], cuenta[playerid][cMunicion][8], cuenta[playerid][cArma][9], cuenta[playerid][cMunicion][9], cuenta[playerid][cArma][10], cuenta[playerid][cMunicion][10], cuenta[playerid][cArma][11], 
-    cuenta[playerid][cMunicion][11], cuenta[playerid][cMaleta], cuenta[playerid][cMochila], cuenta[playerid][cCasco], cuenta[playerid][cWofer], cuenta[playerid][cFamilia],
+    cuenta[playerid][cMunicion][11], cuenta[playerid][cMaleta], cuenta[playerid][cMochila], cuenta[playerid][cCasco], (cuenta[playerid][cPatines] ? 1 : 0), cuenta[playerid][cWofer], cuenta[playerid][cFamilia],
     cuenta[playerid][cFamiliaRango], cuenta[playerid][cDesert], cuenta[playerid][cEscopeta], cuenta[playerid][cMP5], cuenta[playerid][cAK47], cuenta[playerid][cM4], cuenta[playerid][cSniper], 
     cuenta[playerid][cEstiloPelea], cuenta[playerid][cLeccion], cuenta[playerid][cBusqueda], cuenta[playerid][cRentado], cuenta[playerid][cRobo], cuenta[playerid][cDonador], 
     cuenta[playerid][cDonar][0], cuenta[playerid][cDonar][1], cuenta[playerid][cDonar][2], cuenta[playerid][cBanDuda], cuenta[playerid][cSeguro], cuenta[playerid][cWalkie], cuenta[playerid][cUnico]);
@@ -9262,7 +9263,7 @@ COMMAND:sospechosos(playerid, params[]) {
     return 1;
 }
 command(tallerpd, playerid, params[]) {
-    if (Team_LSPD(playerid)) return Mensaje(playerid, COLOR_ROJO, "No eres policía.");
+    if (!Team_LSPD(playerid)) return Mensaje(playerid, COLOR_ROJO, "No eres policía.");
     if (!cuenta[playerid][cFaccOnDuty]) return Mensaje(playerid, COLOR_ROJO, "No estás en servicio.");
     if (!IsPlayerInAnyVehicle(playerid)) return Mensaje(playerid, -1, "»{FFFFFF} No estás en un vehículo.");
     if (!IsPlayerInRangeOfPoint(playerid, 7.0, 1602.7480, -1623.6783, 13.4950)) return Mensaje(playerid, COLOR_ROJO, "No estás en el taller.");
@@ -12946,24 +12947,24 @@ command(comprarflores, playerid, params[]){
 }
 command(patines, playerid, params[])
 {
-    if(!patines[playerid])return Mensaje(playerid, COLOR_GRIS, "No tienes patines!");
+    if(!cuenta[playerid][cPatines])return Mensaje(playerid, COLOR_GRIS, "No tienes patines!");
     if(!sscanf(params, "d", params[0]))
     {
         switch(params[0])
         {
         case 0:
             {
-                return patines[playerid] = 1;
+                return cuenta[playerid][cPatines] = 1;
             }
         case 1:
             {
-                patines[playerid] = 20; Mensaje(playerid, COLOR_GRIS2, "ACTIVADO ACCIÓN 2 --> Velocidad moderada");
+                cuenta[playerid][cPatines] = 20; Mensaje(playerid, COLOR_GRIS2, "Patines ajustados a velocidad moderada");
                 return Mensaje(playerid, COLOR_AMARILLO2, "Utiliza: ESPACIO [correr] y ALT [parar] - Utilice /patines 0");
             }
         case 2:
             {
                 Att_Obj_Slot_4[playerid] = "Skate";
-                patines[playerid] = 30; Mensaje(playerid, COLOR_GRIS2, "ACTIVADO ACCIÓN 3 --> Sprint");
+                cuenta[playerid][cPatines] = 30; Mensaje(playerid, COLOR_GRIS2, "Patines ajustados a sprint");
                 return Mensaje(playerid, COLOR_AMARILLO2, "Utiliza: ESPACIO [correr] y ALT [parar] - Utilice /patines 0");
             }
         default: Mensaje(playerid, COLOR_GRIS, "Utiliza: /patines [acción] (0:parar, 1:correr, 2:sprint)");
@@ -15540,7 +15541,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
     }
     if(newkeys & KEY_WALK)
     {
-        if(patines[playerid] > 9)
+        if(cuenta[playerid][cPatines] > 9)
         {
             ApplyAnimation(playerid, "CARRY", "crry_prtial", 4.0, 0, 0, 0, 0, 0);
         }
@@ -15549,11 +15550,11 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
     {
         if(IsPlayerConnected(playerid))
         {
-            if(patines[playerid] > 9)
+            if(cuenta[playerid][cPatines] > 9)
             {
-                if(patines[playerid] == 10) ApplyAnimation(playerid, "SKATE", "skate_idle", 4.0, 1, 1, 1, 1, 500);
-                else if(patines[playerid] == 20) ApplyAnimation(playerid, "SKATE", "skate_run", 4.0, 1, 1, 1, 1, 500);
-                else if(patines[playerid] == 30) ApplyAnimation(playerid, "SKATE", "skate_sprint", 4.0, 1, 1, 1, 1, 500);
+                if(cuenta[playerid][cPatines] == 10) ApplyAnimation(playerid, "SKATE", "skate_idle", 4.0, 1, 1, 1, 1, 500);
+                else if(cuenta[playerid][cPatines] == 20) ApplyAnimation(playerid, "SKATE", "skate_run", 4.0, 1, 1, 1, 1, 500);
+                else if(cuenta[playerid][cPatines] == 30) ApplyAnimation(playerid, "SKATE", "skate_sprint", 4.0, 1, 1, 1, 1, 500);
             }
             else if(booleano[PlayerCuffed]{playerid} || booleano[Rescued]{playerid}) 	ApplyAnimation(playerid, "PED", "WALK_civi", 4.1, 1, 1, 1, 1, 1);
             else if(Accesory[playerid] > 0)
@@ -21886,7 +21887,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         if(verificarDinero(playerid, 50))
                         {
                             ApplyAnimation(playerid, "DEALER", "shop_pay", 4.0, 0, 0, 0, 0, 0);
-                            patines[playerid] = 1;
+                            cuenta[playerid][cPatines] = 1;
                             Mensaje(playerid, COLOR_BLANCO, "Compraste unos patines, utiliza /patines");
                             pierdeDinero(playerid, 50);
                             return 1;
@@ -25039,7 +25040,6 @@ CallBack::ResetearVariables(playerid)
     cCancer[playerid] = 0; 			
     cEpilepsia[playerid] = 0; 
     InAmbu[playerid] = 0;
-    patines[playerid] = 0;
 
     PlayerStatInfo[playerid][0] = "No"; 
     PlayerStatInfo[playerid][1] = "No";	
