@@ -9261,6 +9261,18 @@ COMMAND:sospechosos(playerid, params[]) {
     TextList_Show(playerid, TextList:textList_sospechosos);
     return 1;
 }
+command(tallerpd, playerid, params[]) {
+    if (Team_LSPD(playerid)) return Mensaje(playerid, COLOR_ROJO, "No eres policía.");
+    if (!cuenta[playerid][cFaccOnDuty]) return Mensaje(playerid, COLOR_ROJO, "No estás en servicio.");
+    if (!IsPlayerInAnyVehicle(playerid)) return Mensaje(playerid, -1, "»{FFFFFF} No estás en un vehículo.");
+    if (!IsPlayerInRangeOfPoint(playerid, 7.0, 1602.7480, -1623.6783, 13.4950)) return Mensaje(playerid, COLOR_ROJO, "No estás en el taller.");
+    new vehid = GetPlayerVehicleID(playerid);
+    if (!EsCochePolicial(vehid)) return Mensaje(playerid, COLOR_ROJO, "Sólo puedes reparar patrullas.");
+    
+    SetVehicleHealth(vehid, 1000.0);
+    RepairVehicle(vehid);
+    return Mensaje(playerid, COLOR_GRIS2, "¡Vehículo reparado!");
+}
 COMMAND:su(playerid, params[])
 {
     if(Team_LSPD(playerid) || Team_FBI(playerid))
@@ -16610,8 +16622,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
                                 if(k == 15)return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} Usted no necesita estar en servicio.");
                                 if(IsPlayerInRangeOfPoint(playerid, 5.0, trabajos[k][trabPos][0], trabajos[k][trabPos][1], trabajos[k][trabPos][2]))
                                 {
-                                    if(!cuenta[playerid][servicio])
-                                    {
+                                    if (!cuenta[playerid][servicio]) {
                                         cuenta[playerid][servicio] = true;
                                         if (cuenta[playerid][cSexo] == 2) {
                                             SetPlayerSkin(playerid, trabajos[k][trabSkinMuj]);   
@@ -16645,7 +16656,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
                                             }
                                         }
                                     }
-                                }else return Mensaje(playerid, COLOR_ROJO, "Usted no esta cerca de su trabajo.");
+                                } else return Mensaje(playerid, COLOR_ROJO, "Usted no esta cerca de su trabajo.");
                             }
                         case 20:
                             {
@@ -18683,7 +18694,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                     Mensaje(playerid, -1, "{E48584}LSPD:{FFFFFF} /limpiar /ant /arrestar /su /bk /bkc /esposar /revisarcarga /quitar");
                                     Mensaje(playerid, -1, "{E48584}LSPD:{FFFFFF} /vercinturon /remolcar /allanarcasa /revisarcasa /incautar /bar /qb");
                                     Mensaje(playerid, -1, "{E48584}LSPD:{FFFFFF} /pstrips /qstrips /retener /camaras /sospechosos /qbs /miranda");
-                                    Mensaje(playerid, -1, "{E48584}LSPD:{FFFFFF} /tlcdesasdb /quitarcarga /estadoemergencia (SOLO LG)");
+                                    Mensaje(playerid, -1, "{E48584}LSPD:{FFFFFF} /tallerpd /tlcdesasdb /quitarcarga /estadoemergencia (SOLO LG)");
                                     Mensaje(playerid, -1, "{E48584}LSPD:{FFFFFF} /quemarcosecha [SOLO PARA COSECHAS PG (Medio de la calle o lugares publicos]");
                                 }
                             case 3:
