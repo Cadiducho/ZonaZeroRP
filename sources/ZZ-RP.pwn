@@ -182,7 +182,6 @@ native WP_Hash(buffer[], len, const str[]);
 #define DIALOGO_EQUIPO_LSPD11  													(74)
 #define DIA_RENTA 																(75)
 #define CREDITOS 																(76)
-#define DIALOGO_MAPA 															(77)
 #define MECANICO_MENU_CHECK_REMOVEALL 											(78)
 #define DINFO   																(79)
 #define DINFO   																(79)
@@ -262,7 +261,6 @@ native WP_Hash(buffer[], len, const str[]);
 #define DIALOGO_NUMERO_CONFIRMADO  												(161)
 #define DIALOGO_SALDO_PAQUETES 													(162)
 #define DIALOG_SAMUR_ELEVATOR   												(163)
-#define IPHONE_AGENDA_ESCRIVIR                                                  (958)
 #define DIALOG_FBI_ELEVATOR     												(164)
 #define DIALOG_ESTADO   														(165)
 #define DIALOG_REG_ESTADO   													(166)
@@ -13846,10 +13844,6 @@ command(infonew, playerid, params[])
     format(string, sizeof(string), "%s %s", di, di2);
     return ShowPlayerDialog(playerid, 999, DIALOG_STYLE_MSGBOX, "{FF231D}Info del uso de /new", string, "Ok", "" );
 }
-command(258525852, playerid, params[])
-{
-    return ShowPlayerDialog(playerid, IPHONE_AGENDA_ESCRIVIR, DIALOG_STYLE_INPUT, "-> Escribe una nota <-", "A", "Aceptar", "Aceptar");
-}
 
 command(new, playerid, params[]){
     new string[128];
@@ -17078,7 +17072,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
     }
     else if(playertextid == iPhoneDatos[9][TDIphone])
     {
-        ShowPlayerDialog(playerid, DIALOGO_MAPA, DIALOG_STYLE_LIST, "{018CFE}Puntos de interes", "{FFFFFF}» Ayuntamiento\n» Comisaria\n» Taller\n» Licencieria\n» Binco\n» 24-7 Vinewood\n» 24-7 Unity\n» 24-7\n» Deposito de la LSPD\n» Banco\n» Consecionaria\n» Casino\n» Pista de Karting\n» Localizador de Vehiculos\n» Tienda de Electronica\n» Cabina de Anuncios (/ad)\n» Prision Federal\n» Trabajos", "Aceptar", "Salir");
+        Dialog_Show(playerid, Dialog:mapa);
         EsconderIphone(playerid);
     }
     else if(playertextid == iPhoneDatos[10][TDIphone])
@@ -20445,19 +20439,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     TextDrawShowForPlayer(playerid, SunGlasses);
                 }
             }
-        }
-    case IPHONE_AGENDA_ESCRIVIR:
-        {
-            if(response)
-            {
-                if(strcmp(cuenta[playerid][cNote1], "None", true) == 0)
-                {
-                    strmid(cuenta[playerid][cNote1], inputtext, 0, strlen(inputtext), 80);
-                    format(string, sizeof(string), "Nota1: %s", cuenta[playerid][cNote1]);
-                    Mensaje(playerid, COLOR_GRIS2, string);
-                }
-            }
-            return 0;
         }
     case DIALOGO_PETICIONES:
         {
