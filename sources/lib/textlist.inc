@@ -52,7 +52,7 @@
 */
 
 #if !defined TEXTLIST_MAX_ITEMS
-	#define TEXTLIST_MAX_ITEMS 30
+	#define TEXTLIST_MAX_ITEMS 150 //30
 #endif
 
 #if !defined TEXTLIST_MAX_ITEMS_ON_LIST

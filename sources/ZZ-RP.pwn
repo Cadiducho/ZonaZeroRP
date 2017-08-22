@@ -5816,19 +5816,13 @@ CallBack::SyncTime()
     gettime(tmphour, tmpminute, tmpsecond);
     FixHour(tmphour);
     tmphour = shifthour;
-    if ((tmphour > ghour) || (tmphour == 0 && ghour == 23))
-    {
+    if ((tmphour > ghour) || (tmphour == 0 && ghour == 23)) {
         ghour = tmphour;
-        if (realtime)
-        {
+        if (realtime) {
             SetWorldTime(tmphour);
         }
-        if(tmphour == 10 || tmphour == 15 ||tmphour == 20 || tmphour == 3)
-        {
-            new string[80];
-            format(string, sizeof(string), "{2F99B5}Noticias de la Loteria: {FFFFFF}Hemos empezado la elección de la loteria.");
-            OOCOff(COLOR_BLANCO, string);
-            Lotto(random(150));
+        if(tmphour == 10 || tmphour == 15 ||tmphour == 20 || tmphour == 3) {
+            Lotto();
         }
     }
 }
@@ -9181,24 +9175,21 @@ TextListCreate:textList_sospechosos(playerid) {
         if(!cuenta[id][cBusqueda]) continue;
         format(items[id], TEXTLIST_MAX_ITEM_NAME, "%s", PlayerName(id));
         switch (cuenta[id][cBusqueda]) {
-        case 1: {
-                items_bg_colors[id] = COLOR_AMARILLO;
-            }
-        case 2: {
-                items_bg_colors[id] = COLOR_NARANJA;
-            }
-        case 3: {
-                items_bg_colors[id] = COLOR_ROJO;
-            }
-        case 4: {
-                items_bg_colors[id] = COLOR_PURPURA;
-            }
-        case 5: {
-                items_bg_colors[id] = COLOR_VIOLETA;
-            }
-        default: {
-                items_bg_colors[id] = COLOR_VERDE;
-            }
+            case 1: {
+                    items_bg_colors[id] = COLOR_AMARILLO;
+                }
+            case 2: {
+                    items_bg_colors[id] = COLOR_NARANJA;
+                }
+            case 3: {
+                    items_bg_colors[id] = COLOR_ROJO;
+                }
+            case 4: {
+                    items_bg_colors[id] = COLOR_PURPURA;
+                }
+            case 5: {
+                    items_bg_colors[id] = COLOR_VIOLETA;
+                }
         }
         
         encontro++;
@@ -11462,7 +11453,7 @@ command(loteria, playerid, params[])
     new string[128];
     format(string, sizeof(string), "{2F99B5}Noticias de la Loteria: {FFFFFF}Hemos empezado la elección de la loteria.");
     OOCOff(COLOR_BLANCO, string);
-    Lotto(random(150));
+    Lotto();
     return 1;
 }
 command(setpayday, playerid, params[])
@@ -24542,10 +24533,20 @@ CallBack::SafeLoadObjects(playerid)
         TextDrawHideForPlayer(playerid, streamer);
     }
 }
-CallBack::Lotto(number)
-{
-    if(!number) number = random(30) + 100;
+CallBack::Lotto() {
+    new string[80];
+    format(string, sizeof(string), "{2F99B5}Noticias de la Loteria: {FFFFFF}En 10 minutos se realizará el sorteo de la lotería.");
+    OOCOff(COLOR_BLANCO, string);
+            
+    SetTimerEx("LottoTimer", 10 * 60 * 1000, false);
+}
+CallBack::LottoTimer() {
+    new number = random(100);
     
+    new string[80];
+    format(string, sizeof(string), "{2F99B5}Noticias de la Loteria: {FFFFFF}Hemos empezado la elección de la loteria.");
+    OOCOff(COLOR_BLANCO, string);
+            
     new JackpotFallen = 0;
     new string[128];
     format(string, sizeof(string), "Noticias de la Loteria: {FFFFFF}Hoy en dia el numero ganador ha recaido en: {FF0000}%d", number);
