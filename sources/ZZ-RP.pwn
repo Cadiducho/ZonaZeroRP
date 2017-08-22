@@ -20904,6 +20904,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 10;
                         SetHP(playerid, 50);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha 50 Vida con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 1:
                     {
@@ -20911,6 +20913,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 15;
                         SetHP(playerid, 80);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha 80 Vida con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 2:
                     {
@@ -20919,6 +20923,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         SetHP(playerid, 100);
                         darArmadura(playerid, 100);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha comprado 100 Vida + 100 Armadura con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 3:
                     {
@@ -20929,6 +20935,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         autos[idcar][cBattery] = 10000;
                         Gas[idcar] = 1000;
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha reparado su vehículo con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 4:
                     {
@@ -20936,6 +20944,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 70;
                         darArma(playerid, 25, 30);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha comprado Escopeta - 30 Balas con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 5:
                     {
@@ -20943,6 +20953,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 50;
                         darArma(playerid, 24, 40);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha comprado Desert - 40 Balas con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 6:
                     {
@@ -20950,6 +20962,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 125;
                         darArma(playerid, 30, 60);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha comprado AK47 - 60 Balas con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 7:
                     {
@@ -20957,6 +20971,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 145;
                         darArma(playerid, 31, 60);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha comprado M4A1 - 60 Balas con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 8:
                     {
@@ -20964,6 +20980,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 105;
                         darArma(playerid, 29, 90);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha comprado MP5 - 90 Balas con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 9:
                     {
@@ -20971,6 +20989,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 350;
                         darArma(playerid, 34, 5);
                         Mensaje(playerid, COLOR_VERDE, "Compra Satisfactoria!");
+                        format(string, sizeof(string), "%s ha comorado Sniper - 5 Balas con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 10:
                     {
@@ -20978,6 +20998,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                         cuenta[playerid][cZonaZeroCash] -= 1500;
                         cuenta[playerid][cBusqueda] = 0;
                         Mensaje(playerid, COLOR_VERDE, "Nivel de Busqueda LIMPIO!");
+                        format(string, sizeof(string), "%s ha limpiado su nivel de busqueda con /comandovip", PlayerName(playerid));
+                        AdminMensaje(string);
                     }
                 case 11:
                     {
@@ -24538,14 +24560,14 @@ CallBack::Lotto() {
     format(string, sizeof(string), "{2F99B5}Noticias de la Loteria: {FFFFFF}En 10 minutos se realizará el sorteo de la lotería.");
     OOCOff(COLOR_BLANCO, string);
             
-    SetTimerEx("LottoTimer", 10 * 60 * 1000, false);
+    SetTimer("LottoTimer", 10 * 60 * 1000, false);
 }
 CallBack::LottoTimer() {
     new number = random(100);
     
-    new string[80];
-    format(string, sizeof(string), "{2F99B5}Noticias de la Loteria: {FFFFFF}Hemos empezado la elección de la loteria.");
-    OOCOff(COLOR_BLANCO, string);
+    new noticias[80];
+    format(noticias, sizeof(noticias), "{2F99B5}Noticias de la Loteria: {FFFFFF}Hemos empezado la elección de la loteria.");
+    OOCOff(COLOR_BLANCO, noticias);
             
     new JackpotFallen = 0;
     new string[128];
@@ -27642,7 +27664,7 @@ COMMAND:guardarcuenta(playerid, params[])
 
 COMMAND:comandovip(playerid, params[])
 {
-    ShowPlayerDialog(playerid, DIALOGO_SANTIAGO, DIALOG_STYLE_LIST, "Comando VIP - Premiums", "50 Vida {008000}[10 ZZCASH]\n80 Vida {008000}[15 ZZCASH]\n100 Vida + 100 Armadura {008000}[30 ZZCASH]\nFull GAS + Bateria + Reparacion {008000}[65 ZZCASH]\nEscopeta - 30 Balas {008000}[25 ZZCASH]\nDesert - 40 Balas {008000}[50 ZZCASH]\nAK47 - 60 Balas {008000}[125 ZZCASH]\nM4A1 - 60 Balas {008000}[145 ZZCASH]\nMP5 - 90 Balas {008000}[85 ZZCASH]\nSniper - 5 Balas {008000}[350 ZZCASH]\nLimpieza de Antecedentes {008000}[1500 ZZCASH]\nImpuesto Coche 1 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 2 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 3 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 4 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Casa 1 pagado por 2 meses {008000}[7000 ZZCASH]\nImpuesto Casa 2 pagado por 2 meses {008000}[7000 ZZCASH]\nImpuesto Negocio 1 pagado por 2 meses {008000}[8000 ZZCASH]\nImpuesto Negocio 2 pagado por 2 meses {008000}[8000 ZZCASH]", "Aceptar", "Cancelar");
+    ShowPlayerDialog(playerid, DIALOGO_SANTIAGO, DIALOG_STYLE_LIST, "Comando VIP - Premiums", "50 Vida {008000}[10 ZZCASH]\n80 Vida {008000}[15 ZZCASH]\n100 Vida + 100 Armadura {008000}[30 ZZCASH]\nFull GAS + Bateria + Reparacion {008000}[65 ZZCASH]\nEscopeta - 30 Balas {008000}[25 ZZCASH]\nDesert - 40 Balas {008000}[50 ZZCASH]\nAK47 - 60 Balas {008000}[125 ZZCASH]\nM4A1 - 60 Balas {008000}[145 ZZCASH]\nMP5 - 90 Balas {008000}[85 ZZCASH]\nSniper - 5 Balas {008000}[350 ZZCASH]\nLimpieza de nivel de búsqueda {008000}[1500 ZZCASH]\nImpuesto Coche 1 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 2 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 3 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Coche 4 pagado por 2 meses {008000}[5000 ZZCASH]\nImpuesto Casa 1 pagado por 2 meses {008000}[7000 ZZCASH]\nImpuesto Casa 2 pagado por 2 meses {008000}[7000 ZZCASH]\nImpuesto Negocio 1 pagado por 2 meses {008000}[8000 ZZCASH]\nImpuesto Negocio 2 pagado por 2 meses {008000}[8000 ZZCASH]", "Aceptar", "Cancelar");
     return 1;
 }
 COMMAND:beneficios2(playerid, params[])
