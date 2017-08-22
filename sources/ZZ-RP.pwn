@@ -9176,7 +9176,6 @@ command(aceptarmuerte, playerid, params[]) {
 }
 
 TextListCreate:textList_sospechosos(playerid) {
-    cuenta[playerid][cBusqueda] = 5;
     new encontro;
     new items[MAX_PLAYERS][TEXTLIST_MAX_ITEM_NAME];
     new items_bg_colors[TEXTLIST_MAX_ITEMS];
@@ -9831,7 +9830,7 @@ DialogResponse:mapa(playerid, response, listitem, inputtext[]) {
             case 15: SetPlayerCheckpoint(playerid, 1088.3285, -1379.8683, 13.8077, 3.0); // Cabina de anuncios
             case 16: SetPlayerCheckpoint(playerid, 2047.1602, -2095.8225, 13.5469, 3.0); // Prision Federal
             case 17: {
-                
+                Dialog_Show(playerid, Dialog:ubicacionTrabajos);
             }
         }
         Mensaje(playerid, COLOR_BLANCO, "{FFFFFF}Se marcó la ubicación en el minimapa en forma de checkpoint (punto rojo).");
