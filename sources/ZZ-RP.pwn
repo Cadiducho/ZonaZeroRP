@@ -5,7 +5,7 @@
     *	Desarrollador:		    Cadiducho	
     *   Antiguos Creditos:      Parka, Lucas Clemente(lolking), Sergio Mitnick. Desarrolladores de Ciudad Prohibida
     *   Mappers:                Javier_Cardenas.
-    *	Version:				1.0.3
+    *	Version:				1.0.5
     *
     *	Principal: ZZ-RP.pwn
     *
@@ -40,7 +40,7 @@ native WP_Hash(buffer[], len, const str[]);
 /******************************[- Definiciones -]******************************/
 /******************************************************************************/
 
-#define Version			"v1.0.3"
+#define Version			"v1.0.5"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
@@ -5426,7 +5426,7 @@ CallBack::HacerPruebaRol(playerid)
                     format(tmp, sizeof(tmp), "Usted ha fallado %d/10 vuelva a intentarlo en 1 minuto.", enteroChar[cPrueba]{playerid});
                     Mensaje(playerid, COLOR_ROJO, tmp);
                     
-                    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%s', '%s', 'Fallar Prueba', '%s', %d)", Nombre(playerid), Nombre(playerid), ObtenerFecha(), (gettime() + 60));
+                    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%e', '%e', 'Fallar Prueba', '%e', %d)", Nombre(playerid), Nombre(playerid), ObtenerFecha(), (gettime() + 60));
                     mysql_tquery(servidor[mysqlControl], tmp);
                     Kick(playerid);
                 }
@@ -5435,7 +5435,7 @@ CallBack::HacerPruebaRol(playerid)
                     format(tmp, sizeof(tmp), "Usted ha fallado %d/10 vuelva a intentarlo en 1 minuto.", enteroChar[cPrueba]{playerid});
                     Mensaje(playerid, COLOR_ROJO, tmp);
                     
-                    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%s', '%s', 'Fallar Prueba', '%s', %d)", Nombre(playerid), Nombre(playerid), ObtenerFecha(), (gettime() + 60));
+                    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%e', '%e', 'Fallar Prueba', '%e', %d)", Nombre(playerid), Nombre(playerid), ObtenerFecha(), (gettime() + 60));
                     mysql_tquery(servidor[mysqlControl], tmp);
                     Kick(playerid);
                 }
@@ -5444,7 +5444,7 @@ CallBack::HacerPruebaRol(playerid)
                     format(tmp, sizeof(tmp), "Usted ha fallado %d/10 vuelva a intentarlo en 1 minutos.", enteroChar[cPrueba]{playerid});
                     Mensaje(playerid, COLOR_ROJO, tmp);
                     
-                    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%s', '%s', 'Fallar Prueba Leer Guias', '%s', %d)", Nombre(playerid), Nombre(playerid), ObtenerFecha(), (gettime() + 60));
+                    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_bantmp(nombreadmin, nombrejugador, razon, fecha, segundos) VALUES ('%e', '%e', 'Fallar Prueba Leer Guias', '%e', %d)", Nombre(playerid), Nombre(playerid), ObtenerFecha(), (gettime() + 60));
                     mysql_tquery(servidor[mysqlControl], tmp);
                     Kick(playerid);
                 }
@@ -6875,7 +6875,7 @@ CallBack::OnAccountLoad(playerid, FailPass, pass[]) {
     cuenta[playerid][cNegocio2] = cache_get_field_content_int(0, "negocio2");
     cuenta[playerid][cCasa2] = cache_get_field_content_int(0, "casa2");
     
-    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_juguetes WHERE nombre='%s'", Nombre(playerid));
+    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_juguetes WHERE nombre='%e'", Nombre(playerid));
     R = mysql_query(servidor[mysqlControl], tmp, true);
     if(cache_get_row_count(servidor[mysqlControl]))
     {
@@ -6896,7 +6896,7 @@ CallBack::OnAccountLoad(playerid, FailPass, pass[]) {
     }
     else
     {
-        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_juguetes(nombre) VALUES ('%s')", Nombre(playerid));
+        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_juguetes(nombre) VALUES ('%e')", Nombre(playerid));
         mysql_query(servidor[mysqlControl], tmp, false);
     }
     cache_delete(R);
@@ -7087,12 +7087,12 @@ CallBack::GuardarDatosMySQL(playerid) {
     
     tmp[0] = '\0';
     mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "UPDATE zz_usuarios SET \
-    antecedente1='%s', antecedente2='%s', antecedente3='%s', \
-    nota1='%s', nota2='%s', nota3='%s', nota4='%s', nota5='%s', \
-    sms1='%s', sms2='%s', sms3='%s', sms4='%s', sms5='%s', \
-    busqueda1='%s', busqueda2='%s', busqueda3='%s', busqueda4='%s', busqueda5='%s', \
-    marriedto='%s', \
-    ultconn='%s' WHERE id='%d'", 
+    antecedente1='%e', antecedente2='%e', antecedente3='%e', \
+    nota1='%e', nota2='%e', nota3='%e', nota4='%e', nota5='%e', \
+    sms1='%e', sms2='%e', sms3='%e', sms4='%e', sms5='%e', \
+    busqueda1='%e', busqueda2='%e', busqueda3='%e', busqueda4='%e', busqueda5='%e', \
+    marriedto='%e', \
+    ultconn='%e' WHERE id='%d'", 
     cuenta[playerid][cAntecedente1], cuenta[playerid][cAntecedente2], cuenta[playerid][cAntecedente3], 
     cuenta[playerid][cNote1], cuenta[playerid][cNote2], cuenta[playerid][cNote3], cuenta[playerid][cNote4], cuenta[playerid][cNote5], 
     cuenta[playerid][cSMS1], cuenta[playerid][cSMS2], cuenta[playerid][cSMS3], cuenta[playerid][cSMS4], cuenta[playerid][cSMS5], 
@@ -7120,7 +7120,7 @@ CallBack::GuardarDatosMySQL(playerid) {
     rotz0=%f, rotz1=%f, rotz2=%f, rotz3=%f, rotz4=%f, \
     scalex0=%f, scalex1=%f, scalex2=%f, scalex3=%f, scalex4=%f, \
     scaley0=%f, scaley1=%f, scaley2=%f, scaley3=%f, scaley4=%f, \
-    scalez0=%f, scalez1=%f, scalez2=%f, scalez3=%f, scalez4=%f WHERE nombre='%s'", 
+    scalez0=%f, scalez1=%f, scalez2=%f, scalez3=%f, scalez4=%f WHERE nombre='%e'", 
     juguetes[playerid][0][ptModelID], juguetes[playerid][1][ptModelID], juguetes[playerid][2][ptModelID], juguetes[playerid][3][ptModelID], juguetes[playerid][4][ptModelID], 
     juguetes[playerid][0][ptBone], juguetes[playerid][1][ptBone], juguetes[playerid][2][ptBone], juguetes[playerid][3][ptBone], juguetes[playerid][4][ptBone], 
     juguetes[playerid][0][ptPosX], juguetes[playerid][1][ptPosX], juguetes[playerid][2][ptPosX], juguetes[playerid][3][ptPosX], juguetes[playerid][4][ptPosX], 
@@ -17165,7 +17165,7 @@ public OnPlayerConnect(playerid)
     }
     //
     GetPlayerIp(playerid, ip, sizeof(ip));
-    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_tablaip WHERE ipaddress ='%s' OR nombre='%s'", ip, Nombre(playerid));
+    mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "SELECT * FROM zz_tablaip WHERE ipaddress ='%e' OR nombre='%e'", ip, Nombre(playerid));
     R = mysql_query(servidor[mysqlControl], tmp, true);
     if(cache_get_row_count(servidor[mysqlControl]))
     {
@@ -17454,7 +17454,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 new tmp[300], safeInput[32], buf[WP_HASH_LENGTH];
                 mysql_real_escape_string(inputtext, safeInput, servidor[mysqlControl]); 
                 WP_Hash(buf, sizeof (buf), inputtext);
-                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_usuarios(nombre, clave, password, inv11, casa, negocio, casa2, negocio2, deagle, shotgun, mp5, ak47, m4, sniper, fstyle, salud, team) VALUES('%s', md5('%s'), '%s', 1, 9999, 9999, 9999, 9999, 100, 100, 100, 100, 100, 100, 4, 50.0, 3);", Nombre(playerid), safeInput, buf);
+                mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_usuarios(nombre, clave, password, inv11, casa, negocio, casa2, negocio2, deagle, shotgun, mp5, ak47, m4, sniper, fstyle, salud, team) VALUES('%e', md5('%e'), '%e', 1, 9999, 9999, 9999, 9999, 100, 100, 100, 100, 100, 100, 4, 50.0, 3);", Nombre(playerid), safeInput, buf);
                 mysql_tquery(servidor[mysqlControl], tmp, "ConsultarCuenta", "i", playerid);
             }
             return 1;
@@ -17472,10 +17472,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     printf("Pass cifrada");
                     new buf[WP_HASH_LENGTH];
                     WP_Hash(buf, sizeof (buf), inputtext);
-                    mysql_format(servidor[mysqlControl], query, sizeof(query), "SELECT * FROM zz_usuarios WHERE nombre='%s' AND password='%s' LIMIT 1;", Nombre(playerid), buf);
+                    mysql_format(servidor[mysqlControl], query, sizeof(query), "SELECT * FROM zz_usuarios WHERE nombre='%e' AND password='%e' LIMIT 1;", Nombre(playerid), buf);
                 } else {*/
 
-                mysql_format(servidor[mysqlControl], query, sizeof(query), "SELECT * FROM zz_usuarios WHERE nombre='%s' AND clave=md5('%e') LIMIT 1;", Nombre(playerid), inputtext);
+                mysql_format(servidor[mysqlControl], query, sizeof(query), "SELECT * FROM zz_usuarios WHERE nombre='%e' AND clave=md5('%e') LIMIT 1;", Nombre(playerid), inputtext);
                     
                 /*}*/
 				mysql_tquery(servidor[mysqlControl], query, "OnAccountLoad", "iis", playerid, FailPass, inputtext);
@@ -17502,7 +17502,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(IsPlayerConnected(ObtenerIdDelNombre(inputtext)))return Mensaje(playerid, COLOR_GRIS2, "Este jugador esta conectado.");
             
             new Cache:resultado, consulta[126];
-            mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "SELECT * FROM zz_usuarios WHERE nombre = '%s';", inputtext);
+            mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "SELECT * FROM zz_usuarios WHERE nombre = '%e';", inputtext);
             resultado = mysql_query(servidor[mysqlControl], consulta, true);
             if(!cache_get_row_count())
             {
@@ -17535,14 +17535,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(dinero > cuenta[playerid][cDineroBanco] || dinero < 1)return Mensaje(playerid, COLOR_GRIS2, "Usted no posee esa cantidad de dinero!");
 
             new Cache:resultado, consulta[126];
-            mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "SELECT dinerobanco FROM zz_usuarios WHERE nombre = '%s';", cajeros[enteroChar[cajeroslot]{playerid}][tranferenciaNombre]);
+            mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "SELECT dinerobanco FROM zz_usuarios WHERE nombre = '%e';", cajeros[enteroChar[cajeroslot]{playerid}][tranferenciaNombre]);
             resultado = mysql_query(servidor[mysqlControl], consulta, true);
             
             dinerobanco = cache_get_row_int(0, 0, servidor[mysqlControl]);
             cache_delete(resultado);
             
             cuenta[playerid][cDineroBanco] -= dinero;
-            mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_usuarios SET dinerobanco = %d WHERE nombre = '%s';", dinero + dinerobanco, cajeros[enteroChar[cajeroslot]{playerid}][tranferenciaNombre]);
+            mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_usuarios SET dinerobanco = %d WHERE nombre = '%e';", dinero + dinerobanco, cajeros[enteroChar[cajeroslot]{playerid}][tranferenciaNombre]);
             mysql_query(servidor[mysqlControl], consulta, false);
             
             format(string, sizeof(string), "\n{00ff00}Transferencia Satisfactoria\n\n{ffffff}Deudor: %s\nDestinario: %s\nMonto: %d\n", PlayerName(playerid), cajeros[enteroChar[cajeroslot]{playerid}][tranferenciaNombre], dinero);
@@ -26802,7 +26802,7 @@ stock temporizador(playerid, segundos)
 stock MySQL_UPDATE_STRING(const database[], const name[], const fila[], const value[])
 {
     new Consulta[256];
-    mysql_format(servidor[mysqlControl], Consulta, sizeof(Consulta), "UPDATE %s SET %s='%s' WHERE nombre='%e'", database, fila, value, name);
+    mysql_format(servidor[mysqlControl], Consulta, sizeof(Consulta), "UPDATE %s SET %s='%e' WHERE nombre='%e'", database, fila, value, name);
     mysql_query(servidor[mysqlControl], Consulta, false);
     return true;
 }
@@ -27193,7 +27193,7 @@ stock SaveAllHouses() {
 }
 CallBack::ActualizaNegocio(bizzid){
     new consulta[1024];
-    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_negocios SET owned=%d, owner='%s', name='%s', extortion='%s', entrancex=%.4f, entrancey=%.4f, entrancez=%.4f, exitx=%.4f, exity=%.4f, exitz=%.4f, interior=%d, levelneeded=%d, buyprice=%d, till=%d, tillx=%d, productos=%d, costoentrada=%d, tiempo=%d, ubicacion='%s', empresa='%s' WHERE negocioid = %d;", 
+    mysql_format(servidor[mysqlControl], consulta, sizeof(consulta), "UPDATE zz_negocios SET owned=%d, owner='%e', name='%e', extortion='%e', entrancex=%.4f, entrancey=%.4f, entrancez=%.4f, exitx=%.4f, exity=%.4f, exitz=%.4f, interior=%d, levelneeded=%d, buyprice=%d, till=%d, tillx=%d, productos=%d, costoentrada=%d, tiempo=%d, ubicacion='%e', empresa='%e' WHERE negocioid = %d;", 
     negocio[bizzid][bOwned], 
     negocio[bizzid][bOwner], 
     negocio[bizzid][bName], 
@@ -31550,7 +31550,7 @@ COMMAND:jailoff(playerid, params[])
         format(string, sizeof(string), "{FF0000}CMD-OFF: {FFFFFF}%s encarceló a %s por %d minuto(s), razón: %s", PlayerName(playerid), inombre, tiempo, razon);
         AdminMensaje(string);
         
-        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "UPDATE zz_usuarios SET carcel=1, tiempocarcel=%d, janombre='%e', jrazon='%s' WHERE id=%d", tiempo * 60, Nombre(playerid), razon, jailid);
+        mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "UPDATE zz_usuarios SET carcel=1, tiempocarcel=%d, janombre='%e', jrazon='%e' WHERE id=%d", tiempo * 60, Nombre(playerid), razon, jailid);
         mysql_query(servidor[mysqlControl], tmp, false);
     }
     else
