@@ -28457,6 +28457,7 @@ COMMAND:iphone(playerid, params[])
 COMMAND:pagar(playerid, params[])
 {
     new player, dinero, string[128];
+    if (cuenta[playerid][cHorasJugadas] < 4) return Mensaje(playerid, COLOR_GRIS2, "Debes jugar 4 horas mínimo para pagar a otros jugadores");
     if(sscanf(params, "ui", player, dinero))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /pagar (Jugador/ID) (Cantidad)");
     if(dinero > obtenerDinero(playerid))return Mensaje(playerid, COLOR_GRIS2, "No posees esa cantidad.");
     if(dinero < 1 || dinero > 3000)return Mensaje(playerid, COLOR_GRIS2, "Máx: 3000$");
