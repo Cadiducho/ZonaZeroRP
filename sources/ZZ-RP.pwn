@@ -7009,7 +7009,7 @@ CallBack::GuardarDatosMySQL(playerid) {
     GetPlayerFacingAngle(playerid, poss[3]);
     printf("Estado del jugador %s(ID: %d) #1: %d (Coord..: %f, %f, %f, %f)", Nombre(playerid), playerid, GetPlayerState(playerid), poss[0], poss[1], poss[2], poss[3]);
     
-    new tmp[2048];
+    new tmp[4096];
     
     if (poss[0] != 0 && poss[1] != 0 && poss[2] != 0) {
         cuenta[playerid][cMundo] = GetPlayerVirtualWorld(playerid);
