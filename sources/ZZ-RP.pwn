@@ -40,7 +40,7 @@ native WP_Hash(buffer[], len, const str[]);
 /******************************[- Definiciones -]******************************/
 /******************************************************************************/
 
-#define Version			"v1.0.5"
+#define Version			"v1.0.6"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
@@ -568,7 +568,7 @@ new static nonplayers[][_@en@nonplayers] =
     {253, {1156.6292, -1769.978, 16.5938, 358.279}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Fernando Perez"}, //Chofer de Bus
     {158, {-382.6065, -1438.936, 26.0048, 269.581}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Pedro Novillo"}, //Agricultor
     {155, {2102.3044, -1810.030, 13.5547, 91.2935}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Jesus Lopez"}, //Pizzero
-    {261, {1685.6140, -1944.629, 13.5469, 270.835}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Martin Rodriguez"}, //Conductor de Trenes
+    {261, {1685.6140, -1944.629, 13.4695, 270.835}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Martin Rodriguez"}, //Conductor de Trenes
     {007, {1766.1630, -1903.391, 13.5665, 3.26940}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Alberto Mejia"}, //Taxista
     {006, {2190.6213, -1997.077, 13.5469, 1.38950}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Santiago Miguez"}, //Basurero
     {128, {60.707300, -1720.755, 7.51720, 89.1236}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Mateo Suñiga"}, //Pescador
@@ -603,7 +603,8 @@ new static nonplayers[][_@en@nonplayers] =
     /* 45 */{112, {563.0352, -1297.5935, 17.2579, 90.1907}, 0, false, "autos lujosos", "autos familiares", "motocicletas", "aviones", "Toreto Dominic"}, //Consecionarias
     {1, {2165.9282, -1737.1431, 13.5909, 1.4705}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Carlos Madero"}, //carpintero job
     {120, {852.4067, 5516.1602, 8.5859, 91.8660}, 0, false, "bebidas", "_", "_", "_", "Raul Ceballos"}, //Bar	
-    {76, {2269.3008, -1679.5327, 15.6309, 88.9975}, 0, false, "Comprar ropa", "Comprar juguetes", "_", "_", "Carla Sanchez"}, 
+    {76, {2269.3008, -1679.5327, 15.6309, 88.9975}, 0, false, "Comprar ropa", "Comprar juguetes", "_", "_", "Carla Sanchez"},
+	{124, {1483.8263,-1741.2952,13.5469,202.1283}, 491, false, "Comprar ropa", "Comprar juguetes", "_", "_", "Hector Fernandez"},
     {184, {2262.4639, -1679.9022, 15.6209, 271.6491}, 0, false, "Comprar ropa", "Comprar juguetes", "_", "_", "Roger Sanchez"}
 };
 //Sistema de Toys
@@ -1441,7 +1442,7 @@ new static trabajos[][_@en@trabajos] =
     {{2102.3757, -1809.8839, 13.5547}, "Pizzero", "/servicio /finservicio /pizza", 1, 1, 155, 88, 1}, 
     {{1685.7495, -1944.5226, 13.5469}, "Conductor de Trenes", "/servicio /finservicio /ruta", 2, 1, 261, 9, 2}, 
     {{1766.1532, -1903.4260, 13.5665}, "Taxista", "/servicio /finservicio /tarifa", 4, 1, 7, 93, 2}, 
-    {{2190.5740, -1997.0985, 13.5469}, "Basurero", "/servicio /finservicio /basura", 1, 1, 6, 11, 2}, 
+    {{2190.5740, -1997.0985, 13.5469}, "Basurero", "/servicio /finservicio /basura", 1, 1, 6, 11, 2},
     {{60.2410, -1720.7347, 7.5172}, "Pescador", "/servicio /finservicio /pescar", 2, 1, 128, 131, 4}, 
     {{2530.5439, -880.4722, 87.6618}, "Minero", "/servicio /finservicio", 3, 1, 27, 151, 0}, 
     {{2170.7991, -1736.3546, 13.5919}, "Carpintero", "/servicio /finservicio", 3, 1, 1, 298, 0}, 
@@ -2460,7 +2461,7 @@ public OnPlayerSpawn(playerid)
                             SetPosEx(playerid, 1529.6, -1691.2, 13.3, 0, 0 , 0);
                         }
                         
-                        SetHP(playerid, (!cuenta[playerid][cVida])?(50.0):(cuenta[playerid][cVida]));
+                        SetHP(playerid, (!cuenta[playerid][cVida])?(100.0):(cuenta[playerid][cVida]));
                         darArmadura(playerid, cuenta[playerid][cArmadura]);
                         
                         SetPlayerWeapons(playerid);
@@ -3948,7 +3949,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         {
             if(HireKey[playerid] == 9999)
             {
-                ShowPlayerDialog(playerid, DIA_RENTA, DIALOG_STYLE_INPUT, "Vehiculo de alquiler", "{ffffff}Por favor ingrese la cantidad de tiempo en minutos\n{ffffff}Que desea usar este vehiculo en el siguiente espacio:\n{ff0000} 1 minutos equivale a 3$\n{ff0000}PEjemplo: 10 = 10 Minutos", "Aceptar", "Cancelar");
+                ShowPlayerDialog(playerid, DIA_RENTA, DIALOG_STYLE_INPUT, "Vehiculo de alquiler", "{ffffff}Por favor ingrese la cantidad de tiempo en minutos\n{ffffff}Que desea usar este vehiculo en el siguiente espacio:\n{ff0000} 1 minutos equivale a 3$\n{ff0000}Ejemplo: 10 = 10 Minutos", "Aceptar", "Cancelar");
             } else if(HireKey[playerid] != newcar) RemovePlayerFromVehicle(playerid), Mensaje(playerid, 0xFFFFFFFF, "Recuerda que tienes un vehículo alquilado. Utiliza /desrentarveh para poder alquilar otro.");
         }
         // ========================== Info Embargos & Multa ================================ //
@@ -4833,7 +4834,7 @@ public OnGameModeInit() {
     //Entrada Middleton [BAR]
     CreateDynamicPickup(1239, 1, 1555.5348, -1199.9865, 20.0236);
     CreateDynamic3DTextLabel("Bar - {FC7F75}Middleton Social Club\n{FFFFFF}Pulsa Y", 0xFFFFFFFF, 1555.5348, -1199.9865, 20.0236, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);
-    //Entrada Iglesia [MAPA]
+    //Entrada Iglesia [MAPAS]
     CreateDynamicPickup(1239, 1, 2233.9846, -1333.1912, 23.9815); // Entrada a la Iglesia
     CreateDynamic3DTextLabel("Iglesia - {FC7F75}Los Santos\n{FFFFFF}Pulsa Y", 0xFFFFFFFF, 2233.9846, -1333.1912, 23.9815, 8.0, INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 0, 0);
     //Hospital [Fort Carson]
@@ -6145,7 +6146,7 @@ CallBack::StreamMediaHora()
             new Float:vida;
             GetPlayerHealth(i, vida);
             new Float:vidarestante = (vida * 5.0) / 100.0;
-            SetHP(i, vida - vidarestante);
+             (i, vida - vidarestante);
             Mensaje(i, COLOR_ROJO, "Usted esta enfermo, vaya a diagnosticarse con un medico.");
         }*/
         
@@ -8779,6 +8780,86 @@ command(i, playerid, params[])
     else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /i <Mensaje>");
     return 1;
 }
+command(policia, playerid, params[])
+{
+    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
+    if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
+    if(!sscanf(params, "s[128]", params[0])){
+        if(IsACop(playerid)){
+            new string[128];
+            format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
+            SendRadioMessage(1, COLOR_CIAN, string);
+            SendRadioMessage(2, COLOR_CIAN, string);
+            SendRadioMessage(3, COLOR_CIAN, string);
+            SendRadioMessage(6, COLOR_CIAN, string);
+            SendRadioMessage(9, COLOR_CIAN, string);
+            SendRadioMessage(10, COLOR_CIAN, string);
+            format(string, sizeof(string), "* (Radio) %s: %s", PlayerName(playerid), params[0]);
+            ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
+        } else Mensaje(playerid, COLOR_GRIS2, "No eres parte de la policía!");
+    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /policia <Texto>");
+    return 1;
+}
+command(fbi, playerid, params[])
+{
+    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
+    if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
+    if(!sscanf(params, "s[128]", params[0])){
+        if(Team_FBI(playerid)){
+            new string[128];
+            format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
+            SendRadioMessage(1, COLOR_CIAN, string);
+            SendRadioMessage(2, COLOR_CIAN, string);
+            SendRadioMessage(3, COLOR_CIAN, string);
+            SendRadioMessage(6, COLOR_CIAN, string);
+            SendRadioMessage(9, COLOR_CIAN, string);
+            SendRadioMessage(10, COLOR_CIAN, string);
+            format(string, sizeof(string), "* (Radio) %s: %s", PlayerName(playerid), params[0]);
+            ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
+        } else Mensaje(playerid, COLOR_GRIS2, "No eres parte del FBI!");
+    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /fbi <Texto>");
+    return 1;
+}
+command(gobierno, playerid, params[])
+{
+    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
+    if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
+    if(!sscanf(params, "s[128]", params[0])){
+        if(Gobierno(playerid)){
+            new string[128];
+            format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
+            SendRadioMessage(1, COLOR_CIAN, string);
+            SendRadioMessage(2, COLOR_CIAN, string);
+            SendRadioMessage(3, COLOR_CIAN, string);
+            SendRadioMessage(6, COLOR_CIAN, string);
+            SendRadioMessage(9, COLOR_CIAN, string);
+            SendRadioMessage(10, COLOR_CIAN, string);
+            format(string, sizeof(string), "* (Radio) %s: %s", PlayerName(playerid), params[0]);
+            ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
+        } else Mensaje(playerid, COLOR_GRIS2, "No eres parte del gobierno!");
+    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /gobierno <Texto>");
+    return 1;
+}
+command(samur, playerid, params[])
+{
+    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
+    if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
+    if(!sscanf(params, "s[128]", params[0])){
+        if(Team_SAMUR(playerid)){
+            new string[128];
+            format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
+            SendRadioMessage(1, COLOR_CIAN, string);
+            SendRadioMessage(2, COLOR_CIAN, string);
+            SendRadioMessage(3, COLOR_CIAN, string);
+            SendRadioMessage(6, COLOR_CIAN, string);
+            SendRadioMessage(9, COLOR_CIAN, string);
+            SendRadioMessage(10, COLOR_CIAN, string);
+            format(string, sizeof(string), "* (Radio) %s: %s", PlayerName(playerid), params[0]);
+            ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
+        } else Mensaje(playerid, COLOR_GRIS2, "No eres parte de SAMUR!");
+    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /samur <Texto>");
+    return 1;
+}
 command(d, playerid, params[])
 {
     if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
@@ -8817,7 +8898,7 @@ command(f, playerid, params[])
     return 1;
 }
 
-command(r, playerid, params[]){
+command(h, playerid, params[]){
     new string[128];
     if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]); 
     if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada.");
@@ -8831,7 +8912,7 @@ command(r, playerid, params[]){
             SendRadioMessage(cuenta[playerid][cMiembro], TEAM_RADIO_COLOR, string);
             ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
         }
-    } else return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /r <Texto>");
+    } else return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /h <Texto>");
     return 1;
 }
 
@@ -8847,7 +8928,7 @@ command(contratar, playerid, params[]){
                     switch(cuenta[playerid][cLider]){
                     case 1: ReqF_Name[params[0]] = "Policía Local LS";
                     case 2: ReqF_Name[params[0]] = "Ejército Militar";
-                    case 3: ReqF_Name[params[0]] = "Hospital Nacinoal";
+                    case 3: ReqF_Name[params[0]] = "Hospital Nacional";
                     case 4: ReqF_Name[params[0]] = "Los Santos Customs";
                     case 5: ReqF_Name[params[0]] = "Gobierno de Fort Carson";
                     case 6: ReqF_Name[params[0]] = "Gobierno";
@@ -9220,9 +9301,8 @@ TextListResponse:textList_sospechosos(playerid, TextListType:response, itemid, i
 }
 DialogCreate:suspectAntecedentes(playerid) {
     new suspectid = cuenta[playerid][mirandoMotivosDe];
-    new title[128];
+    new title[300];
     new motivos[90 * 5];
-    format(title, sizeof(title), "%s es buscad%s por: ", PlayerName(suspectid), (cuenta[suspectid][cSexo] == 1 ? "o" : "a"));
     
     strcat(motivos, cuenta[suspectid][cMotivoBusqueda1]);
     strcat(motivos, "\n");
@@ -9266,7 +9346,8 @@ COMMAND:su(playerid, params[])
 {
     if(Team_LSPD(playerid) || Team_FBI(playerid))
     {
-        if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas OnDuty.");
+        if(!cuenta[playerid][cBusqueda])return Mensaje(playerid, COLOR_GRIS2, "Este jugador no tiene nivel de búsqueda.");
+        if(!entero[playerid][borracho])return Mensaje(playerid, COLOR_GRIS2, "Usted no tiene una bebida en la mano.");
         new usuario, crimen[64];
         if(sscanf(params, "us[64]", usuario, crimen))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /su [Usuario] [Crimen]");
         
@@ -9415,13 +9496,13 @@ command(ta, playerid, params[]){
         if(!booleano[Tazer]{playerid}){
             format(string, sizeof(string), "* %s carga su tazer", PlayerName(playerid));
             ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
-            SetPlayerAttachedObject(playerid, 0, 18642, 6, 0.070212, 0.017647, 0.065603, 0.000000, 185.632217, 264.085418, 1.000000, 1.000000, 1.000000 );
-            Att_Obj_Slot_0[playerid] = "Tazer";
+            darArma(playerid, 23, 5);
             booleano[Tazer]{playerid} = true;
         }else{
             format(string, sizeof(string), "* %s guarda su tazer", PlayerName(playerid));
             ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
             booleano[Tazer]{playerid} = false;
+            RemovePlayerWeapon(playerid, 23);
             RemoveHand(playerid);
         }
     }else return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No perteneces a ningún departamento de seguridad.");
@@ -9767,6 +9848,7 @@ IsAtMap(playerid) {
         else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1450.84, -1026.94, 23.62))  return 1;
         else if (IsPlayerInRangeOfPoint(playerid, 5.0, 2089.01, -1824.00, 13.34))   return 1;
         else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1718.75, -1866.16, 13.57))   return 1;
+		else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1483.8263,-1741.2952,13.5469)) return 1;
         else if (IsPlayerInRangeOfPoint(playerid, 5.0, 1271.5137, -994.5891, 35.6477))   return 1;
     }
     return 0;
@@ -13531,7 +13613,7 @@ command(b, playerid, params[])
     if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
     if(!sscanf(params, "s[128]", params[0]))
     {
-        new string[128]; 
+        new string[320];
         format(string, sizeof(string), "(( [OOC] %s(%d) dice: %s ))", PlayerName(playerid), playerid, params[0]);
         ProxDetector(20.0, playerid, string, COLOR_BLANCO, COLOR_BLANCO, COLOR_BLANCO, COLOR_BLANCO, COLOR_BLANCO);
     }else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /b <Canal OOC>");
@@ -13647,7 +13729,7 @@ command(jap, playerid, params[])
     if(!IsPlayerConnected(playerid))return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No te encuentras conectado.");
     if(!sscanf(params, "s[128]", params[0]))
     {
-        new Float:x, Float:y, Float:z, string[128];
+        new Float:x, Float:y, Float:z, string[320];
         GetPlayerPos(playerid, x, y, z);
         for(new i = 0; i < MAX_PLAYERS; i++)
         {
@@ -13677,7 +13759,7 @@ command(c, playerid, params[])
     if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
     if(!sscanf(params, "s[128]", params[0]))
     {
-        new string[128];
+        new string[320];
         if(Maskuse[playerid] == 1)	format(string, sizeof(string), "Desconocido dice: %s", params[0]);
         else format(string, sizeof(string), "%s dice: %s", PlayerName(playerid), params[0]);
         ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
@@ -13748,7 +13830,7 @@ command(j, playerid, params[])
     if(cuenta[playerid][cAdministrador] < 1)return  Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(!booleano[AntiAbusos]{playerid}){Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No puedes usar este comando sin estar en OnDuty."); return 1;}
     if(!sscanf(params, "s[128]", params[0])){
-        new string[128];
+        new string[320];
         format(string, sizeof(string), "%s Administrador dice: "COL_GRIS"%s", PlayerName(playerid), params[0]);
         ProxDetector(30.0, playerid, string, COLOR_NARANJA, COLOR_NARANJA, COLOR_NARANJA, COLOR_NARANJA, COLOR_NARANJA);
     } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /j <Texto>");
@@ -13812,7 +13894,7 @@ command(aooc, playerid, params[]){
         if(!sscanf(params, "s[128]", params[0]))
         {
             new string[128];
-            format(string, sizeof(string), "[{FFFFFF}AOOC{2684FF}] Admin %s: %s " , PlayerName(playerid), params[0]);
+            format(string, sizeof(string), "[{FFFFFF}AOOC{2684FF}] Administrador %s: %s " , PlayerName(playerid), params[0]);
             MensajeGlobal(0x62B382AA, string);
         } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /aooc <Texto>");
     } else Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
@@ -14348,7 +14430,7 @@ public OnPlayerText(playerid, text[])
     if (!booleano[gMurio]{playerid}) {
         AnimacionTalk(playerid, text);
     }
-    new string[128], tmp[32], car = GetVehicleModel(GetPlayerVehicleID(playerid));
+    new string[320], tmp[32], car = GetVehicleModel(GetPlayerVehicleID(playerid));
     
     if(palabrasProhibidas(text))
     {
@@ -15506,7 +15588,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                     format(string, sizeof(string), "* Oficial %s dispara contra %s, pero no consigue tazear al sujeto", PlayerName(playerid), PlayerName(suspect));
                     ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
                     booleano[Tazer]{playerid} = false;
-                    SetTimerEx("RemoveHand", 7000, false, "i", playerid);
+                    SetTimerEx("RemoveArmaTazer", 7000, false, "i", playerid);
                 }else{
                     format(string, sizeof(string), "* Oficial %s dispara contra %s y tazea al sujeto", PlayerName(playerid), PlayerName(suspect));
                     ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
@@ -15517,7 +15599,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                     ApplyAnimation(suspect, "CRACK", "crckdeth2", 4.0, 1, 0, 0, 0, 0);
                     booleano[PlayerTazeado]{suspect} = true;
                     booleano[Tazer]{playerid} = false;
-                    SetTimerEx("RemoveHand", 7000, false, "i", playerid);
+                    SetTimerEx("RemoveArmaTazer", 7000, false, "i", playerid);
                     SetTimerEx("UntazePlayer", 20000, false, "i", suspect);
                 }
             }else return Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
@@ -18706,8 +18788,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 }
                             case 9:
                                 {
-                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /incautar /equipo /bk /bkc /placa /ap /cp /controlcelda");
-                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /cachear /quitar /sospechosos /su /ant /limpiar");
+                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /duty /d /incautar /equipo /bk /bkc /placa /ap /cp /controlcelda");
+                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /cachear /radio /contratar (Lider) /quitar /sospechosos /su /ant /limpiar");
+                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /r /tirar /esposar /ta(zer)  /drag /miranda /quemarcosecha");
                                 }
                             }
                         }else if(cuenta[playerid][cMiembro])
@@ -18743,8 +18826,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 }
                             case 9:
                                 {
-                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /incautar /equipo /bk /bkc /placa /ap /cp /controlcelda /placa");
-                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /cachear /quitar /sospechosos /su /ant /limpiar");
+                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /duty /d /incautar /equipo /bk /bkc /placa /ap /cp /controlcelda");
+                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /cachear /radio /contratar (Lider) /quitar /sospechosos /su /ant /limpiar");
+                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /r /tirar /esposar /ta(zer)  /drag /miranda /quemarcosecha");
                                 }
                             }
                         }
@@ -19642,7 +19726,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                 new k = listitem, ano, mes, dia;
                 getdate(ano, mes, dia);
 
-                format(string, sizeof(string), "Usted ha retirado %d acciones de %s ganancias %d$", acciones[playerid][aAccCantidad][k], negocio[acciones[playerid][aAccTipo][k]][bName], acciones[playerid][aAccTipo][k] * negocio[acciones[playerid][aAccTipo][k]][bPrecioFinal]);
+                format(string, sizeof(string), "Usted ha retirado %d acciones de %s Ganancias %d$", acciones[playerid][aAccCantidad][k], negocio[acciones[playerid][aAccTipo][k]][bName], acciones[playerid][aAccTipo][k] * negocio[acciones[playerid][aAccTipo][k]][bPrecioFinal]);
                 Mensaje(playerid, COLOR_GRIS3, string);
 
                 ganaDinero(playerid, acciones[playerid][aAccCantidad][k] * negocio[acciones[playerid][aAccTipo][k]][bPrecioFinal]);
@@ -24556,7 +24640,7 @@ CallBack::SafeLoadObjects(playerid)
     }
 }
 CallBack::Lotto() {
-    new string[80];
+    new string[350];
     format(string, sizeof(string), "{2F99B5}Noticias de la Loteria: {FFFFFF}En 10 minutos se realizará el sorteo de la lotería.");
     OOCOff(COLOR_BLANCO, string);
             
@@ -24565,7 +24649,7 @@ CallBack::Lotto() {
 CallBack::LottoTimer() {
     new number = random(100);
     
-    new noticias[80];
+    new noticias[340];
     format(noticias, sizeof(noticias), "{2F99B5}Noticias de la Loteria: {FFFFFF}Hemos empezado la elección de la loteria.");
     OOCOff(COLOR_BLANCO, noticias);
             
@@ -25328,6 +25412,11 @@ CallBack::RemoveHand(playerid)
     RemovePlayerAttachedObject(playerid, 0);
     Att_Obj_Slot_0[playerid] = "Vacío";
 }
+CallBack::RemoveArmaTazer(playerid)
+{
+    RemovePlayerWeapon(playerid, 23);
+}
+    
 CallBack::UntazePlayer(playerid)
 {
     new string[128];
@@ -25619,7 +25708,7 @@ CallBack::ShowStats(playerid, targetid)
         if(cuenta[targetid][cNegocio] != 9999)
         {
             new bizz = cuenta[targetid][cNegocio];
-            format(iString, sizeof(iString), "{E4A54D}» {FFFFFF}1er Negocio: %s Valor: %d$ Ganancias: %d$ Llave: %d Impuesto: {AA3333}%s", negocio[bizz][bName], negocio[bizz][bBuyPrice], negocio[bizz][bTill], bizz, ObtenerTiempoRestante(negocio[bizz][bTime]));
+            format(iString, sizeof(iString), "{E4A54D}» {FFFFFF}1er Negocio: %s Valor: %d$  Ganancias: %d$ Llave: %d Impuesto: {AA3333}%s", negocio[bizz][bName], negocio[bizz][bBuyPrice], negocio[bizz][bTill], bizz, ObtenerTiempoRestante(negocio[bizz][bTime]));
             Mensaje(playerid, -1, iString);
         }   		
         if(cuenta[targetid][cNegocio2] != 9999)
@@ -27576,12 +27665,12 @@ COMMAND:a(playerid, params[])
         {
         case 1: rango = "{FFD700}Ayudante";
         case 2: rango = "{00A5F4}Moderador";
-        case 3: rango = "{00A5F4}Admin Junior";
+        case 3: rango = "{00A5F4}Moderador Superior";
         case 4: rango = "{00A5F4}Administrador";
-        case 5: rango = "{00A5F4}Admin Superior";
-        case 6: rango = "{00A5F4}Admin Lider";
-        case 2012: rango = "{EA7A0B}Enc de Facciones";
-        case 2013: rango = "{EA7A0B}Enc de Staff";
+        case 5: rango = "{00A5F4}Administrador Superior";
+        case 6: rango = "{00A5F4}Administrador Lider";
+        case 2012: rango = "{EA7A0B}Faccion [Lider]";
+        case 2013: rango = "{EA7A0B}Staff [Lider]";
         case 2014: rango = "{AA3333}Dueño";
         }
         format(string, sizeof(string), "%s %s:{ffffff} %s", rango, PlayerName(playerid), mensaje);
@@ -28135,11 +28224,10 @@ COMMAND:finservicio(playerid, params[])
     if(cuenta[playerid][cTrabajo] == 15)return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} Usted no necesita estar en finservicio.");
     if(cuenta[playerid][servicio])
     {
-        new string[126], vehicle = GetPlayerVehicleID(playerid);
+        new string[126];
         cuenta[playerid][servicio] = false;
         cuenta[playerid][selecciono] = 0;
         SetPlayerSkin(playerid, cuenta[playerid][cTraje]);
-        SetVehicleToRespawn(vehicle);
         DisablePlayerCheckpoint(playerid);
         addObjetoTrabajo(playerid, 1, 0.0000, 0.0000, 0.0000);
         RemovePlayerAttachedObject(playerid, 8);
@@ -32777,12 +32865,11 @@ Funcion.verificarArmaHack(playerid)
     {
         if(IsPlayerConnected(playerid) && GetPlayerPing(playerid) < 300 && (detectarArmas2[playerid][i][1] - 3) > detectarArmas[playerid][i][1])
         {
-            format(tmp, sizeof(tmp), "{ff0000}Anti-Cheat{FFFFFF}: %s[%d] fue baneado por Hack de Balas.", Nombre(playerid), playerid);
+            format(tmp, sizeof(tmp), "{ff0000}¡AVISO PREVIO!{FFFFFF}: %s[%d] Posible LAG - CHOKE. (REVISARLO!).", Nombre(playerid), playerid);
             MensajeAdmin(-1, tmp, 1);
             
             format(tmp16, sizeof(tmp16), "0xBQ%dDT%d - 0xBQ%dT%d", detectarArmas[playerid][i][1], detectarArmas[playerid][i][1] * 6, detectarArmas2[playerid][i][1], detectarArmas2[playerid][i][1] * 2);
             format(tmp15, sizeof(tmp15), "[NPC]%s", nonplayers[random(sizeof(nonplayers))][npcNombre]);
-            Kick(playerid, "Hack de Balas", tmp15, tmp16);
         }
         else
         {
@@ -32793,12 +32880,11 @@ Funcion.verificarArmaHack(playerid)
     else if(IsPlayerConnected(playerid) && GetPlayerPing(playerid) < 300 && !detectarArmas[playerid][i][2])
     {
         detectarArmas[playerid][i][2] = 1;
-        format(tmp, sizeof(tmp), "{ff0000}Anti-Cheat{FFFFFF}: %s[%d] fue baneado por Hack de Armas.", Nombre(playerid), playerid);
+        format(tmp, sizeof(tmp), "{ff0000}¡AVISO PREVIO!{FFFFFF}: %s[%d] Posible LAG - CHOKE. (REVISARLO!)", Nombre(playerid), playerid);
         MensajeAdmin(-1, tmp, 1);
         
         format(tmp16, sizeof(tmp16), "0xWQ%dDT%d - 0xWQ%dT%d", detectarArmas[playerid][i][0], detectarArmas[playerid][i][0] * 12, detectarArmas2[playerid][i][0], detectarArmas2[playerid][i][0] * 4);
         format(tmp15, sizeof(tmp15), "[NPC]%s", nonplayers[random(sizeof(nonplayers))][npcNombre]);
-        Kick(playerid, "Hack de Armas", tmp15, tmp16);
     }
     else 
     {
@@ -32890,4 +32976,4 @@ Funcion.pescadorAuto(vehicleid) {
 }
 
 //
-#include "zz_mapas.pwn"
+#include "zz_mapas.pwn"
