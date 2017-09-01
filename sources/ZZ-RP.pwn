@@ -604,7 +604,7 @@ new static nonplayers[][_@en@nonplayers] =
     {1, {2165.9282, -1737.1431, 13.5909, 1.4705}, 0, false, "deseo trabajar aqui", "renuncio", "comenzar trabajo", "_", "Carlos Madero"}, //carpintero job
     {120, {852.4067, 5516.1602, 8.5859, 91.8660}, 0, false, "bebidas", "_", "_", "_", "Raul Ceballos"}, //Bar	
     {76, {2269.3008, -1679.5327, 15.6309, 88.9975}, 0, false, "Comprar ropa", "Comprar juguetes", "_", "_", "Carla Sanchez"},
-	{124, {1483.8263,-1741.2952,13.5469,202.1283}, 491, false, "Comprar ropa", "Comprar juguetes", "_", "_", "Hector Fernandez"},
+	{124, {204.8534,-8.0318,1001.2109,267.6802}, 5, false, "Comprar ropa", "Comprar juguetes", "_", "_", "Hector Fernandez"},
     {184, {2262.4639, -1679.9022, 15.6209, 271.6491}, 0, false, "Comprar ropa", "Comprar juguetes", "_", "_", "Roger Sanchez"}
 };
 //Sistema de Toys
@@ -1393,7 +1393,7 @@ new static cajeros[][_@en@cajeros] =
     {2942, {2852.91650, -1498.01587, 10.40660, 0.00000, 0.00000, 179.09920}, false}, 
     {2942, {2184.70068, -1142.76257, 23.95786, 0.00000, 0.00000, 269.03708}, false}
 };
-//sistema de licencias |--->
+//sistema de obtener licencias |--->
 enum _@en@obtenerLicencia
 {
     cocheModelo, 
@@ -1405,14 +1405,14 @@ enum _@en@obtenerLicencia
 };
 new static obtenerLicencia[][_@en@obtenerLicencia] = 
 {
-    {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 90, 1, false}, 
-    {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 91, 1, false}, 
-    {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 92, 1, false}, 
-    {410, {1414.3712, -39.1632, 1000.6524, 86.7709}, 93, 1, false},  
-    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 94, 1, false},  
-    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 95, 1, false},  
-    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 96, 1, false},  
-    {586, {1414.3712, -39.1632, 1000.6524, 86.7709}, 97, 1, false},  
+    {410, {2033.6217,-1932.3217,12.9011,88.8347}, 90, 1, false},
+    {410, {2033.6217,-1932.3217,12.9011,88.8347}, 91, 1, false},
+    {410, {2033.6217,-1932.3217,12.9011,88.8347}, 92, 1, false},
+    {410, {2033.6217,-1932.3217,12.9011,88.8347}, 93, 1, false},
+    {586, {2033.6217,-1932.3217,12.9011,88.8347}, 94, 1, false},
+    {586, {2033.6217,-1932.3217,12.9011,88.8347}, 95, 1, false},
+    {586, {2033.6217,-1932.3217,12.9011,88.8347}, 96, 1, false},
+    {586, {2033.6217,-1932.3217,12.9011,88.8347}, 97, 1, false},
     {593, {426.7948, 2501.7593, 16.9445, 88.0809}, 98, 0, false}, 
     {593, {426.7948, 2501.7593, 16.9445, 88.0809}, 99, 0, false}, 
     {473, {58.0547, -1221.8842, -0.5517, 324.8833}, 100, 0, false}, 
@@ -3610,18 +3610,18 @@ public OnPlayerEnterRaceCheckpoint(playerid)
                     enteroChar[licestado]{playerid}++;
                     switch(enteroChar[licestado]{playerid})
                     {
-                    case 1: SetPlayerRaceCheckpoint(playerid, 0, 1394.8308, -1.6123, 1000.6443, 1365.7014, -19.2223, 1000.6489, 3.0);
-                    case 2: SetPlayerRaceCheckpoint(playerid, 0, 1365.7014, -19.2223, 1000.6489, 1373.3943, -36.4012, 1000.6483, 3.0);
-                    case 3: SetPlayerRaceCheckpoint(playerid, 0, 1373.3943, -36.4012, 1000.6483, 1406.2656, -45.8226, 1000.6423, 3.0);
+                    case 1: SetPlayerRaceCheckpoint(playerid, 0, 1960.6512,-1971.2611,12.9254, 1958.7754,-2129.3311,12.9043, 3.0);
+                    case 2: SetPlayerRaceCheckpoint(playerid, 0, 1826.8207,-2164.3442,12.9045, 1679.2911,-2194.0540,12.8967, 3.0);
+                    case 3: SetPlayerRaceCheckpoint(playerid, 0, 1760.4126,-2180.4163,13.0886, 1524.8167,-2194.6025,12.8943, 3.0);
                     case 4: 
                         {
                             if(enteroChar[licvueltas]{playerid} >= 4)
                             {
-                                SetPlayerRaceCheckpoint(playerid, 1, 1406.2656, -45.8226, 1000.6423, 0.0, 0.0, 0.0, 3.0);
+                                SetPlayerRaceCheckpoint(playerid, 1, 1524.8167,-2194.6025,12.8943, 0.0, 0.0, 0.0, 3.0);
                             }
                             else
                             {
-                                SetPlayerRaceCheckpoint(playerid, 0, 1406.2656, -45.8226, 1000.6423, 1390.3795, -27.3216, 1000.6432, 3.0);
+                                SetPlayerRaceCheckpoint(playerid, 0, 1524.8167,-2194.6025,12.8943,1317.4880,-2195.3403,21.2174, 3.0);
                             }
                         }
                     case 5:
@@ -3691,7 +3691,7 @@ public OnPlayerEnterRaceCheckpoint(playerid)
                             {
                                 enteroChar[licvueltas]{playerid}++;
                                 enteroChar[licestado]{playerid} = 0;
-                                SetPlayerRaceCheckpoint(playerid, 0, 1390.3795, -27.3216, 1000.6432, 1394.8308, -1.6123, 1000.6443, 3.0);
+                                SetPlayerRaceCheckpoint(playerid, 0, 1317.4880,-2195.3403,21.2174, 1314.7155,-2259.9875,12.9043, 3.0);
                             }
                         }
                     }
@@ -4100,7 +4100,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         else if(!cuenta[playerid][servicio] && tren == newcar || transAuto(newcar) || aviadorAuto(newcar) || camioneroAuto(newcar) || barrenderoAuto(newcar) || busesAuto(newcar) || agricultorAuto(newcar) || pizzaAuto(newcar) || taxiAuto(newcar) || basureroAuto(newcar) || pescadorAuto(newcar))
         {
             RemovePlayerFromVehicle(playerid);
-            Mensaje(playerid, COLOR_ROJO, "Usted debe estar en servicio para usar este vehiculo. Hable con su jefe");
+            Mensaje(playerid, COLOR_ROJO, "Usted debe estar en esrvicio para usar este vehiculo. Hable con su jefe");
         }
     }
     return 1;
@@ -8780,90 +8780,11 @@ command(i, playerid, params[])
     else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /i <Mensaje>");
     return 1;
 }
-command(policia, playerid, params[])
-{
-    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
-    if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
-    if(!sscanf(params, "s[128]", params[0])){
-        if(IsACop(playerid)){
-            new string[128];
-            format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
-            SendRadioMessage(1, COLOR_CIAN, string);
-            SendRadioMessage(2, COLOR_CIAN, string);
-            SendRadioMessage(3, COLOR_CIAN, string);
-            SendRadioMessage(6, COLOR_CIAN, string);
-            SendRadioMessage(9, COLOR_CIAN, string);
-            SendRadioMessage(10, COLOR_CIAN, string);
-            format(string, sizeof(string), "* (Radio) %s: %s", PlayerName(playerid), params[0]);
-            ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
-        } else Mensaje(playerid, COLOR_GRIS2, "No eres parte de la policía!");
-    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /policia <Texto>");
-    return 1;
-}
-command(fbi, playerid, params[])
-{
-    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
-    if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
-    if(!sscanf(params, "s[128]", params[0])){
-        if(Team_FBI(playerid)){
-            new string[128];
-            format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
-            SendRadioMessage(1, COLOR_CIAN, string);
-            SendRadioMessage(2, COLOR_CIAN, string);
-            SendRadioMessage(3, COLOR_CIAN, string);
-            SendRadioMessage(6, COLOR_CIAN, string);
-            SendRadioMessage(9, COLOR_CIAN, string);
-            SendRadioMessage(10, COLOR_CIAN, string);
-            format(string, sizeof(string), "* (Radio) %s: %s", PlayerName(playerid), params[0]);
-            ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
-        } else Mensaje(playerid, COLOR_GRIS2, "No eres parte del FBI!");
-    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /fbi <Texto>");
-    return 1;
-}
-command(gobierno, playerid, params[])
-{
-    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
-    if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
-    if(!sscanf(params, "s[128]", params[0])){
-        if(Gobierno(playerid)){
-            new string[128];
-            format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
-            SendRadioMessage(1, COLOR_CIAN, string);
-            SendRadioMessage(2, COLOR_CIAN, string);
-            SendRadioMessage(3, COLOR_CIAN, string);
-            SendRadioMessage(6, COLOR_CIAN, string);
-            SendRadioMessage(9, COLOR_CIAN, string);
-            SendRadioMessage(10, COLOR_CIAN, string);
-            format(string, sizeof(string), "* (Radio) %s: %s", PlayerName(playerid), params[0]);
-            ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
-        } else Mensaje(playerid, COLOR_GRIS2, "No eres parte del gobierno!");
-    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /gobierno <Texto>");
-    return 1;
-}
-command(samur, playerid, params[])
-{
-    if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
-    if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
-    if(!sscanf(params, "s[128]", params[0])){
-        if(Team_SAMUR(playerid)){
-            new string[128];
-            format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
-            SendRadioMessage(1, COLOR_CIAN, string);
-            SendRadioMessage(2, COLOR_CIAN, string);
-            SendRadioMessage(3, COLOR_CIAN, string);
-            SendRadioMessage(6, COLOR_CIAN, string);
-            SendRadioMessage(9, COLOR_CIAN, string);
-            SendRadioMessage(10, COLOR_CIAN, string);
-            format(string, sizeof(string), "* (Radio) %s: %s", PlayerName(playerid), params[0]);
-            ProxDetector(20.0, playerid, string, COLOR_FADE1, COLOR_FADE2, COLOR_FADE3, COLOR_FADE4, COLOR_FADE5);
-        } else Mensaje(playerid, COLOR_GRIS2, "No eres parte de SAMUR!");
-    } else Mensaje(playerid, COLOR_GRIS2, "Utiliza: /samur <Texto>");
-    return 1;
-}
 command(d, playerid, params[])
 {
     if(palabrasProhibidas(params[0]))return AccionSPAM(playerid, params[0]);
     if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
+    if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estás en servicio!");
     if(!sscanf(params, "s[128]", params[0])){
         if(IsACop(playerid)|| Team_SAMUR(playerid) || Gobierno(playerid) || Team_FBI(playerid)){
             new string[128];
@@ -11395,6 +11316,7 @@ COMMAND:spoff(playerid, params[])
     GameTextForPlayer(playerid, "", 50, 3);
     TogglePlayerSpectating(playerid, false);
     SetPlayerColor(playerid, Color[playerid]);
+    SetPlayerWeapons(playerid);
     entero[playerid][gSpectea] = INVALID_PLAYER_ID;
     return 1;
 }
@@ -14114,7 +14036,6 @@ command(estadodeshb, playerid, params[])
     DialogoEstado(playerid);
     return 1;
 }
-
 COMMAND:miestado(playerid, params[])
 {
     new mensaje[64], string[144];
@@ -18731,7 +18652,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     }
                 case 3:{
                         Mensaje(playerid, -1, "Comandos ZonaZero RP:");
-                        Mensaje(playerid, -1, "{E48584}Sistema de Negocios:{FFFFFF} /comprarnegocio /sganancias /extorcion /qextorcion /recaudar /vendernegocio");
+                        Mensaje(playerid, -1, "{E48584}Sistema de Negocios:{FFFFFF} /comprarnegocio /sganancias /extorsion /qextorsion /recaudar /vendernegocio");
                         Mensaje(playerid, -1, "{E48584}Sistema de Negocios:{FFFFFF} /pagarnegocio /costoentrada /comprarproductos /negocio");
                         Mensaje(playerid, -1, "{E48584}Sistema de Negocios:{FFFFFF} /venderneg [Jugador a jugador] /pagarnegocio [Ubicado dentro del Ayuntamiento NPC]");
                     }
@@ -23674,9 +23595,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if(response)
             {
                 format(negocio[QuitExtortion[playerid]][bExtortion], 24, "Sin Extorsionista");
-                format(string, sizeof(string), "Has dejado de ser el extorcionista del negocio de {FF7617}%s", PlayerName(ExtortionID[playerid]));
+                format(string, sizeof(string), "Has dejado de ser el  extorsionista del negocio de {FF7617}%s", PlayerName(ExtortionID[playerid]));
                 Mensaje(playerid, COLOR_BLANCO, string);
-                format(string, sizeof(string), "* %s ha aceptado dejar de ser el extorcionista de tu negocio.", PlayerName(playerid));
+                format(string, sizeof(string), "* %s ha aceptado dejar de ser el extorsionista de tu negocio.", PlayerName(playerid));
                 Mensaje(ExtortionID[playerid], COLOR_GRIS2, string);
                 OnBizzTextdrawUpdate(QuitExtortion[playerid]);
                 QuitExtortion[playerid] = 999;
@@ -23685,7 +23606,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             }
             else
             {
-                format(string, sizeof(string), "* %s no ha aceptado dejar de ser el extorcionista de tu negocio.", PlayerName(playerid));
+                format(string, sizeof(string), "* %s no ha aceptado dejar de ser el extorsionista de tu negocio.", PlayerName(playerid));
                 Mensaje(ExtortionID[playerid], COLOR_GRIS2, string);
                 Mensaje(playerid, COLOR_GRIS2, "* Has rechazado una peticion.");
                 QuitExtortion[playerid] = 999;
@@ -24935,7 +24856,6 @@ CallBack::StreamMedioSegundo()
             if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
             {
                 //anti - Driver
-                SetPlayerArmedWeapon(playerid, 0);
                 
                 new Float:v_health, stats[2][24];
                 GetVehicleHealth(vehicleid, v_health);
@@ -28340,7 +28260,7 @@ COMMAND:papeles(playerid, params[])
             format(string, sizeof(string), "Embargos: %d -  Multa: %d$", autos[vehicle][cEmbargo], autos[vehicle][cMulta]);
             Mensaje(jugador, COLOR_BLANCO, string);
             
-            format(string, sizeof(string), "* %s le muestra a %s los documentos del vehículo.", PlayerName(playerid), PlayerName(jugador));
+            format(string, sizeof(string), "* %s le muestra a %s los documentos del vehiculo.", PlayerName(playerid), PlayerName(jugador));
             ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
         }
     }else Mensaje(playerid, COLOR_GRIS2, "Este jugador esta lejos.");  
@@ -28780,18 +28700,16 @@ COMMAND:negocio(playerid, params[])
     }
     return 1;
 }
-COMMAND:extorcion(playerid, params[])
+COMMAND:extorsion(playerid, params[])
 {
     new jugador, neg, idneg, string[126];
-    if(!sscanf(params, "du", neg, jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /extorcion [slot 1 - 2] [Usuario]");
-    
+    if(!sscanf(params, "du", neg, jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /extorsion [slot 1 - 2] [Usuario]");
     idneg = (neg == 1) ? cuenta[playerid][cNegocio] : cuenta[playerid][cNegocio2];
-    if(idneg == 9999)return Mensaje(playerid, COLOR_ROJO, "No tienes un negocio!");
-    
+	if(idneg == 9999)return Mensaje(playerid, COLOR_ROJO, "No tienes un negocio!");
     if(IsPlayerInRangeOfPoint(playerid, 4.0, negocio[idneg][bEntrancex], negocio[idneg][bEntrancey], negocio[idneg][bEntrancez]))
     {
         if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
-        if(jugador == playerid)return Mensaje(playerid, COLOR_GRIS2, "No te puedes poner como extorcionista tu mismo.");
+        if(jugador == playerid)return Mensaje(playerid, COLOR_GRIS2, "No te puedes poner como extorsionista tu mismo.");
         
         if(dDistanciaJugador(5.0, playerid, jugador))
         {
@@ -28814,7 +28732,7 @@ COMMAND:qextorcion(playerid, params[])
     if(!sscanf(params, "du", neg, jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /extorcion [slot 1 - 2] [Usuario]");
     
     idneg = (neg == 1) ? cuenta[playerid][cNegocio] : cuenta[playerid][cNegocio2];
-    if(idneg == 9999)return Mensaje(playerid, COLOR_ROJO, "No tienes un negocio!");
+	if(idneg == 9999)return Mensaje(playerid, COLOR_ROJO, "No tienes un negocio!");
     
     if(IsPlayerInRangeOfPoint(playerid, 4.0, negocio[idneg][bEntrancex], negocio[idneg][bEntrancey], negocio[idneg][bEntrancez]))
     {
@@ -31582,6 +31500,20 @@ COMMAND:listaspec(playerid, params[])
     ShowPlayerDialog(playerid, DIALOGO_DEFAULT, DIALOG_STYLE_MSGBOX, "Lista de Specteos", tmp2, "Aceptar", "");
     return 1;
 }
+COMMAND:ircord(playerid, params[])
+{
+	if(cuenta[playerid][cAdministrador] < 2014) return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+	if(!booleano[AntiAbusos]{playerid})return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No puedes usar este comando sin estar en OnDuty.");
+	{
+		new Float: pos[3], int;
+		if(sscanf(params, "fffd", pos[0], pos[1], pos[2], int)) return SendClientMessage(playerid, COLOR_GRIS2, "USA: /gotoco [coordenada x] [coordenada y] [coordenada z] [interior]");
+		Mensaje(playerid, COLOR_GRIS2, " Fuiste teletransportado a las coordenadas establecidas.");
+		SetPlayerPos(playerid, pos[0], pos[1], pos[2]);
+		SetPlayerInterior(playerid, int);
+	}
+	return 1;
+}
+
 COMMAND:daradmin(playerid, params[])
 {
     new jugador, nivel, string[144];
@@ -32082,11 +32014,11 @@ Funcion.comenzarPrueba(playerid)
     {
     case 0, 1:
         {
-            SetPlayerRaceCheckpoint(playerid, 0, 1390.3795, -27.3216, 1000.6432, 1394.8308, -1.6123, 1000.6443, 3.0);
+            SetPlayerRaceCheckpoint(playerid, 0, 1317.4880,-2195.3403,21.2174, 1314.7155,-2259.9875,12.9043, 3.0);
             enteroChar[licvueltas]{playerid} = 0;
         }
-    case 2: SetPlayerRaceCheckpoint(playerid, 3, 157.7692, 2505.7637, 42.3494, -63.9375, 2508.9941, 91.6324, 6.0);
-    case 3: SetPlayerRaceCheckpoint(playerid, 1, 71.6266, -1134.2206, -0.5285, 70.4348, -1009.1017, -0.5573, 4.0);
+    case 2: SetPlayerRaceCheckpoint(playerid, 3, 1348.9652,-2219.7114,12.9020, 1348.9652,-2219.7114,12.9020, 6.0);
+    case 3: SetPlayerRaceCheckpoint(playerid, 1, 1660.5503,-2027.7532,22.2391, 1625.1279,-1793.2052,26.5383, 4.0);
     }
     return 1;
 }
