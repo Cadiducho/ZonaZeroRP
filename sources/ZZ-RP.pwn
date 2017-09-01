@@ -5,7 +5,7 @@
     *	Desarrollador:		    Cadiducho	
     *   Antiguos Creditos:      Parka, Lucas Clemente(lolking), Sergio Mitnick. Desarrolladores de Ciudad Prohibida
     *   Mappers:                Javier_Cardenas.
-    *	Version:				1.0.5
+    *	Version:				1.0.6
     *
     *	Principal: ZZ-RP.pwn
     *
