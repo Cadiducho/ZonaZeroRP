@@ -4,7 +4,7 @@
 
 #define _config_included
 
-#define SQL_Host        ""
-#define SQL_User        ""
-#define SQL_Database    ""
-#define SQL_Password    ""
+#define SQL_Host        "127.0.0.1"
+#define SQL_User        "zonauser"
+#define SQL_Database    "zonazero"
+#define SQL_Password    "4o3ay5"
