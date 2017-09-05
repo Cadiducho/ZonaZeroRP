@@ -2613,7 +2613,7 @@ public OnPlayerSpawn(playerid)
                 Mensaje(playerid, COLOR_ROJO3, string);
                 format(string, sizeof(string), "Tiempo: %d minutos", cuenta[playerid][cTiempoCarcel] / 60);
                 Mensaje(playerid, COLOR_ROJO3, string);
-                format(string, sizeof(string), "Razon: %s", cuenta[playerid][cCarcelRazon]);
+                format(string, sizeof(string), "azon: %s", cuenta[playerid][cCarcelRazon]);
                 Mensaje(playerid, COLOR_ROJO3, string);
                 SetPosEx(playerid, 325.2867, 305.1505, 999.1484, 348.7300, 5, (playerid + 20));
             }
@@ -3584,7 +3584,7 @@ public OnPlayerEnterCheckpoint(playerid)
         }		
         else if(trab == 13 && IsPlayerInRangeOfPoint(playerid, 5.0, trabCarpintero[0][carPos][0], trabCarpintero[0][carPos][1], trabCarpintero[0][carPos][2]))
         {
-            new paga = 75 + random(35);
+            new paga = 25 + random(35);
             cuenta[playerid][pagas] += paga;
             format(string, sizeof(string), "Usted recibio ~g~%d$ ~w~por este mueble, acumulado ~g~%d$", paga, cuenta[playerid][pagas]);
             TextoInformatico(20, playerid, string);
@@ -3637,7 +3637,7 @@ public OnPlayerEnterRaceCheckpoint(playerid)
                                     {
                                         if(gettime() - entero[playerid][lictiempo] > 200 || vehvida <= 600)
                                         {
-                                            Mensaje(playerid, COLOR_ROJO, "|____EXAMEN REPROBADO____|");
+                                            Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO____|");
                                             
                                             format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
                                             Mensaje(playerid, COLOR_BLANCO, string);
@@ -3662,7 +3662,7 @@ public OnPlayerEnterRaceCheckpoint(playerid)
                                     {
                                         if(gettime() - entero[playerid][lictiempo] > 130 || vehvida <= 900)
                                         {
-                                            Mensaje(playerid, COLOR_ROJO, "|____EXAMEN REPROBADO____|");
+                                            Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO____|");
                                             
                                             format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
                                             Mensaje(playerid, COLOR_BLANCO, string);
@@ -3721,7 +3721,7 @@ public OnPlayerEnterRaceCheckpoint(playerid)
                             
                             if(gettime() - entero[playerid][lictiempo] > 230 || vehvida <= 950)
                             {
-                                Mensaje(playerid, COLOR_ROJO, "|____EXAMEN REPROBADO____|");
+                                Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO____|");
                                 
                                 format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
                                 Mensaje(playerid, COLOR_BLANCO, string);
@@ -3774,7 +3774,7 @@ public OnPlayerEnterRaceCheckpoint(playerid)
 
                             if(gettime() - entero[playerid][lictiempo] > 300 || vehvida <= 900)
                             {
-                                Mensaje(playerid, COLOR_ROJO, "|____EXAMEN REPROBADO____|");
+                                Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO|");
                                 
                                 format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
                                 Mensaje(playerid, COLOR_BLANCO, string);
@@ -8378,7 +8378,7 @@ COMMAND:garma(playerid, params[])
 }
 command(allanarcasa, playerid, params[])
 {
-    if(!IsACop(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres policia!");
+    if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres policia!");
     for(new i = 0; i < sizeof(casa); i++)
     {
         new string[128];
@@ -8398,7 +8398,7 @@ command(allanarcasa, playerid, params[])
 command(revisarcasa, playerid, params[])
 {
     new string[128];
-    if(!IsACop(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres policia!");
+    if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres policia!");
     for(new i = 0; i < sizeof(casa); i++)
     {
         if(IsPlayerInRangeOfPoint(playerid, 20.0, casa[i][hExitx], casa[i][hExity], casa[i][hExitz]))
@@ -8786,7 +8786,7 @@ command(d, playerid, params[])
     if(!booleano[RadioOn]{playerid})return Mensaje(playerid, COLOR_GRIS2, "Tu radio está apagada!");
     if(!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estás en servicio!");
     if(!sscanf(params, "s[128]", params[0])){
-        if(IsACop(playerid)|| Team_SAMUR(playerid) || Gobierno(playerid) || Team_FBI(playerid)){
+        if(Team_LSPD(playerid)|| Team_SAMUR(playerid) || Gobierno(playerid) || Team_FBI(playerid)){
             new string[128];
             format(string, sizeof(string), "** %s %s: %s **", PlayerStatInfo[playerid][4], PlayerName(playerid), params[0]);
             SendRadioMessage(1, COLOR_CIAN, string);
@@ -8944,7 +8944,7 @@ command(moneda, playerid, params[])
 }
 command(ant, playerid, params[])
 {
-    if(IsACop(playerid) || Team_FBI(playerid)){
+    if(Team_LSPD(playerid) || Team_FBI(playerid)){
         if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
         if(!sscanf(params, "us[64]", params[0], params[1]))
         {
@@ -8952,7 +8952,7 @@ command(ant, playerid, params[])
             {
                 if(StringOther(playerid, params[1]) == 1)
                 {
-                    if (IsACop(params[0]))return Mensaje(playerid, COLOR_GRIS2, "No puedes acusar a un policía.");
+                    if (Team_LSPD(params[0]))return Mensaje(playerid, COLOR_GRIS2, "No puedes acusar a un policía.");
                     if(strcmp("Ninguno", cuenta[params[0]][cAntecedente1], true) == 0 || strcmp("Ninguno", cuenta[params[0]][cAntecedente2], true) == 0 || strcmp("Ninguno", cuenta[params[0]][cAntecedente3], true) == 0)
                     {
                         if(strcmp("Ninguno", cuenta[params[0]][cAntecedente1], true) == 0)  	strmid(cuenta[params[0]][cAntecedente1], params[1], 0, strlen(params[1]), 64);
@@ -9037,7 +9037,7 @@ command(nokear, playerid, params[]){
 //----------------Pinchos-------------------------------------------//
 command(pstrips, playerid, params[])
 {
-    if(!IsACop(playerid))return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No perteneces a ningún departamento policial.");
+    if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No perteneces a ningún departamento policial.");
     if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
     new Float:plocx, Float:plocy, Float:plocz, Float:ploca;
     GetPlayerPos(playerid, plocx, plocy, plocz);
@@ -9050,7 +9050,7 @@ command(pstrips, playerid, params[])
 }
 command(qstrips, playerid, params[])
 {
-    if(!IsACop(playerid))return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
     DeleteClosestStrip(playerid);
     GameTextForPlayer(playerid, "~r~Banda de clavos ~w~eliminada!", 3000, 1);
@@ -9066,7 +9066,7 @@ command(astrips, playerid, params[])
 }
 command(retener, playerid, params[])
 {
-    if(!IsACop(playerid))return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No perteneces a ningún cuerpo de seguridad.");
+    if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No perteneces a ningún cuerpo de seguridad.");
     if(!sscanf(params, "u", params[0])){
         if (dDistanciaJugador(8.0, playerid, params[0])){
             if(params[0] == INVALID_PLAYER_ID)return Mensaje(playerid, COLOR_GRIS2, "ID invalida.");
@@ -9082,7 +9082,7 @@ command(retener, playerid, params[])
 }
 command(esposar, playerid, params[]){
     new player, string[128];
-    if(IsACop(playerid) || Team_FBI(playerid)){
+    if(Team_LSPD(playerid) || Team_FBI(playerid)){
         if(!sscanf(params, "u", player)){
             if(player == playerid)return Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF}No puedes esposarte a ti mismo.");
             if(dDistanciaJugador(8.0, playerid, player)){
@@ -9400,7 +9400,7 @@ COMMAND:bk(playerid, params[])
 }
 COMMAND:bkc(playerid, params[])
 {
-    if(IsACop(playerid))
+    if(Team_LSPD(playerid))
     {
         BackupClear(playerid, 0);
     }
@@ -9413,7 +9413,7 @@ COMMAND:bkc(playerid, params[])
 
 command(ta, playerid, params[]){
     new string[128];
-    if(IsACop(playerid) || Team_FBI(playerid)){
+    if(Team_LSPD(playerid) || Team_FBI(playerid)){
         if(!booleano[Tazer]{playerid}){
             format(string, sizeof(string), "* %s carga su tazer", PlayerName(playerid));
             ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
@@ -9431,7 +9431,7 @@ command(ta, playerid, params[]){
 }
 
 command(bar, playerid, params[]){
-    if(IsACop(playerid) || Team_FBI(playerid)){
+    if(Team_LSPD(playerid) || Team_FBI(playerid)){
         if(!cuenta[playerid][cFaccOnDuty])return  Mensaje(playerid, COLOR_GRIS, "No estas OnDuty.");
         if(!sscanf(params, "i", params[0])){
             new Float:plocx, Float:plocy, Float:plocz, Float:ploca;
@@ -9461,7 +9461,7 @@ command(bar, playerid, params[]){
 
 command(qb, playerid, params[])
 {
-    if(IsACop(playerid) || cuenta[playerid][cAdministrador] > 3)
+    if(Team_LSPD(playerid) || cuenta[playerid][cAdministrador] > 3)
     {
         DeleteClosestRoadblock(playerid);
         GameTextForPlayer(playerid, "~r~barrera ~w~eliminada!", 3000, 1);
@@ -9470,7 +9470,7 @@ command(qb, playerid, params[])
 }
 command(qbs, playerid, params[])
 {
-    if(IsACop(playerid) || cuenta[playerid][cAdministrador] >= 3)
+    if(Team_LSPD(playerid) || cuenta[playerid][cAdministrador] >= 3)
     {
         if(cuenta[playerid][cRango] >= 6 || cuenta[playerid][cAdministrador] >= 3)
         {
@@ -9522,7 +9522,7 @@ command(m, playerid, params[])
     if(estaSilenciado(playerid))return 1;
     if(sscanf(params, "s[128]", params[0]))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /m <texto>");
     if(!IsPlayerInAnyVehicle(playerid))return Mensaje(playerid, COLOR_GRIS2, "No estás en un vehículo!");
-    if(Team_SAMUR(playerid) || IsACop(playerid))
+    if(Team_SAMUR(playerid) || Team_LSPD(playerid) || Team_FBI(playerid))
     {
         new string[128];
         format(string, sizeof(string), "(Megáfono) %s: %s", PlayerName(playerid), params[0]);
@@ -9979,7 +9979,7 @@ COMMAND:cinturon(playerid, params[])
 }
 command(vercinturon, playerid, params[])
 {
-    if(!IsACop(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres policía!");
+    if(!Team_LSPD(playerid))return Mensaje(playerid, COLOR_GRIS2, "No eres policía!");
     new tmp[126], jugador;
     if(sscanf(params, "u", jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /vercinturon [Usuario]");
     
@@ -10002,7 +10002,7 @@ command(vercinturon, playerid, params[])
 }
 command(revisarcarga, playerid, params[])
 {
-	if(!IsACop(playerid)) return Mensaje(playerid, COLOR_GRIS2, "¡No perteneces a un cuerpo de justicia!");
+	if(!Team_LSPD(playerid)) return Mensaje(playerid, COLOR_GRIS2, "¡No perteneces a un cuerpo de justicia!");
 	if(!sscanf(params, "u", params[0])){
 		if(!IsPlayerConnected(params[0])) return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
 		if(!dDistanciaJugador(5.0, playerid, params[0])) return Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
@@ -10020,7 +10020,7 @@ command(revisarcarga, playerid, params[])
 }
 command(quitarcarga, playerid, params[])
 {
-	if(!IsACop(playerid)) return Mensaje(playerid, COLOR_GRIS2, "¡No perteneces a un cuerpo de justicia!");
+	if(!Team_LSPD(playerid)) return Mensaje(playerid, COLOR_GRIS2, "¡No perteneces a un cuerpo de justicia!");
 	if(!sscanf(params, "u", params[0])){
 		if(!IsPlayerConnected(params[0])) return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
 		if(!dDistanciaJugador(5.0, playerid, params[0])) return Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
@@ -10044,7 +10044,7 @@ command(quitarcarga, playerid, params[])
 command(drag, playerid, params[])
 {
 	new carid = GetPlayerVehicleID(playerid);
-	if(!IsACop(playerid) || Team_FBI(playerid)) return Mensaje(playerid, COLOR_GRIS2, "No perteneces a una fuerza de seguridad.");
+	if(!Team_LSPD(playerid) || Team_FBI(playerid)) return Mensaje(playerid, COLOR_GRIS2, "No perteneces a una fuerza de seguridad.");
 	if(!EsCochePolicial(carid) && !FBI_Vehicle(carid)) return Mensaje(playerid, COLOR_GRIS2, "¡No estás en una patrulla!");
 	if(!sscanf(params, "u", params[0]))
 	{
@@ -10217,7 +10217,7 @@ command(altavoz, playerid, params[])
 }
 command(miranda, playerid, params[])
 {
-    if(IsACop(playerid) || Team_FBI(playerid))
+    if(Team_LSPD(playerid) || Team_FBI(playerid))
     {
         new string[128];
         format(string, sizeof(string), "* %s lee los 'Derechos Miranda'", PlayerName(playerid));
@@ -10264,17 +10264,17 @@ COMMAND:ah2014(playerid, params[])
 {
     if(cuenta[playerid][cAdministrador] == 2014)
     {
-        Mensaje(playerid, COLOR_VERDE, "Comandos especiales para DUEÑOS");
-        Mensaje(playerid, COLOR_GRIS, "[*] /crearfaccion: {FFFFFF}Crea una Faccion Oficial");
-        Mensaje(playerid, COLOR_GRIS, "[*] /listafaccion: {FFFFFF}Visualiza las facciones {008000}DISPONIBLES");
-        Mensaje(playerid, COLOR_GRIS, "[*] /efaccion: {FFFFFF}Elimina una faccion Oficial completamente");
-        Mensaje(playerid, COLOR_GRIS, "[*] /hqboveda: {FFFFFF}Crea una Boveda para una Faccion Ilegal");
-        Mensaje(playerid, COLOR_GRIS, "[*] /hqmover: {FFFFFF}Crea un Territorio para la Faccion Ilegal");
-        Mensaje(playerid, COLOR_GRIS, "[*] /colorid: {FFFFFF}Muestra los colores disponibles para los territorios");
-        Mensaje(playerid, COLOR_GRIS, "[*] /zonacolor: {FFFFFF}Cambia el color de un territorio");
-        Mensaje(playerid, COLOR_GRIS, "[*] /crearautofacc: {FFFFFF}Crea un auto para una faccion");
-        Mensaje(playerid, COLOR_GRIS, "[*] /borrarautofacc: {FFFFFF}Borra el auto de una faccion, id con /dl");
-        Mensaje(playerid, COLOR_GRIS, "[*] /editarautofacc: {FFFFFF}Cambia el Color y la posicion de spawn de un auto de faccion");
+        Mensaje(playerid, COLOR_VERDE, "Comandos especiales para DUEÑOS y Encargados de Facciones");
+        Mensaje(playerid, COLOR_GRIS, "[*] /crearfaccion: {FFFFFF}Crea una Faccion Oficial [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /listafaccion: {FFFFFF}Visualiza las facciones {008000}DISPONIBLES [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /efaccion: {FFFFFF}Elimina una faccion Oficial completamente [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /hqboveda: {FFFFFF}Crea una Boveda para una Faccion Ilegal [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /hqmover: {FFFFFF}Crea un Territorio para la Faccion Ilegal [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /colorid: {FFFFFF}Muestra los colores disponibles para los territorios [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /zonacolor: {FFFFFF}Cambia el color de un territorio [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /crearautofacc: {FFFFFF}Crea un auto para una faccion [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /borrarautofacc: {FFFFFF}Borra el auto de una faccion, id con /dl [E.F]");
+        Mensaje(playerid, COLOR_GRIS, "[*] /editarautofacc: {FFFFFF}Cambia el Color y la posicion de spawn de un auto de faccion [E.F]");
         Mensaje(playerid, COLOR_GRIS, "[*] /avenderauto: {FFFFFF}Vende un auto de cualquier usuario");
         Mensaje(playerid, COLOR_GRIS, "[*] /eliminarreja: {FFFFFF}Eliminar rejas, recuerda el ID");
         Mensaje(playerid, COLOR_GRIS, "[*] /editarreja: {FFFFFF}Edita rejas, ponte cerca de la rejas");
@@ -10387,7 +10387,7 @@ COMMAND:faccion(playerid, params[])
 COMMAND:efaccion(playerid, params[])
 {
     new facc;
-    if(cuenta[playerid][cAdministrador] < 2013)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "d", facc))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /efaccion [ID Faccion]");
     
     new i = facc-16;
@@ -10461,7 +10461,7 @@ COMMAND:listafaccion(playerid, params[])
 COMMAND:crearautofacc(playerid, params[])
 {
     new model, facc;
-    if(cuenta[playerid][cAdministrador] < 2014)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "dd", model, facc))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /crearautofacc [Modelo] [Faccion]");
     for(new i=0; i<sizeof(Autosfacc); i++)
     {
@@ -10483,7 +10483,7 @@ COMMAND:crearautofacc(playerid, params[])
 COMMAND:editarautofacc(playerid, params[])
 {
     new opcion[12], col1, col2, vehicleid = GetPlayerVehicleID(playerid);
-    if(cuenta[playerid][cAdministrador] < 2013)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "s[12]D(500)D(500)", opcion, col1, col2))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /editarautofacc [Posicion - Color]");
     if(IsPlayerInAnyVehicle(playerid))
     {
@@ -10528,7 +10528,7 @@ COMMAND:editarautofacc(playerid, params[])
 COMMAND:borrarautofacc(playerid, params[])
 {
     new vehicleid;
-    if(cuenta[playerid][cAdministrador] < 2013)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "d", vehicleid))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /borrarautofacc [ID Vehiculo]");
     
     for(new i=0; i<sizeof(Autosfacc); i++)
@@ -10556,7 +10556,7 @@ COMMAND:borrarautofacc(playerid, params[])
 COMMAND:crearfaccion(playerid, params[])
 {
     new faccion[32], string[128];
-    if(cuenta[playerid][cAdministrador] < 2013)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "s[32]", faccion))return Mensaje(playerid, COLOR_GRIS2, "Use /crearfaccion [Nombre de Faccion]");
     if(strlen(faccion) < 6 || strlen(faccion) > 32)return Mensaje(playerid, COLOR_GRIS2, "Caracteres minimo 6 y maximo 32");
     
@@ -10583,7 +10583,7 @@ COMMAND:crearfaccion(playerid, params[])
 COMMAND:hqboveda(playerid, params[])
 {
     new faccid;
-    if(cuenta[playerid][cAdministrador] < 2013)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "i", faccid))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /hqboveda [ID Faccion]");
     switch(faccid)
     {
@@ -10609,7 +10609,7 @@ COMMAND:hqboveda(playerid, params[])
 COMMAND:colorid(playerid, params[])
 {
     new str[42], icolor;
-    if(cuenta[playerid][cAdministrador] < 2013)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "d", icolor))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /colorid [Color ID]");
     if(icolor < 0 || icolor > 136)return Mensaje(playerid, COLOR_GRIS2, "Utiliza /colorid [0 - 136]");
     
@@ -10624,7 +10624,7 @@ COMMAND:colorid(playerid, params[])
 COMMAND:hqmover(playerid, params[])
 {
     new faccid;
-    if(cuenta[playerid][cAdministrador] < 2013)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "i", faccid))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /hqmover [ID Faccion]");
     switch(faccid)
     {
@@ -10696,7 +10696,7 @@ COMMAND:boveda(playerid, params[])
 COMMAND:zonacolor(playerid, params[])
 {
     new facc, icolor;
-    if(cuenta[playerid][cAdministrador] < 2013)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(cuenta[playerid][cAdministrador] < 2012)return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
     if(sscanf(params, "dd", facc, icolor))return Mensaje(playerid, COLOR_GRIS2, "Utiliza /zonacolor [ID Faccion] [Color ID]");
     if(icolor < 0 || icolor > 136)return Mensaje(playerid, COLOR_GRIS2, "Error ID del color no valida.");
     if(facc < 16 || facc > 45)return Mensaje(playerid, COLOR_GRIS2, "Error ID de faccion no valida.");
@@ -11640,7 +11640,7 @@ command(rsinuso, playerid, params[]){
 
 command(reautomatico, playerid, params[])
 {
-    if(cuenta[playerid][cAdministrador] < 5)return Mensaje(playerid, COLOR_GRIS1, "Necesitar ser Administrador Nivel 5!");
+    if(cuenta[playerid][cAdministrador] < 3)return Mensaje(playerid, COLOR_GRIS1, "Necesitar ser Administrador Nivel 5!");
     
     new string[210];
     if(Conteo != 0)return Mensaje(playerid, COLOR_GRIS, "* ERROR: Ya hay un respawn de vehiculos en progreso!");
@@ -11923,14 +11923,14 @@ command(ah, playerid, params[]){
     {
         Mensaje(playerid, 0x93FF93FF, "-= Comandos Nivel 2 =-");
         Mensaje(playerid, COLOR_GRIS2, "/alimpiar /desarmar /slap /setskin /rtcar /carid /sethp /setarmor /activar");
-        Mensaje(playerid, COLOR_GRIS2, "/jail /jailoff /quemarcosecha /togac /unjail");
+        Mensaje(playerid, COLOR_GRIS2, "/jail /jailoff /togac /unjail");
         Mensaje(playerid, COLOR_GRIS2, "/rsfacciones [Respawn de autos SIN USO de facciones]");
         Mensaje(playerid, COLOR_GRIS2, "/rsrenta [Respawn de autos SIN USO de renta]");
         Mensaje(playerid, COLOR_GRIS2, "/rsjobs [Respawn de autos SIN USO de trabajos]");
     }
     if(Admin(3, playerid)){
         Mensaje(playerid, 0xFFA579FF, "-= Comandos Nivel 3 =-");
-        Mensaje(playerid, COLOR_GRIS2, "/getcar /qb /qbs /bigears /gotocar");
+        Mensaje(playerid, COLOR_GRIS2, "/getcar /qb /qbs /bigears /gotocar /quemarcosecha /reautomatico");
     }
     if(Admin(4, playerid)){
         Mensaje(playerid, 0xFF8040FF, "-= Comandos Nivel 4 =-");
@@ -11939,7 +11939,7 @@ command(ah, playerid, params[]){
     }
     if(Admin(5, playerid)){
         Mensaje(playerid, 0xFFA579FF, "-= Comandos Nivel 5 =-");
-        Mensaje(playerid, COLOR_GRIS2, "/explode /llenarautos /fixveh /verip /aooc /reautomatico");
+        Mensaje(playerid, COLOR_GRIS2, "/explode /llenarautos /fixveh /verip /aooc ");
     }
     if(Admin(6, playerid)){
         Mensaje(playerid, 0xFF8040FF, "-= Comandos Nivel 6 =-");
@@ -11949,10 +11949,6 @@ command(ah, playerid, params[]){
         Mensaje(playerid, 0xFF4A4AFF, "-= Comandos Nivel 2012 =-");
         Mensaje(playerid, COLOR_GRIS2, "Comandos de familias: /setfamilia");
         Mensaje(playerid, COLOR_GRIS2, "/unban /house /houseint /bizz /liberar /darlider /estadoemergencia (quitar)");
-    }
-    if(Admin(2013, playerid)){
-        Mensaje(playerid, 0xFF4A4AFF, "-= Comandos Nivel 2013 =-");
-        Mensaje(playerid, COLOR_GRIS2, "/daradmin /noac /staff /mps /listaspec /noduda /clima /setstat");
         Mensaje(playerid, COLOR_GRIS, "[*] /crearfaccion: {FFFFFF}Crea una Faccion Oficial");
         Mensaje(playerid, COLOR_GRIS, "[*] /listafaccion: {FFFFFF}Visualiza las facciones {008000}DISPONIBLES");
         Mensaje(playerid, COLOR_GRIS, "[*] /efaccion: {FFFFFF}Elimina una faccion Oficial completamente");
@@ -11962,6 +11958,10 @@ command(ah, playerid, params[]){
         Mensaje(playerid, COLOR_GRIS, "[*] /zonacolor: {FFFFFF}Cambia el color de un territorio");
         Mensaje(playerid, COLOR_GRIS, "[*] /borrarautofacc: {FFFFFF}Borra el auto de una faccion, id con /dl");
         Mensaje(playerid, COLOR_GRIS, "[*] /editarautofacc: {FFFFFF}Cambia el Color y la posicion de spawn de un auto de faccion");
+    }
+    if(Admin(2013, playerid)){
+        Mensaje(playerid, 0xFF4A4AFF, "-= Comandos Nivel 2013 =-");
+        Mensaje(playerid, COLOR_GRIS2, "/daradmin /noac /staff /mps /listaspec /noduda /clima /setstat");
     }
     if(Admin(2014, playerid)){
         Mensaje(playerid, 0xFF4A4AFF, "-= Comandos Dueño =-");
@@ -12209,13 +12209,13 @@ command(admins, playerid, params[]){
         if(IsPlayerConnected(i)){
             if(cuenta[i][cAdministrador] >= 1 && cuenta[i][cAdministrador] <= 2014){
                 new string[128], admtext[24];
-                if(cuenta[i][cAdministrador] == 2014){ admtext = "Dueño"; }
+                if(cuenta[i][cAdministrador] == 2014){ admtext = "Admin Dueño"; }
                 else if(cuenta[i][cAdministrador] == 2013){ admtext = "Encargado de Staff"; }
-                else if(cuenta[i][cAdministrador] == 2012){ admtext = "Administrador General"; }
+                else if(cuenta[i][cAdministrador] == 2012){ admtext = "Encargado de Facciones"; }
                 else if(cuenta[i][cAdministrador] == 6){ admtext = "Administrador Lider"; }
                 else if(cuenta[i][cAdministrador] == 5)	{ admtext = "Administrador Superior"; }
                 else if(cuenta[i][cAdministrador] == 4)	{ admtext = "Administrador"; }
-                else if(cuenta[i][cAdministrador] == 3)	{ admtext = "Admin Junior"; }
+                else if(cuenta[i][cAdministrador] == 3)	{ admtext = "Moderador Superior"; }
                 else if(cuenta[i][cAdministrador] == 2)	{ admtext = "Moderador"; }
                 else if(cuenta[i][cAdministrador] == 1)	{ admtext = "Ayudante"; }
                 if(!booleano[AdminDuty]{i}){
@@ -15133,7 +15133,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             else if(PlayerToPointStripped(1, playerid, 790.4796, -367.0797, 994.2100, cx, cy, cz))
             {
                 //Ascensor LSPD
-                if(IsACop(playerid))
+                if(Team_LSPD(playerid))
                 {
                     ShowPlayerDialog(playerid, DIALOG_LSPD_ELEVATOR, DIALOG_STYLE_LIST, "Ascensor LSPD", "¿ Donde desea ir ?", "Garage", "Salir");
                     return 1;
@@ -15503,7 +15503,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             new suspect = GetClosestPlayer(playerid);
             if(booleano[PlayerTazeado]{suspect})return Mensaje(playerid, COLOR_GRIS, "Este jugador ya está tazeado!");
             if(dDistanciaJugador(3.0, playerid, suspect)){
-                if(IsACop(suspect))return Mensaje(playerid, COLOR_GRIS, "No puedes tazear a un compañero!");
+                if(Team_LSPD(suspect))return Mensaje(playerid, COLOR_GRIS, "No puedes tazear a un compañero!");
                 new randt = random(4)+1;
                 if(randt == 1){
                     format(string, sizeof(string), "* Oficial %s dispara contra %s, pero no consigue tazear al sujeto", PlayerName(playerid), PlayerName(suspect));
@@ -16418,7 +16418,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
                             }
                         case 21:
                             {
-                                if(IsACop(playerid))
+                                if(Team_LSPD(playerid))
                                 {
                                     if(!cuenta[playerid][cFaccOnDuty])
                                     {
@@ -18747,9 +18747,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 }
                             case 9:
                                 {
-                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /duty /d /incautar /equipo /bk /bkc /placa /ap /cp /controlcelda");
+                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /duty /d /incautar /equipo /qb /pstrips /bar /bk /bkc /placa /ap /cp /controlcelda");
                                     Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /cachear /radio /contratar (Lider) /quitar /sospechosos /su /ant /limpiar");
-                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /r /tirar /esposar /ta(zer)  /drag /miranda /quemarcosecha");
+                                    Mensaje(playerid, -1, "{E48584}FBI:{FFFFFF} /r /tirar /esposar /m /ta(zer)/qstrips  /drag /miranda /quemarcosecha");
                                 }
                             }
                         }
@@ -26899,7 +26899,7 @@ stock ObtenerTiempoRestante(tiempo)
     }
     else
     {
-        str = "Empezar a preocuparse";
+        str = "por motivos como";
     }
     return str;
 }
@@ -27589,9 +27589,9 @@ COMMAND:a(playerid, params[])
         case 4: rango = "{00A5F4}Administrador";
         case 5: rango = "{00A5F4}Administrador Superior";
         case 6: rango = "{00A5F4}Administrador Lider";
-        case 2012: rango = "{EA7A0B}Faccion [Lider]";
-        case 2013: rango = "{EA7A0B}Staff [Lider]";
-        case 2014: rango = "{AA3333}Dueño";
+        case 2012: rango = "{EA7A0B}Encargado de facciones";
+        case 2013: rango = "{EA7A0B}Encargado del Staff";
+        case 2014: rango = "{AA3333}Admin-Dueño";
         }
         format(string, sizeof(string), "%s %s:{ffffff} %s", rango, PlayerName(playerid), mensaje);
         MensajeAdmin(-1, string, 1);
@@ -30385,7 +30385,7 @@ COMMAND:darlicencia(playerid, params[])
 {
     new player;
     if(sscanf(params, "u", player))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /darlicencia [Jugador]");
-    if(!IsACop(playerid) || cuenta[playerid][cRango] < 4)return Mensaje(playerid, COLOR_GRIS2, "No eres de la LSPD o tu rango es muy bajo!");
+    if(!Team_LSPD(playerid) || cuenta[playerid][cRango] < 4)return Mensaje(playerid, COLOR_GRIS2, "No eres de la LSPD o tu rango es muy bajo!");
     if(IsPlayerConnected(player))
     {
         if(dDistanciaJugador(5.0, playerid, player))
@@ -30576,7 +30576,7 @@ COMMAND:sangre(playerid, params[])
 }
 COMMAND:quemarcosecha(playerid, params[])
 {
-    if(Team_FBI(playerid) || IsACop(playerid) || cuenta[playerid][cAdministrador] >= 2){
+    if(Team_FBI(playerid) || Team_LSPD(playerid) || cuenta[playerid][cAdministrador] >= 3){
         for(new f=0;f<MAX_SEMILLAS_SEMBRADAS;f++){
             if(IsPlayerInRangeOfPoint(playerid, 1, semillas[f][sPosicion][0], semillas[f][sPosicion][1], semillas[f][sPosicion][2])){
                 if(semillas[f][sSlot]){
@@ -31704,7 +31704,7 @@ COMMAND:tkick(playerid, params[])
 
         segundos = (dias * 60) + gettime();
         if(dias > 240)return Mensaje(playerid, COLOR_ROJO, "Minutos maximos de kick 240, use /tban");
-        format(string, sizeof(string), "Administrador %s expulso(Kick) a %s por %s, Razon: %s", PlayerName(playerid), PlayerName(user), ObtenerTiempoRestante(segundos), razon);
+        format(string, sizeof(string), "Administrador %s ha kickeado a %s por %s : %s", PlayerName(playerid), PlayerName(user), ObtenerTiempoRestante(segundos), razon);
         AdminMensaje(string);
         Mensaje(user, COLOR_ROJO, string);
         
