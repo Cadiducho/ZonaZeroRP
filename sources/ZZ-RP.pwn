@@ -1464,7 +1464,7 @@ new static trabajos[][_@en@trabajos] =
     {{-382.4231, -1438.8834, 25.7266}, "Agricultor", "/servicio /finservicio /cosechar", 1, 1, 158, 31, 2}, 
     {{2102.3757, -1809.8839, 13.5547}, "Pizzero", "/servicio /finservicio /pizza", 1, 1, 155, 88, 1}, 
     {{1685.7495, -1944.5226, 13.5469}, "Conductor de Trenes", "/servicio /finservicio /ruta", 2, 1, 261, 9, 2}, 
-    {{1766.1532, -1903.4260, 13.5665}, "Taxista", "/servicio /finservicio /tarifa", 4, 1, 7, 93, 2}, 
+    {{1766.1532, -1903.4260, 13.5665}, "Taxista", "/servicio /finservicio /tarifa", 2, 1, 7, 93, 2}, 
     {{2190.5740, -1997.0985, 13.5469}, "Basurero", "/servicio /finservicio /basura", 1, 1, 6, 11, 2},
     {{60.2410, -1720.7347, 7.5172}, "Pescador", "/servicio /finservicio /pescar", 2, 1, 128, 131, 4}, 
     {{2530.5439, -880.4722, 87.6618}, "Minero", "/servicio /finservicio", 3, 1, 27, 151, 0}, 
