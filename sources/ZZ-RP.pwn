@@ -28,7 +28,7 @@
 #include "lib/sscanf2"
 #include "lib/streamer"
 #include "lib/seif_walk"
-#include "lib/mSelection"
+#include "lib/mSelection"2
 #include "lib/progressbar"
 #include "lib/SetVehicleAttachedObject"
 
@@ -2007,6 +2007,7 @@ enum _@en@cuenta
     Float:cMuertePosX, 
     Float:cMuertePosY, 
     Float:cMuertePosZ, 
+    cMuerteTimerId,
     cArrestado, 
     cLoteria, 
     cTrabajo, 
@@ -2615,7 +2616,7 @@ public OnPlayerSpawn(playerid)
                             if(hayMedicos) {
                                 tiempoAceptar = 180;
                             }
-                            SetTimerEx("PermitirAceptarMuerte", tiempoAceptar * 1000, false, "i", playerid);
+                            cuenta[playerid][cMuerteTimerId] = SetTimerEx("PermitirAceptarMuerte", tiempoAceptar * 1000, false, "i", playerid);
                             Mensaje(playerid, COLOR_CIAN, "------------------ Aviso -----------------");
                             Mensaje(playerid, COLOR_CIAN, "Estás desangrándote hasta morir y no puedes moverte.");
                             Mensaje(playerid, COLOR_CIAN, "¡Los médicos pueden salvarte la vida!");
@@ -9097,13 +9098,15 @@ command(lspd, playerid, params[]) {
     format(string, sizeof(string), "Hay %d policías de servicio", encontro);
     return Mensaje(playerid, COLOR_BUSCADO, string);
 }
-
+CallBack::revivir(playerid) {
+    booleano[gMurio]{playerid} = false;
+    booleano[gPuedeAceptarMuerte]{playerid} = false;
+    TogglePlayerControllable(playerid, true);
+}
 command(aceptarmuerte, playerid, params[]) {
     if (booleano[gPuedeAceptarMuerte]{playerid}) {
-        booleano[gMurio]{playerid} = false;
-        booleano[gPuedeAceptarMuerte]{playerid} = false;
-        TogglePlayerControllable(playerid, true);
-
+        revivir(playerid);
+        
         Mensaje(playerid, COLOR_CIAN, "Te has recuperado exsitósamente de tu accidente.");
         Mensaje(playerid, COLOR_CIAN, "Te hemos transladado al hospital.");
         Mensaje(playerid, COLOR_CIAN, "Desafortunadamente tienes amnesia, no recuerdas nada.");
@@ -9119,6 +9122,17 @@ command(aceptarmuerte, playerid, params[]) {
     }
     return 1;
 }
+command(revivir, playerid, params[]) {
+    new target, string[128];
+    if(cuenta[playerid][cAdministrador] < 4) return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(sscanf(params, "u", target)) return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /revivir [Usuario]");
+
+    revivir(target);
+    KillTimer(cuenta[target][cMuerteTimerId]);
+    format(string, sizeof(string), "%s revivió a %s", PlayerName(playerid), PlayerName(target)); AdminMensaje(string);
+    return Mensaje(target, COLOR_ROJO, string);
+}
+
 TextListCreate:textList_sospechosos(playerid) {
     new encontro;
     new items[MAX_PLAYERS][TEXTLIST_MAX_ITEM_NAME];
@@ -11882,7 +11896,7 @@ command(ah, playerid, params[]){
     }
     if(Admin(4, playerid)){
         Mensaje(playerid, 0xFF8040FF, "-= Comandos Nivel 4 =-");
-        Mensaje(playerid, COLOR_GRIS2, "/puntorol /tban /unbanip /banduda /unbanduda /aengineon");
+        Mensaje(playerid, COLOR_GRIS2, "/puntorol /tban /unbanip /banduda /unbanduda /aengineon /revivir");
         Mensaje(playerid, COLOR_GRIS2, "/unban [PARA USUARIOS QUE APELEN EN FORO]");
     }
     if(Admin(5, playerid)){
@@ -11891,7 +11905,7 @@ command(ah, playerid, params[]){
     }
     if(Admin(6, playerid)){
         Mensaje(playerid, 0xFF8040FF, "-= Comandos Nivel 6 =-");
-        Mensaje(playerid, COLOR_GRIS2, "/changeit /aseguro /removerpublicidad");
+        Mensaje(playerid, COLOR_GRIS2, "/changeit /aseguro /removerpublicidad /darlicenciasadmin");
     }
     if(Admin(2012, playerid)){
         Mensaje(playerid, 0xFF4A4AFF, "-= Comandos Nivel 2012 =-");
@@ -28116,6 +28130,37 @@ COMMAND:licencias(playerid, params[])
     format(string, sizeof(string), "* %s muestra sus licencias a %s.", PlayerName(playerid), PlayerName(jugador));
     ProxDetector(30.0, playerid, string, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA, COLOR_PURPURA);
     return 1;
+}
+command(darlicenciasadmin, playerid, params[]) {
+    new target, tipo, tipoStr[20], string[128];
+    if(cuenta[playerid][cAdministrador] < 6) return Mensaje(playerid, COLOR_GRIS2, "No autorizado!");
+    if(sscanf(params, "ud", target, tipo)) return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /licencias [Usuario] [1 (moto) - 2 (coche) - 3 (aviación) - 4 (navegación) - 5 (arma)]");
+    
+    switch (tipo) {
+        case 1: {
+            cuenta[target][cLicenciaMoto] = 1;
+            format(tipoStr, sizeof(tipoStr), "moto");
+        }
+        case 2: {
+            cuenta[target][cLicenciaAuto] = 1;
+            format(tipoStr, sizeof(tipoStr), "coche");
+        }
+        case 3: {
+            cuenta[target][cLicenciaVuelo] = 1;
+            format(tipoStr, sizeof(tipoStr), "vuelo");
+        }
+        case 4: {
+            cuenta[target][cLicenciaBote] = 1;
+            format(tipoStr, sizeof(tipoStr), "navegación");
+        }
+        case 5: {
+            cuenta[target][cLicenciaArma] = 1;
+            format(tipoStr, sizeof(tipoStr), "armas");
+        }
+        default: Mensaje(playerid, COLOR_GRIS2, "Utiliza: /licencias [Usuario] [1 (moto) - 2 (coche) - 3 (aviación) - 4 (navegación)");
+    }
+    format(string, sizeof(string), "%s recibió la licencia de %s por admin %s", PlayerName(target), tipoStr, PlayerName(playerid)); AdminMensaje(string);
+    return Mensaje(target, COLOR_ROJO, string);
 }
 command(terminarprueba, playerid, params[]) {
     new slot = enteroChar[licslot]{playerid};
