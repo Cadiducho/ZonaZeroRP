@@ -1398,25 +1398,48 @@ enum _@en@obtenerLicencia
 {
     cocheModelo, 
     Float:cochePos[4], 
-    cocheWorld, 
-    cocheInterior, 
     bool:cocheUse, 
     cocheExamen
 };
 new static obtenerLicencia[][_@en@obtenerLicencia] = 
 {
-    {410, {2033.6217,-1932.3217,12.9011,88.8347}, 90, 0, false},
-    {410, {2033.6217,-1932.3217,12.9011,88.8347}, 91, 0, false},
-    {410, {2033.6217,-1932.3217,12.9011,88.8347}, 92, 0, false},
-    {410, {2033.6217,-1932.3217,12.9011,88.8347}, 93, 0, false},
-    {586, {2033.6217,-1932.3217,12.9011,88.8347}, 94, 0, false},
-    {586, {2033.6217,-1932.3217,12.9011,88.8347}, 95, 0, false},
-    {586, {2033.6217,-1932.3217,12.9011,88.8347}, 96, 0, false},
-    {586, {2033.6217,-1932.3217,12.9011,88.8347}, 97, 0, false},
-    {593, {426.7948, 2501.7593, 16.9445, 88.0809}, 98, 0, false}, 
-    {593, {426.7948, 2501.7593, 16.9445, 88.0809}, 99, 0, false}, 
-    {473, {58.0547, -1221.8842, -0.5517, 324.8833}, 100, 0, false}, 
-    {473, {58.0547, -1221.8842, -0.5517, 324.8833}, 101, 0, false}
+    {410, {2052.6372,-1904.1082,13.2676,2.1358}, false},
+    {410, {2056.0415,-1904.4470,13.2669,1.4144}, false},
+    {410, {2059.1560,-1903.9856,13.2662,358.8434}, false},
+    {410, {2062.3206,-1904.0732,13.2676,359.5889}, false},
+    {586, {2065.5752,-1904.2098,13.2680,359.6471}, false},
+    {586, {2068.6619,-1903.8965,13.2669,359.5603}, false},
+    {586, {2062.2568,-1918.9083,13.2674,180.0815}, false},
+    {586, {2065.5496,-1919.5264,13.2629,181.1232}, false},
+    {593, {426.7948, 2501.7593, 16.9445, 88.0809}, false}, 
+    {593, {426.7948, 2501.7593, 16.9445, 88.0809}, false}, 
+    {473, {58.0547, -1221.8842, -0.5517, 324.8833}, false}, 
+    {473, {58.0547, -1221.8842, -0.5517, 324.8833}, false}
+};
+enum _@en@Recorrido {
+    Float:trackPos[3]
+};
+new static recLicencias[][_@en@Recorrido] = {
+    {{2047.5496,-1929.4921,12.9793}},
+    {{1959.0374,-1946.7367,13.1745}},
+    {{1958.5886,-2150.9673,12.9765}},
+    {{1943.9684,-2163.3496,12.9901}},
+    {{1757.4270,-2180.1699,13.1582}},
+    {{1663.6539,-2192.0957,12.9729}},
+    {{1472.8909,-2217.9683,12.9793}},
+    {{1404.0206,-2283.1709,12.9807}},
+    {{1350.6970,-2218.5801,12.9807}},
+    {{1552.6393,-2126.4597,14.6404}},
+    {{1652.2590,-1897.6501,24.4903}},
+    {{1623.3727,-1620.7720,28.0484}},
+    {{1777.9777,-1521.6365,9.8897}},
+    {{2009.5952,-1528.9706,3.0438}},
+    {{2061.1021,-1614.5916,12.9768}},
+    {{2079.3899,-1652.9132,12.9869}},
+    {{2084.6245,-1756.2639,12.9953}},
+    {{2079.0000,-1871.7571,12.9465}},
+    {{2073.5288,-1909.5728,13.1474}},
+    {{2053.0544,-1910.4332,13.1423}}
 };
 //sistema de trabajos |--->
 enum _@en@trabajos
@@ -1887,7 +1910,6 @@ static detectarArmas2[MAX_PLAYERS][13][2];
 
 enum _@en@entero
 {
-    lictiempo, 
     sNegocio, 
     sbebidas, 
     borracho, 
@@ -3029,6 +3051,14 @@ Gobierno_Vehicle(carid){
     }
     return false;
 } 
+Licencias_Vehicle(carid){
+    for(new v=0;v<sizeof(obtenerLicencia);v++){
+        if(carid == obtenerLicencia[v][cocheExamen]){
+            return true;
+        }
+    }
+    return false;
+}
 IsAPlane(carid){
     #pragma unused carid
     return false;
@@ -3587,146 +3617,84 @@ public OnPlayerEnterCheckpoint(playerid)
     return 1;
 }
 
-public OnPlayerEnterRaceCheckpoint(playerid)
-{
-    if(IsPlayerInAnyVehicle(playerid))
-    {
-        if(enteroChar[lictipo]{playerid} != 255)
-        {
-            switch(enteroChar[lictipo]{playerid})
-            {
-            case 0, 1:
-                {
-                    enteroChar[licestado]{playerid}++;
-                    switch(enteroChar[licestado]{playerid})
-                    {
-                    case 1: SetPlayerRaceCheckpoint(playerid, 0, 1960.6512,-1971.2611,12.9254, 1958.7754,-2129.3311,12.9043, 3.0);
-                    case 2: SetPlayerRaceCheckpoint(playerid, 0, 1826.8207,-2164.3442,12.9045, 1679.2911,-2194.0540,12.8967, 3.0);
-                    case 3: SetPlayerRaceCheckpoint(playerid, 0, 1760.4126,-2180.4163,13.0886, 1524.8167,-2194.6025,12.8943, 3.0);
-                    case 4: 
-                        {
-                            if(enteroChar[licvueltas]{playerid} >= 4)
-                            {
-                                SetPlayerRaceCheckpoint(playerid, 1, 1524.8167,-2194.6025,12.8943, 0.0, 0.0, 0.0, 3.0);
-                            }
-                            else
-                            {
-                                SetPlayerRaceCheckpoint(playerid, 0, 1524.8167,-2194.6025,12.8943,1317.4880,-2195.3403,21.2174, 3.0);
-                            }
-                        }
-                    case 5:
-                        {
-                            if(enteroChar[licvueltas]{playerid} >= 4)
-                            {
-                                new string[126], vehicle = GetPlayerVehicleID(playerid), Float:vehvida;
-                                GetVehicleHealth(vehicle, vehvida);
-                                
-                                switch(GetVehicleModel(vehicle))
-                                {
-                                case 410:
-                                    {
-                                        if(gettime() - entero[playerid][lictiempo] > 200 || vehvida <= 600)
-                                        {
-                                            Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO____|");
-                                            
-                                            format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
-                                            Mensaje(playerid, COLOR_BLANCO, string);
-                                            
-                                            format(string, sizeof(string), "Tiempo: %s", generarTiempo(gettime() - entero[playerid][lictiempo]));
-                                            Mensaje(playerid, COLOR_BLANCO, string);
-                                        }
-                                        else
-                                        {
-                                            Mensaje(playerid, COLOR_VERDE, "|____EXAMEN APROBADO____|");
-                                            
-                                            format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
-                                            Mensaje(playerid, COLOR_BLANCO, string);
-                                            
-                                            format(string, sizeof(string), "Tiempo: %s", generarTiempo(gettime() - entero[playerid][lictiempo]));
-                                            Mensaje(playerid, COLOR_BLANCO, string);
-                                            
-                                            cuenta[playerid][cLicenciaAuto] = 1;
-                                        }
-                                    }
-                                case 586:
-                                    {
-                                        if(gettime() - entero[playerid][lictiempo] > 130 || vehvida <= 900)
-                                        {
-                                            Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO____|");
-                                            
-                                            format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
-                                            Mensaje(playerid, COLOR_BLANCO, string);
-                                            
-                                            format(string, sizeof(string), "Tiempo: %s", generarTiempo(gettime() - entero[playerid][lictiempo]));
-                                            Mensaje(playerid, COLOR_BLANCO, string);
-                                        }
-                                        else
-                                        {
-                                            Mensaje(playerid, COLOR_VERDE, "|____EXAMEN APROBADO____|");
-                                            
-                                            format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
-                                            Mensaje(playerid, COLOR_BLANCO, string);
-                                            
-                                            format(string, sizeof(string), "Tiempo: %s", generarTiempo(gettime() - entero[playerid][lictiempo]));
-                                            Mensaje(playerid, COLOR_BLANCO, string);
-                                            
-                                            cuenta[playerid][cLicenciaMoto] = 1;
-                                        }
-                                    }
+public OnPlayerEnterRaceCheckpoint(playerid) {
+    if(IsPlayerInAnyVehicle(playerid)) {
+        if(enteroChar[lictipo]{playerid} != 255) {
+            switch(enteroChar[lictipo]{playerid}) {
+                case 0, 1: { //coche y moto
+                    new i = ++enteroChar[licestado]{playerid};
+                    
+                    if (i != sizeof(recLicencias) - 1) { //no es el último
+                        SetPlayerRaceCheckpoint(playerid, 0, recLicencias[i][trackPos][0], recLicencias[i][trackPos][1], recLicencias[i][trackPos][2], recLicencias[i+1][trackPos][0], recLicencias[i+1][trackPos][1], recLicencias[i+1][trackPos][2], 3.0);
+                    } else {
+                        new string[126], vehicle = GetPlayerVehicleID(playerid), Float:vehvida;
+                        GetVehicleHealth(vehicle, vehvida);
+                        
+                        switch(GetVehicleModel(vehicle)) {
+                            case 410: {
+                                if(vehvida <= 600) {
+                                    Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO____|");
+                                    
+                                    format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
+                                    Mensaje(playerid, COLOR_BLANCO, string);
+                                } else {
+                                    Mensaje(playerid, COLOR_VERDE, "|____EXAMEN APROBADO____|");
+                                    
+                                    format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
+                                    Mensaje(playerid, COLOR_BLANCO, string);
+                                    
+                                    cuenta[playerid][cLicenciaAuto] = 1;
                                 }
-                                SetPosEx(playerid, 2048.1421, -1908.2161, 13.5469, 267.6207, 0, 0);
-                                terminarPrueba(playerid);
                             }
-                            else
-                            {
-                                enteroChar[licvueltas]{playerid}++;
-                                enteroChar[licestado]{playerid} = 0;
-                                SetPlayerRaceCheckpoint(playerid, 0, 1317.4880,-2195.3403,21.2174, 1314.7155,-2259.9875,12.9043, 3.0);
+                            case 586: {
+                                if(vehvida <= 900) {
+                                    Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO____|");
+                                    
+                                    format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
+                                    Mensaje(playerid, COLOR_BLANCO, string);
+                                } else {
+                                    Mensaje(playerid, COLOR_VERDE, "|____EXAMEN APROBADO____|");
+                                    
+                                    format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
+                                    Mensaje(playerid, COLOR_BLANCO, string);
+                                    
+                                    cuenta[playerid][cLicenciaMoto] = 1;
+                                }
                             }
                         }
+                        SetPosEx(playerid, 2048.1421, -1908.2161, 13.5469, 267.6207, 0, 0);
+                        terminarPrueba(playerid);
                     }
                 }
-            case 2:
-                {
+                case 2: {
                     enteroChar[licestado]{playerid}++;
-                    switch(enteroChar[licestado]{playerid})
-                    {
-                    case 1: SetPlayerRaceCheckpoint(playerid, 3, -63.9375, 2508.9941, 91.6324, -316.5374, 2429.5198, 131.4340, 6.0);
-                    case 2: SetPlayerRaceCheckpoint(playerid, 3, -316.5374, 2429.5198, 131.4340, -394.1963, 2067.6755, 160.1145, 6.0);
-                    case 3: SetPlayerRaceCheckpoint(playerid, 3, -394.1963, 2067.6755, 160.1145, -599.5220, 1818.0098, 159.3034, 6.0);
-                    case 4: SetPlayerRaceCheckpoint(playerid, 3, -599.5220, 1818.0098, 159.3034, -928.8336, 1895.7354, 204.3688, 6.0);
-                    case 5: SetPlayerRaceCheckpoint(playerid, 3, -928.8336, 1895.7354, 204.3688, -1193.4266, 2083.7129, 171.5246, 6.0);
-                    case 6: SetPlayerRaceCheckpoint(playerid, 3, -1193.4266, 2083.7129, 171.5246, -1376.0507, 2448.2119, 147.9311, 6.0);
-                    case 7: SetPlayerRaceCheckpoint(playerid, 3, -1376.0507, 2448.2119, 147.9311, -1173.5979, 2656.2014, 134.9926, 6.0);
-                    case 8: SetPlayerRaceCheckpoint(playerid, 3, -1173.5979, 2656.2014, 134.9926, -866.8888, 2677.1228, 134.8802, 6.0);
-                    case 9: SetPlayerRaceCheckpoint(playerid, 3, -866.8888, 2677.1228, 134.8802, -583.7990, 2621.6641, 124.5950, 6.0);
-                    case 10: SetPlayerRaceCheckpoint(playerid, 3, -583.7990, 2621.6641, 124.5950, -368.7597, 2568.6921, 86.0015, 6.0);
-                    case 11: SetPlayerRaceCheckpoint(playerid, 3, -368.7597, 2568.6921, 86.0015, 87.2058, 2505.9927, 38.4314, 6.0);
-                    case 12: SetPlayerRaceCheckpoint(playerid, 3, 87.2058, 2505.9927, 38.4314, 383.6990, 2496.0896, 16.9575, 6.0);
-                    case 13: SetPlayerRaceCheckpoint(playerid, 1, 383.6990, 2496.0896, 16.9575, 0.0, 0.0, 0.0, 6.0);
-                    case 14:
-                        {		
+                    switch(enteroChar[licestado]{playerid}) {
+                        case 1: SetPlayerRaceCheckpoint(playerid, 3, -63.9375, 2508.9941, 91.6324, -316.5374, 2429.5198, 131.4340, 6.0);
+                        case 2: SetPlayerRaceCheckpoint(playerid, 3, -316.5374, 2429.5198, 131.4340, -394.1963, 2067.6755, 160.1145, 6.0);
+                        case 3: SetPlayerRaceCheckpoint(playerid, 3, -394.1963, 2067.6755, 160.1145, -599.5220, 1818.0098, 159.3034, 6.0);
+                        case 4: SetPlayerRaceCheckpoint(playerid, 3, -599.5220, 1818.0098, 159.3034, -928.8336, 1895.7354, 204.3688, 6.0);
+                        case 5: SetPlayerRaceCheckpoint(playerid, 3, -928.8336, 1895.7354, 204.3688, -1193.4266, 2083.7129, 171.5246, 6.0);
+                        case 6: SetPlayerRaceCheckpoint(playerid, 3, -1193.4266, 2083.7129, 171.5246, -1376.0507, 2448.2119, 147.9311, 6.0);
+                        case 7: SetPlayerRaceCheckpoint(playerid, 3, -1376.0507, 2448.2119, 147.9311, -1173.5979, 2656.2014, 134.9926, 6.0);
+                        case 8: SetPlayerRaceCheckpoint(playerid, 3, -1173.5979, 2656.2014, 134.9926, -866.8888, 2677.1228, 134.8802, 6.0);
+                        case 9: SetPlayerRaceCheckpoint(playerid, 3, -866.8888, 2677.1228, 134.8802, -583.7990, 2621.6641, 124.5950, 6.0);
+                        case 10: SetPlayerRaceCheckpoint(playerid, 3, -583.7990, 2621.6641, 124.5950, -368.7597, 2568.6921, 86.0015, 6.0);
+                        case 11: SetPlayerRaceCheckpoint(playerid, 3, -368.7597, 2568.6921, 86.0015, 87.2058, 2505.9927, 38.4314, 6.0);
+                        case 12: SetPlayerRaceCheckpoint(playerid, 3, 87.2058, 2505.9927, 38.4314, 383.6990, 2496.0896, 16.9575, 6.0);
+                        case 13: SetPlayerRaceCheckpoint(playerid, 1, 383.6990, 2496.0896, 16.9575, 0.0, 0.0, 0.0, 6.0);
+                        case 14: {		
                             new string[126], vehicle = GetPlayerVehicleID(playerid), Float:vehvida;
                             GetVehicleHealth(vehicle, vehvida);
                             
-                            if(gettime() - entero[playerid][lictiempo] > 230 || vehvida <= 950)
-                            {
+                            if(vehvida <= 950) {
                                 Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO____|");
                                 
                                 format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
                                 Mensaje(playerid, COLOR_BLANCO, string);
-                                
-                                format(string, sizeof(string), "Tiempo: %s", generarTiempo(gettime() - entero[playerid][lictiempo]));
-                                Mensaje(playerid, COLOR_BLANCO, string);
-                            }
-                            else
-                            {
+                            } else {
                                 Mensaje(playerid, COLOR_VERDE, "|____EXAMEN APROBADO____|");
                                 
                                 format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
-                                Mensaje(playerid, COLOR_BLANCO, string);
-                                
-                                format(string, sizeof(string), "Tiempo: %s", generarTiempo(gettime() - entero[playerid][lictiempo]));
                                 Mensaje(playerid, COLOR_BLANCO, string);
                                 
                                 cuenta[playerid][cLicenciaVuelo] = 1;
@@ -3737,49 +3705,37 @@ public OnPlayerEnterRaceCheckpoint(playerid)
                         }
                     }
                 }
-            case 3:
-                {
+                case 3: {
                     enteroChar[licestado]{playerid}++;
-                    switch(enteroChar[licestado]{playerid})
-                    {
-                    case 1: SetPlayerRaceCheckpoint(playerid, 1, 70.4348, -1009.1017, -0.5573, 17.2706, -919.5793, -0.5883, 4.0);
-                    case 2: SetPlayerRaceCheckpoint(playerid, 1, 17.2706, -919.5793, -0.5883, -130.9745, -848.1539, -0.5852, 4.0);
-                    case 3: SetPlayerRaceCheckpoint(playerid, 1, -130.9745, -848.1539, -0.5852, -37.4063, -618.8232, -0.5545, 4.0);
-                    case 4: SetPlayerRaceCheckpoint(playerid, 1, -37.4063, -618.8232, -0.5545, 148.7364, -432.4186, -0.5063, 4.0);
-                    case 5: SetPlayerRaceCheckpoint(playerid, 1, 148.7364, -432.4186, -0.5063, 296.8453, -352.4254, -0.6798, 4.0);
-                    case 6: SetPlayerRaceCheckpoint(playerid, 1, 296.8453, -352.4254, -0.6798, 511.5570, -252.7190, -0.5767, 4.0);
-                    case 7: SetPlayerRaceCheckpoint(playerid, 1, 511.5570, -252.7190, -0.5767, 805.4914, -153.4740, -0.3605, 4.0);
-                    case 8: SetPlayerRaceCheckpoint(playerid, 1, 805.4914, -153.4740, -0.3605, 1047.1149, -115.0807, -0.4555, 4.0);
-                    case 9: SetPlayerRaceCheckpoint(playerid, 1, 1047.1149, -115.0807, -0.4555, 1250.5764, -180.8685, -0.5837, 4.0);
-                    case 10: SetPlayerRaceCheckpoint(playerid, 1, 1250.5764, -180.8685, -0.5837, 1439.6049, -246.8832, -0.6053, 4.0);
-                    case 11: SetPlayerRaceCheckpoint(playerid, 1, 1439.6049, -246.8832, -0.6053, 1599.5824, -92.3071, -0.5996, 4.0);
-                    case 12: SetPlayerRaceCheckpoint(playerid, 1, 1599.5824, -92.3071, -0.5996, 1762.1896, -26.1280, -0.5559, 4.0);
-                    case 13: SetPlayerRaceCheckpoint(playerid, 1, 1762.1896, -26.1280, -0.5559, 1897.7286, -79.6258, -0.6098, 4.0);
-                    case 14: SetPlayerRaceCheckpoint(playerid, 1, 1897.7286, -79.6258, -0.6098, 2110.3325, -107.5398, -0.5103, 4.0);
-                    case 15: SetPlayerRaceCheckpoint(playerid, 1, 2110.3325, -107.5398, -0.5103, 0.0, 0.0, 0.0, 4.0);
-                    case 16:
-                        {
+                    switch(enteroChar[licestado]{playerid}) {
+                        case 1: SetPlayerRaceCheckpoint(playerid, 1, 70.4348, -1009.1017, -0.5573, 17.2706, -919.5793, -0.5883, 4.0);
+                        case 2: SetPlayerRaceCheckpoint(playerid, 1, 17.2706, -919.5793, -0.5883, -130.9745, -848.1539, -0.5852, 4.0);
+                        case 3: SetPlayerRaceCheckpoint(playerid, 1, -130.9745, -848.1539, -0.5852, -37.4063, -618.8232, -0.5545, 4.0);
+                        case 4: SetPlayerRaceCheckpoint(playerid, 1, -37.4063, -618.8232, -0.5545, 148.7364, -432.4186, -0.5063, 4.0);
+                        case 5: SetPlayerRaceCheckpoint(playerid, 1, 148.7364, -432.4186, -0.5063, 296.8453, -352.4254, -0.6798, 4.0);
+                        case 6: SetPlayerRaceCheckpoint(playerid, 1, 296.8453, -352.4254, -0.6798, 511.5570, -252.7190, -0.5767, 4.0);
+                        case 7: SetPlayerRaceCheckpoint(playerid, 1, 511.5570, -252.7190, -0.5767, 805.4914, -153.4740, -0.3605, 4.0);
+                        case 8: SetPlayerRaceCheckpoint(playerid, 1, 805.4914, -153.4740, -0.3605, 1047.1149, -115.0807, -0.4555, 4.0);
+                        case 9: SetPlayerRaceCheckpoint(playerid, 1, 1047.1149, -115.0807, -0.4555, 1250.5764, -180.8685, -0.5837, 4.0);
+                        case 10: SetPlayerRaceCheckpoint(playerid, 1, 1250.5764, -180.8685, -0.5837, 1439.6049, -246.8832, -0.6053, 4.0);
+                        case 11: SetPlayerRaceCheckpoint(playerid, 1, 1439.6049, -246.8832, -0.6053, 1599.5824, -92.3071, -0.5996, 4.0);
+                        case 12: SetPlayerRaceCheckpoint(playerid, 1, 1599.5824, -92.3071, -0.5996, 1762.1896, -26.1280, -0.5559, 4.0);
+                        case 13: SetPlayerRaceCheckpoint(playerid, 1, 1762.1896, -26.1280, -0.5559, 1897.7286, -79.6258, -0.6098, 4.0);
+                        case 14: SetPlayerRaceCheckpoint(playerid, 1, 1897.7286, -79.6258, -0.6098, 2110.3325, -107.5398, -0.5103, 4.0);
+                        case 15: SetPlayerRaceCheckpoint(playerid, 1, 2110.3325, -107.5398, -0.5103, 0.0, 0.0, 0.0, 4.0);
+                        case 16: {
                             new string[126], vehicle = GetPlayerVehicleID(playerid), Float:vehvida;
                             GetVehicleHealth(vehicle, vehvida);
 
-                            if(gettime() - entero[playerid][lictiempo] > 300 || vehvida <= 900)
-                            {
+                            if(vehvida <= 900) {
                                 Mensaje(playerid, COLOR_ROJO, "|____EXAMEN SUSPENSO|");
                                 
                                 format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
                                 Mensaje(playerid, COLOR_BLANCO, string);
-                                
-                                format(string, sizeof(string), "Tiempo: %s", generarTiempo(gettime() - entero[playerid][lictiempo]));
-                                Mensaje(playerid, COLOR_BLANCO, string);
-                            }
-                            else
-                            {
+                            } else {
                                 Mensaje(playerid, COLOR_VERDE, "|____EXAMEN APROBADO____|");
                                 
                                 format(string, sizeof(string), "Daños: %.0f", 1000 - vehvida);
-                                Mensaje(playerid, COLOR_BLANCO, string);
-                                
-                                format(string, sizeof(string), "Tiempo: %s", generarTiempo(gettime() - entero[playerid][lictiempo]));
                                 Mensaje(playerid, COLOR_BLANCO, string);
                                 
                                 cuenta[playerid][cLicenciaBote] = 1;
@@ -3925,13 +3881,13 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         }
     }
     
-    if(newstate == PLAYER_STATE_DRIVER)
-    {
-        if(!EsBicicleta(newcar))
-        {
-            if(!cuenta[playerid][cLicenciaAuto])
-            {
-                Mensaje(playerid, COLOR_BLANCO, "{AA3333}» {FFFFFF}No tienes {AA3333}Licencia de Manejo{FFFFFF}, ten mucho cuidado con los Policias!");
+    if(newstate == PLAYER_STATE_DRIVER) {
+        if(!EsBicicleta(newcar)) {
+            new slot = enteroChar[licslot]{playerid};
+            if(!(slot != 255 && obtenerLicencia[slot][cocheUse])) { //No está haciendo prueba de conducción
+                if(!cuenta[playerid][cLicenciaAuto]) {
+                    Mensaje(playerid, COLOR_BLANCO, "{AA3333}» {FFFFFF}No tienes {AA3333}Licencia de Manejo{FFFFFF}, ten mucho cuidado con los Policias!");
+                }
             }
         }
         // =================================Carros de Renta ==================================//
@@ -4001,6 +3957,14 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         {
             if(EsPeriodista(playerid)){ return 1; }
             else RemovePlayerFromVehicle(playerid); Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} Este vehículo no es de tu facción.");return 1;
+        }
+        else if(Licencias_Vehicle(newcar))
+        {
+            new slot = enteroChar[licslot]{playerid};
+            if(slot != 255 && obtenerLicencia[slot][cocheUse]) {
+                return 1; 
+            }
+            else RemovePlayerFromVehicle(playerid); Mensaje(playerid, COLOR_GRIS2, "No puedes usar este vehículo salvo en un examen!");return 1;
         }
         else if(EsBicicleta(newcar))
         {
@@ -4090,7 +4054,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
         else if(!cuenta[playerid][servicio] && tren == newcar || transAuto(newcar) || aviadorAuto(newcar) || camioneroAuto(newcar) || barrenderoAuto(newcar) || busesAuto(newcar) || agricultorAuto(newcar) || pizzaAuto(newcar) || taxiAuto(newcar) || basureroAuto(newcar) || pescadorAuto(newcar))
         {
             RemovePlayerFromVehicle(playerid);
-            Mensaje(playerid, COLOR_ROJO, "Usted debe estar en esrvicio para usar este vehiculo. Hable con su jefe");
+            Mensaje(playerid, COLOR_ROJO, "Usted debe estar en servicio para usar este vehiculo. Hable con su jefe");
         }
     }
     return 1;
@@ -5122,11 +5086,8 @@ public OnGameModeInit() {
     CochesNoticias[2] = AddStaticVehicleAnt(582, 741.6085, -1335.1671, 13.7574, 179.1018, 2, 1, VEHICULO_SPAWN);                     // CNN Van
     CochesNoticias[3] = AddStaticVehicleAnt(488, 743.5662, -1372.6359, 25.9022, 358.8606, 2, 1, VEHICULO_SPAWN);                     // Marverik CNN [HELICOPTERO]
 
-    for(new i=0; i<sizeof obtenerLicencia; i++)
-    {
+    for(new i=0; i<sizeof obtenerLicencia; i++) {
         obtenerLicencia[i][cocheExamen] = AddStaticVehicleAnt(obtenerLicencia[i][cocheModelo], obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], random(128), random(128), VEHICULO_SPAWN);
-        SetVehicleVirtualWorld(obtenerLicencia[i][cocheExamen], obtenerLicencia[i][cocheWorld]);
-        LinkVehicleToInterior(obtenerLicencia[i][cocheExamen], obtenerLicencia[i][cocheInterior]);
     }
 
     CochesFbi[0] = AddStaticVehicleAnt(487,1259.5767,-1766.8031,36.2211,88.8390,0,0, VEHICULO_SPAWN);    // Maverick [HELICOPTERO]
@@ -15683,14 +15644,6 @@ public OnVehicleSpawn(vehicleid)
         SetVehicleParamsEx(vehicleid, 1, lights, alarm, doors, bonnet, boot, objective);
     }
     
-    for(new i=0; i<sizeof obtenerLicencia; i++)
-    {
-        if(obtenerLicencia[i][cocheExamen] == vehicleid)
-        {
-            SetVehicleVirtualWorld(vehicleid, obtenerLicencia[i][cocheWorld]);
-            LinkVehicleToInterior(vehicleid, obtenerLicencia[i][cocheInterior]);
-        }
-    }
     return 1;
 }
 
@@ -17771,7 +17724,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 obtenerLicencia[i][cocheUse] = true;
                                 enteroChar[lictipo]{playerid} = 0;
                                 enteroChar[licslot]{playerid} = i;
-                                SetPosEx(playerid, obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], obtenerLicencia[i][cocheInterior], obtenerLicencia[i][cocheWorld]);
+                                SetPosEx(playerid, obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], 0, 0);
                                 PutPlayerInVehicleEx(playerid, obtenerLicencia[i][cocheExamen], 0);
                                 comenzarPrueba(playerid);
                                 pierdeDinero(playerid, 250);
@@ -17792,7 +17745,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 obtenerLicencia[i][cocheUse] = true;
                                 enteroChar[lictipo]{playerid} = 1;
                                 enteroChar[licslot]{playerid} = i;
-                                SetPosEx(playerid, obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], obtenerLicencia[i][cocheInterior], obtenerLicencia[i][cocheWorld]);
+                                SetPosEx(playerid, obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], 0, 0);
                                 PutPlayerInVehicleEx(playerid, obtenerLicencia[i][cocheExamen], 0);
                                 comenzarPrueba(playerid);
                                 pierdeDinero(playerid, 450);
@@ -17813,7 +17766,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 obtenerLicencia[i][cocheUse] = true;
                                 enteroChar[lictipo]{playerid} = 2;
                                 enteroChar[licslot]{playerid} = i;
-                                SetPosEx(playerid, obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], obtenerLicencia[i][cocheInterior], obtenerLicencia[i][cocheWorld]);
+                                SetPosEx(playerid, obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], 0, 0);
                                 PutPlayerInVehicleEx(playerid, obtenerLicencia[i][cocheExamen], 0);
                                 comenzarPrueba(playerid);
                                 pierdeDinero(playerid, 7000);
@@ -17834,7 +17787,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                                 obtenerLicencia[i][cocheUse] = true;
                                 enteroChar[lictipo]{playerid} = 3;
                                 enteroChar[licslot]{playerid} = i;
-                                SetPosEx(playerid, obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], obtenerLicencia[i][cocheInterior], obtenerLicencia[i][cocheWorld]);
+                                SetPosEx(playerid, obtenerLicencia[i][cochePos][0], obtenerLicencia[i][cochePos][1], obtenerLicencia[i][cochePos][2], obtenerLicencia[i][cochePos][3], 0, 0);
                                 PutPlayerInVehicleEx(playerid, obtenerLicencia[i][cocheExamen], 0);
                                 comenzarPrueba(playerid);
                                 pierdeDinero(playerid, 2500);
@@ -24891,11 +24844,6 @@ CallBack::StreamMedioSegundo()
             }
         }
         //
-        if(entero[playerid][lictiempo])
-        {
-            format(string, sizeof(string), "%s", generarTiempo(gettime() - entero[playerid][lictiempo]));
-            GameTextForPlayer(playerid, string, 500, 6);
-        }
         //Verificar que no Utiliza: vida ni armadura cheat
         new Float:health, Float:armadura;
         GetPlayerHealth(playerid, health);
@@ -28173,7 +28121,8 @@ COMMAND:licencias(playerid, params[])
     return 1;
 }
 command(terminarprueba, playerid, params[]) {
-    if (enteroChar[lictipo]{playerid} != 255) {
+    new slot = enteroChar[licslot]{playerid};
+    if (slot != 255 && obtenerLicencia[slot][cocheUse]) {
         SetPosEx(playerid, 2048.1421, -1908.2161, 13.5469, 267.6207, 0, 0);
         terminarPrueba(playerid);
         Mensaje(playerid, COLOR_AMARILLO, "Has salido de la prueba de licencias.");
@@ -31985,7 +31934,6 @@ Funcion.terminarPrueba(playerid)
         obtenerLicencia[slot][cocheUse] = false;
         SetVehicleToRespawn(obtenerLicencia[slot][cocheExamen]);
         DisablePlayerRaceCheckpoint(playerid);
-        entero[playerid][lictiempo] = 0;
     }
     return 1;
 }
@@ -31996,19 +31944,15 @@ Funcion.comenzarPrueba(playerid)
     
     GetVehicleParamsEx(vehicle, engine, lights, alarm, doors, bonnet, boot, objective);
     SetVehicleParamsEx(vehicle, 1, lights, alarm, doors, bonnet, boot, objective);
-    
-    entero[playerid][lictiempo] = gettime();
+
     enteroChar[licestado]{playerid} = 0;
     
-    switch(enteroChar[lictipo]{playerid})
-    {
-    case 0, 1:
-        {
-            SetPlayerRaceCheckpoint(playerid, 0, 1317.4880,-2195.3403,21.2174, 1314.7155,-2259.9875,12.9043, 3.0);
-            enteroChar[licvueltas]{playerid} = 0;
+    switch(enteroChar[lictipo]{playerid}) {
+        case 0, 1: { //coche y moto
+            SetPlayerRaceCheckpoint(playerid, 0, recLicencias[0][trackPos][0], recLicencias[0][trackPos][1], recLicencias[0][trackPos][2], recLicencias[1][trackPos][0], recLicencias[1][trackPos][1], recLicencias[1][trackPos][2], 3.0);
         }
-    case 2: SetPlayerRaceCheckpoint(playerid, 3, 1348.9652,-2219.7114,12.9020, 1348.9652,-2219.7114,12.9020, 6.0);
-    case 3: SetPlayerRaceCheckpoint(playerid, 1, 1660.5503,-2027.7532,22.2391, 1625.1279,-1793.2052,26.5383, 4.0);
+        case 2: SetPlayerRaceCheckpoint(playerid, 3, 1348.9652,-2219.7114,12.9020, 1348.9652,-2219.7114,12.9020, 6.0); //vuelo
+        case 3: SetPlayerRaceCheckpoint(playerid, 1, 1660.5503,-2027.7532,22.2391, 1625.1279,-1793.2052,26.5383, 4.0); //embarcación
     }
     return 1;
 }

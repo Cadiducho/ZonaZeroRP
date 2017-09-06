@@ -4,7 +4,7 @@
 
 #define _config_included
 
-//#define TEST_MODE
+#define TEST_MODE
 
 #define SQL_Host        "127.0.0.1"
 #define SQL_User        "zonauser"
