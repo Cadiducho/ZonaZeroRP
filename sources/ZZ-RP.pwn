@@ -1456,8 +1456,8 @@ enum _@en@trabajos
 new static trabajos[][_@en@trabajos] =  
 {
     {{4000.0, 0.0, 0.0}, "Desempleado", 0, 0, 0, 0}, 
-    {{1278.4047, -979.6494, 38.3699}, "Transportador de Valores", "/servicio /finservicio /transportar", 3, 1, 164, 141, 2}, 
-    {{1956.7324, -2183.4846, 13.5469}, "Aviador", "/servicio /finservicio /pilotear", 4, 1, 61, 150, 3}, 
+    {{1278.4047, -979.6494, 38.3699}, "Transportador de Valores", "/servicio /finservicio /transportar", 4, 1, 164, 141, 2}, 
+    {{1956.7324, -2183.4846, 13.5469}, "Aviador", "/servicio /finservicio /pilotear", 6, 1, 61, 150, 3}, 
     {{2205.6633, -2667.1572, 14.8642}, "Camionero", "/servicio /finservicio /cargar", 1, 1, 6, 11, 2}, 
     {{2481.8337, -1536.7006, 24.0952}, "Barrendero", "/servicio /finservicio /limpiarcalle", 1, 1, 8, 69, 2}, 
     {{1156.9833, -1770.1492, 16.5938}, "Conductor de Bus", "/servicio /finservicio /recorrido", 1, 1, 253, 9, 2}, 
@@ -1468,7 +1468,7 @@ new static trabajos[][_@en@trabajos] =
     {{2190.5740, -1997.0985, 13.5469}, "Basurero", "/servicio /finservicio /basura", 1, 1, 6, 11, 2},
     {{60.2410, -1720.7347, 7.5172}, "Pescador", "/servicio /finservicio /pescar", 2, 1, 128, 131, 4}, 
     {{2530.5439, -880.4722, 87.6618}, "Minero", "/servicio /finservicio", 3, 1, 27, 151, 0}, 
-    {{2170.7991, -1736.3546, 13.5919}, "Carpintero", "/servicio /finservicio", 3, 1, 1, 298, 0}, 
+    {{2170.7991, -1736.3546, 13.5919}, "Carpintero", "/servicio /finservicio", 1, 1, 1, 298, 0}, 
     {{1266.1512, -1259.9255, 13.1965}, "Obrero", "/servicio /finservicio", 2, 1, 260, 157, 0}, 
     {{2609.1614, -2192.2715, -0.2188}, "Ladron", "/robar /vender", 5, 1, 0, 0, 0}
 };
@@ -1529,7 +1529,7 @@ new static trabCamionero[][_@en@trabCamionero] =
     {{1361.7355, -1279.9271, 13.1889}, "Chalecos y Porras Ammunation", "Chalecos y Porras", 350, 0, 0}, 
     {{1191.1016, -1330.4587, 13.2075}, "Medicamentos Hospital", "Medicamentos", 365, 0, 0}, 
     {{763.6075, -1324.5220, 13.1931}, "Microfonos y parlantes CNN", "Equipos de sonido", 380, 0, 0}, 
-    {{-63.9782, -1163.8698, 1.4974}, "Drogas Ilegales", "Drogas", 280, 0, 1}
+    {{-63.9782, -1163.8698, 1.4974}, "Drogas Ilegales", "Drogas", 420, 0, 1}
     //{{957.5847, -1195.5867, 16.7029}, "Armas Ilegales", "Armas", 300, 1, 0}
 };
 //Barrendero
@@ -9119,7 +9119,6 @@ command(aceptarmuerte, playerid, params[]) {
     }
     return 1;
 }
-
 TextListCreate:textList_sospechosos(playerid) {
     new encontro;
     new items[MAX_PLAYERS][TEXTLIST_MAX_ITEM_NAME];
@@ -9163,7 +9162,7 @@ TextListResponse:textList_sospechosos(playerid, TextListType:response, itemid, i
         cuenta[playerid][mirandoMotivosDe] = ObtenerIdDelNombre(itemvalue);
         TextList_Close(playerid);
         PlayerPlaySound(playerid, 1083, 0.0, 0.0, 0.0);
-        Dialog_Show(playerid, Dialog:suspectAntecedentes);
+        Dialog_Show(playerid, Dialog:buscadoPor);
 	} else if (response == TextList_Button1 || response == TextList_Cancel) {
 		TextList_Close(playerid);
         PlayerPlaySound(playerid, 1084, 0.0, 0.0, 0.0);
@@ -9171,10 +9170,11 @@ TextListResponse:textList_sospechosos(playerid, TextListType:response, itemid, i
 	
 	return 1;
 }
-DialogCreate:suspectAntecedentes(playerid) {
+DialogCreate:buscadoPor(playerid) {
     new suspectid = cuenta[playerid][mirandoMotivosDe];
-    new title[300];
+    new title[128];
     new motivos[90 * 5];
+    format(title, sizeof(title), "%s es buscad%s por: ", PlayerName(suspectid), (cuenta[suspectid][cSexo] == 1 ? "o" : "a"));
     
     strcat(motivos, cuenta[suspectid][cMotivoBusqueda1]);
     strcat(motivos, "\n");
@@ -9186,10 +9186,10 @@ DialogCreate:suspectAntecedentes(playerid) {
     strcat(motivos, "\n");
     strcat(motivos, cuenta[suspectid][cMotivoBusqueda5]);
         
-	Dialog_Open(playerid, Dialog:suspectAntecedentes, DIALOG_STYLE_LIST, title, motivos, "Volver", "");
+	Dialog_Open(playerid, Dialog:buscadoPor, DIALOG_STYLE_LIST, title, motivos, "Volver", "");
 }
 
-DialogResponse:suspectAntecedentes(playerid, response, listitem, inputtext[]) {
+DialogResponse:buscadoPor(playerid, response, listitem, inputtext[]) {
 	if (response) {
 		TextList_Show(playerid, TextList:textList_sospechosos);
 	}
@@ -9214,28 +9214,25 @@ command(tallerpd, playerid, params[]) {
     RepairVehicle(vehid);
     return Mensaje(playerid, COLOR_GRIS2, "¡Vehículo reparado!");
 }
-COMMAND:su(playerid, params[])
-{
-    if(Team_LSPD(playerid) || Team_FBI(playerid))
-    {
-        if(!cuenta[playerid][cBusqueda])return Mensaje(playerid, COLOR_GRIS2, "Este jugador no tiene nivel de búsqueda.");
-        if(!entero[playerid][borracho])return Mensaje(playerid, COLOR_GRIS2, "Usted no tiene una bebida en la mano.");
-        new usuario, crimen[64];
-        if(sscanf(params, "us[64]", usuario, crimen))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /su [Usuario] [Crimen]");
+COMMAND:su(playerid, params[]) {
+    if (Team_LSPD(playerid) || Team_FBI(playerid)) {
+        if (!cuenta[playerid][cFaccOnDuty])return Mensaje(playerid, COLOR_GRIS2, "No estas OnDuty.");
+        new target, crimen[64];
+        if (sscanf(params, "us[64]", target, crimen))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /su [target] [Crimen]");
         
-        if(!IsPlayerConnected(usuario))return Mensaje(playerid, COLOR_GRIS2, "Este jugador no esta conectado.");
-        if(Team_LSPD(usuario) || Team_FBI(usuario))return Mensaje(playerid, COLOR_GRIS2, "Este jugador pertenece a la justicia.");
+        if (!IsPlayerConnected(target)) return Mensaje(playerid, COLOR_GRIS2, "Este jugador no esta conectado.");
+        if (Team_LSPD(target) || Team_FBI(target))return Mensaje(playerid, COLOR_GRIS2, "Este jugador pertenece a la justicia.");
         
-        darMotivoBusqueda(playerid, crimen);
+        darMotivoBusqueda(target, crimen);
         
         new string[64];
         ClearChatbox(playerid, 21);
-        format(string, sizeof(string), "** Acusaste a %s de %s", PlayerName(usuario), crimen);
+        format(string, sizeof(string), "** Acusaste a %s de %s", PlayerName(target), crimen);
         Mensaje(playerid, COLOR_BUSCADO, string);
-        format(string, sizeof(string), "Nivel de búsqueda: %d", cuenta[usuario][cBusqueda]);
+        format(string, sizeof(string), "Nivel de búsqueda: %d", cuenta[target][cBusqueda]);
         Mensaje(playerid, COLOR_BUSCADO, string);
         
-    }else Mensaje(playerid, COLOR_AMARILLO, "»{FFFFFF} No perteneces a ningún cuerpo de seguridad.");
+    } else Mensaje(playerid, COLOR_AMARILLO, "¡{FFFFFF} No perteneces a ningún cuerpo de seguridad.");
     return 1;
 }
 COMMAND:limpiar(playerid, params[])
@@ -28639,56 +28636,48 @@ COMMAND:negocio(playerid, params[])
     }
     return 1;
 }
-COMMAND:extorsion(playerid, params[])
-{
+COMMAND:extorsion(playerid, params[]) {
     new jugador, neg, idneg, string[126];
-    if(!sscanf(params, "du", neg, jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /extorsion [slot 1 - 2] [Usuario]");
+    if (sscanf(params, "du", neg, jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /extorsion [slot 1 - 2] [Usuario]");
     idneg = (neg == 1) ? cuenta[playerid][cNegocio] : cuenta[playerid][cNegocio2];
-	if(idneg == 9999)return Mensaje(playerid, COLOR_ROJO, "No tienes un negocio!");
-    if(IsPlayerInRangeOfPoint(playerid, 4.0, negocio[idneg][bEntrancex], negocio[idneg][bEntrancey], negocio[idneg][bEntrancez]))
-    {
-        if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
-        if(jugador == playerid)return Mensaje(playerid, COLOR_GRIS2, "No te puedes poner como extorsionista tu mismo.");
+	if (idneg == 9999)return Mensaje(playerid, COLOR_ROJO, "No tienes un negocio!");
+    if (IsPlayerInRangeOfPoint(playerid, 4.0, negocio[idneg][bEntrancex], negocio[idneg][bEntrancey], negocio[idneg][bEntrancez])) {
+        if (!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
+        if (jugador == playerid)return Mensaje(playerid, COLOR_GRIS2, "¡No puedes ser extorsionista de tu propio negocio!");
         
-        if(dDistanciaJugador(5.0, playerid, jugador))
-        {
-            if(!strcmp("Sin Extorsionista", negocio[idneg][bExtortion]))
-            {
+        if (dDistanciaJugador(5.0, playerid, jugador)) {
+            if (!strcmp("Sin Extorsionista", negocio[idneg][bExtortion])) {
                 format(negocio[idneg][bExtortion], 24, "%s", PlayerName(jugador));
                 format(string, sizeof(string), "Desde ahora {FF4FD4}%s {FFFFFF}será el extorcionista de tu negocio.", PlayerName(jugador));
                 Mensaje(playerid, COLOR_BLANCO, string);
                 format(string, sizeof(string), "%s te ha puesto como extorcionista de su negocio, ahora puedes usar {FF4FD4}/recaudar.", PlayerName(playerid));
                 Mensaje(jugador, COLOR_BLANCO, string);
                 OnBizzTextdrawUpdate(idneg);
-            }else Mensaje(playerid, COLOR_GRIS2, "Tu negocio ya tiene un extorcionista, primero usa /qextorcion.");
-        }else Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
-    }else Mensaje(playerid, COLOR_GRIS2, "Debes estar cerca de tu negocio!");		
+            } else Mensaje(playerid, COLOR_GRIS2, "Tu negocio ya tiene un extorcionista, primero usa /qextorcion.");
+        } else Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
+    } else Mensaje(playerid, COLOR_GRIS2, "Debes estar cerca de tu negocio!");		
     return 1;
 }
-COMMAND:qextorcion(playerid, params[])
-{
+COMMAND:qextorcion(playerid, params[]) {
     new jugador, neg, idneg, string[126];
-    if(!sscanf(params, "du", neg, jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /extorcion [slot 1 - 2] [Usuario]");
+    if (sscanf(params, "du", neg, jugador))return Mensaje(playerid, COLOR_GRIS2, "Utiliza: /extorcion [slot 1 - 2] [Usuario]");
     
     idneg = (neg == 1) ? cuenta[playerid][cNegocio] : cuenta[playerid][cNegocio2];
-	if(idneg == 9999)return Mensaje(playerid, COLOR_ROJO, "No tienes un negocio!");
+	if (idneg == 9999)return Mensaje(playerid, COLOR_ROJO, "No tienes un negocio!");
     
-    if(IsPlayerInRangeOfPoint(playerid, 4.0, negocio[idneg][bEntrancex], negocio[idneg][bEntrancey], negocio[idneg][bEntrancez]))
-    {
-        if(!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
-        if(jugador == playerid)return Mensaje(playerid, COLOR_GRIS2, "No puedes usar este comando contigo mismo.");
-        if(dDistanciaJugador(5.0, playerid, jugador))
-        {
-            if(!strcmp(PlayerName(jugador), negocio[idneg][bExtortion]))
-            {
+    if (IsPlayerInRangeOfPoint(playerid, 4.0, negocio[idneg][bEntrancex], negocio[idneg][bEntrancey], negocio[idneg][bEntrancez])) {
+        if (!IsPlayerConnected(jugador))return Mensaje(playerid, COLOR_GRIS2, "Jugador no conectado.");
+        if (jugador == playerid)return Mensaje(playerid, COLOR_GRIS2, "No puedes usar este comando contigo mismo.");
+        if (dDistanciaJugador(5.0, playerid, jugador)) {
+            if (!strcmp(PlayerName(jugador), negocio[idneg][bExtortion])) {
                 format(string, sizeof(string), "{FFFFFF}%s ha dedicido quitarte como extorcionista de su negocio.\n\tEstas de acuerdo con esta decision?", PlayerName(playerid));
                 ShowPlayerDialog(jugador, DIALOGO_QUITAR_EXTORCION, DIALOG_STYLE_MSGBOX, "Confirmacion Negocios", string, "Aceptar", "Cancelar");
                 Mensaje(playerid, COLOR_GRAD4, "* La solicitud fue enviada, espera su respuesta.");
                 ExtortionID[jugador] = playerid;
                 QuitExtortion[jugador] = idneg;
-            }else Mensaje(playerid, COLOR_GRIS2, "* Esa persona no es extorcionista de tu negocio.");
-        }else Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
-    }else Mensaje(playerid, COLOR_GRIS2, "Debes estar cerca de tu negocio.");
+            } else Mensaje(playerid, COLOR_GRIS2, "* Esa persona no es extorcionista de tu negocio.");
+        } else Mensaje(playerid, COLOR_GRIS2, "Jugador muy lejos.");
+    } else Mensaje(playerid, COLOR_GRIS2, "Debes estar cerca de tu negocio.");
     return 1;
 }
 COMMAND:recaudar(playerid, params[])
