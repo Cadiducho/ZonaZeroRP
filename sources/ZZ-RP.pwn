@@ -5,7 +5,7 @@
     *	Desarrollador:		    Cadiducho	
     *   Antiguos Creditos:      Parka, Lucas Clemente(lolking), Sergio Mitnick. Desarrolladores de Ciudad Prohibida
     *   Mappers:                Javier_Cardenas.
-    *	Version:				1.0.6
+    *	Version:				1.0.7
     *
     *	Principal: ZZ-RP.pwn
     *
@@ -40,7 +40,7 @@ native WP_Hash(buffer[], len, const str[]);
 /******************************[- Definiciones -]******************************/
 /******************************************************************************/
 
-#define Version			"v1.0.6"
+#define Version			"v1.0.7"
 #define ModeText		"RolePlay - RP - "Version""
 #define MapName			"mapname Los Santos"
 #define Hostname		"hostname ZonaZero Roleplay Nueva Generacion - 2017 [0.3.7]"
@@ -2613,7 +2613,7 @@ public OnPlayerSpawn(playerid)
                 Mensaje(playerid, COLOR_ROJO3, string);
                 format(string, sizeof(string), "Tiempo: %d minutos", cuenta[playerid][cTiempoCarcel] / 60);
                 Mensaje(playerid, COLOR_ROJO3, string);
-                format(string, sizeof(string), "azon: %s", cuenta[playerid][cCarcelRazon]);
+                format(string, sizeof(string), "Razón: %s", cuenta[playerid][cCarcelRazon]);
                 Mensaje(playerid, COLOR_ROJO3, string);
                 SetPosEx(playerid, 325.2867, 305.1505, 999.1484, 348.7300, 5, (playerid + 20));
             }
@@ -2908,16 +2908,6 @@ Presidente(playerid)
     {
         new leader = cuenta[playerid][cLider];
         if(leader == 6)	{	return 1;	}
-    }
-    return 0;
-}
-
-IsACop(playerid){
-    if(IsPlayerConnected(playerid)){
-        new leader = cuenta[playerid][cLider];
-        new member = cuenta[playerid][cMiembro];
-        if(member == 1){	return 1;	}
-        else if(leader == 1){	return 1;	}
     }
     return 0;
 }
