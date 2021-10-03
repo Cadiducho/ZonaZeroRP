@@ -1,8 +1,10 @@
 /**
  *  Progress Bar 1.3.1.0
  *  Copyright 2007-2010 Infernus' Group,
- *  Flávio Toribio (flavio_toribio@hotmail.com)
+ *  Flï¿½vio Toribio (flavio_toribio@hotmail.com)
  */
+
+#pragma warning disable 213
 
 #if defined _progress_included
 	#endinput

@@ -1,5 +1,5 @@
 /**
- * MySQL plugin R39-2
+ * MySQL plugin R39-6
  */
 
 
@@ -26,7 +26,7 @@
 #define CR_SERVER_LOST_EXTENDED 		2055
 
 
-enum E_LOGLEVEL
+enum E_MYSQL_LOGLEVEL
 {
 	LOG_NONE = 0,
 	LOG_ERROR = 1,
@@ -36,7 +36,7 @@ enum E_LOGLEVEL
 	LOG_ALL = LOG_ERROR | LOG_WARNING | LOG_DEBUG
 };
 
-enum E_LOGTYPE
+enum E_MYSQL_LOGTYPE
 {
 	LOG_TYPE_TEXT = 1,
 	LOG_TYPE_HTML = 2
@@ -46,13 +46,6 @@ enum ORM_Error
 {
 	ERROR_OK,
 	ERROR_NO_DATA
-};
-
-enum E_VAR_DATATYPE 
-{
-	DATATYPE_INT,
-	DATATYPE_FLOAT,
-	DATATYPE_STRING
 };
 
 enum E_MYSQL_OPTION
@@ -67,6 +60,7 @@ enum E_EXECTIME_UNIT
 	UNIT_MICROSECONDS
 };
 
+
 #define mysql_real_escape_string 					mysql_escape_string
 #define cache_num_fields 							cache_get_field_count
 #define cache_num_rows 								cache_get_row_count
@@ -74,6 +68,7 @@ enum E_EXECTIME_UNIT
 #define mysql_reload(%0) 							mysql_tquery(%0,"FLUSH PRIVILEGES")
 #define mysql_debug(%0)								(%0?mysql_log(LOG_ALL):mysql_log())
 #define ismysqlnull(%0) 							(strcmp(%0,"NULL",false)==0)
+
 
 // ORM functions
 native ORM:orm_create(const table[], connectionHandle = 1);
@@ -105,7 +100,7 @@ native orm_setkey(ORM:id, varname[]);
 
 
 // MySQL functions
-native mysql_log(E_LOGLEVEL:loglevel = LOG_ERROR | LOG_WARNING, E_LOGTYPE:logtype = LOG_TYPE_TEXT);
+native mysql_log(E_MYSQL_LOGLEVEL:loglevel = LOG_ERROR | LOG_WARNING, E_MYSQL_LOGTYPE:logtype = LOG_TYPE_TEXT);
 native mysql_connect(const host[], const user[], const database[], const password[], port = 3306, bool:autoreconnect = true, pool_size = 2);
 native mysql_close(connectionHandle = 1);
 native mysql_reconnect(connectionHandle = 1);
@@ -116,16 +111,16 @@ native mysql_option(E_MYSQL_OPTION:type, value);
 
 native mysql_errno(connectionHandle = 1);
 native mysql_escape_string(const source[], destination[], connectionHandle = 1, max_len = sizeof(destination));
-native mysql_format(connectionHandle, output[], len, format[], {Float,_}:...);
-native mysql_pquery(connectionHandle, query[], callback[] = "", format[] = "", {Float,_}:...);
+native mysql_format(connectionHandle, output[], len, const format[], {Float,_}:...);
+native mysql_pquery(connectionHandle, query[], const callback[] = "", const format[] = "", {Float,_}:...);
 /*
 native mysql_pquery_inline(connHandle, query[], callback:Callback, format[], {Float,_}:...); //y_inline
 */
-native mysql_tquery(connectionHandle, query[], callback[] = "", format[] = "", {Float,_}:...);
+native mysql_tquery(connectionHandle, query[], const callback[] = "", const format[] = "", {Float,_}:...);
 /*
 native mysql_tquery_inline(connHandle, query[], callback:Callback, format[], {Float,_}:...); //y_inline
 */
-native Cache:mysql_query(conhandle, query[], bool:use_cache = true);
+native Cache:mysql_query(conhandle, const query[], bool:use_cache = true);
 
 native mysql_stat(destination[], connectionHandle = 1, max_len = sizeof(destination));
 native mysql_get_charset(destination[], connectionHandle = 1, max_len = sizeof(destination));

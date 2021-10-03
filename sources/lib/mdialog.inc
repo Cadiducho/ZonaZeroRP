@@ -89,7 +89,7 @@ static
 	Dialog_Open
 */
 
-static stock _Dialog_Open(playerid, function[], style, caption[], info[], button1[], button2[])
+static stock _Dialog_Open(playerid, const function[], style, const caption[], const info[], const button1[], const button2[])
 {
 	gIsDialogOpen{playerid} = true;
 	gDialogFunction[playerid] = !"dre_";
@@ -99,7 +99,7 @@ static stock _Dialog_Open(playerid, function[], style, caption[], info[], button
 
 #if defined MDIALOG_ZLANG_MODE
 
-stock Dialog_Open(playerid, function[], style, caption[], info[], button1[], button2[], notvar_flags = MDIALOG_NOTVAR_NONE, va_args<>)
+stock Dialog_Open(playerid, const function[], style, const caption[], const info[], const button1[], const button2[], notvar_flags = MDIALOG_NOTVAR_NONE, va_args<>)
 {
 	static
 		Lang:lang,
@@ -144,7 +144,7 @@ stock Dialog_Open(playerid, function[], style, caption[], info[], button1[], but
 
 #else
 
-stock Dialog_Open(playerid, function[], style, caption[], info[], button1[], button2[])
+stock Dialog_Open(playerid, const function[], style, const caption[], const info[], const button1[], const button2[])
 {
 	return _Dialog_Open(playerid, function, style, caption, info, button1, button2);
 }
@@ -174,7 +174,7 @@ stock Dialog_IsOpen(playerid)
 	Dialog_Show
 */
 
-stock Dialog_Show(playerid, function[])
+stock Dialog_Show(playerid, const function[])
 {
 	new call_func[MAX_FUNCTION_NAME char] = !"dcr_";
 	strcat(call_func, function);
@@ -187,7 +187,7 @@ stock Dialog_Show(playerid, function[])
 
 #if defined MDIALOG_ZLANG_MODE
 
-stock Dialog_Message(playerid, caption[], info[], button1[], notvar_flags = MDIALOG_NOTVAR_NONE, va_args<>)
+stock Dialog_Message(playerid, const caption[], const info[], const button1[], notvar_flags = MDIALOG_NOTVAR_NONE, va_args<>)
 {
 	static
 		Lang:lang,
@@ -223,7 +223,7 @@ stock Dialog_Message(playerid, caption[], info[], button1[], notvar_flags = MDIA
 
 #else
 
-stock Dialog_Message(playerid, caption[], info[], button1[])
+stock Dialog_Message(playerid, const caption[], const info[], const button1[])
 {
 	return _Dialog_Open(playerid, Dialog:Message, DIALOG_STYLE_MSGBOX, caption, info, button1, "");
 }
@@ -236,7 +236,7 @@ stock Dialog_Message(playerid, caption[], info[], button1[])
 
 #if defined MDIALOG_ZLANG_MODE
 
-stock Dialog_MessageEx(playerid, response[], caption[], info[], button1[], button2[], notvar_flags = MDIALOG_NOTVAR_NONE, va_args<>)
+stock Dialog_MessageEx(playerid, const response[], const caption[], const info[], const button1[], const 92button2[], notvar_flags = MDIALOG_NOTVAR_NONE, va_args<>)
 {
 	static
 		Lang:lang,
@@ -281,7 +281,7 @@ stock Dialog_MessageEx(playerid, response[], caption[], info[], button1[], butto
 
 #else
 
-stock Dialog_MessageEx(playerid, response[], caption[], info[], button1[], button2[])
+stock Dialog_MessageEx(playerid, const response[], const caption[], const info[], const button1[], const button2[])
 {
 	return _Dialog_Open(playerid, response, DIALOG_STYLE_MSGBOX, caption, info, button1, button2);
 }

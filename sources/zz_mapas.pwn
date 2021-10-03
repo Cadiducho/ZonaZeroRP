@@ -1,4 +1,3 @@
-#pragma tabsize 0
 
 RemoveObjects(playerid){
     //Parking cerca Buses
