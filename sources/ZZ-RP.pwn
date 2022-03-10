@@ -6636,7 +6636,7 @@ CallBack::OnAccountLoad(playerid, FailPass, pass[]) {
     cache_get_field_content(0, "password", cuenta[playerid][cPassword], WP_HASH_LENGTH);
     if (!cuenta[playerid][cPassword]) {
         new buf[WP_HASH_LENGTH];
-        WP_Hash(buf, sizeof(buf), pass);
+        bcrypt_hash(buf, sizeof(buf), pass);
         format(cuenta[playerid][cPassword], WP_HASH_LENGTH, "%s", buf);
         MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "password", buf);
         cifrada = true;
@@ -17414,7 +17414,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
                 new tmp[300], safeInput[32], buf[WP_HASH_LENGTH];
                 mysql_real_escape_string(inputtext, safeInput, servidor[mysqlControl]); 
-                WP_Hash(buf, sizeof (buf), inputtext);
+                bcrypt_hash(buf, sizeof (buf), inputtext);
                 mysql_format(servidor[mysqlControl], tmp, sizeof(tmp), "INSERT INTO zz_usuarios(nombre, clave, password, inv11, casa, negocio, casa2, negocio2, deagle, shotgun, mp5, ak47, m4, sniper, fstyle, salud, team) VALUES('%e', md5('%e'), '%e', 1, 9999, 9999, 9999, 9999, 100, 100, 100, 100, 100, 100, 4, 50.0, 3);", Nombre(playerid), safeInput, buf);
                 mysql_tquery(servidor[mysqlControl], tmp, "ConsultarCuenta", "i", playerid);
             }
@@ -17432,7 +17432,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                /* if (cuenta[playerid][cPassword]) { aqu� esto es siempre 0... pero el c�digo valdr� en la siguiente versi�n
                     printf("Pass cifrada");
                     new buf[WP_HASH_LENGTH];
-                    WP_Hash(buf, sizeof (buf), inputtext);
+                    bcrypt_hash(buf, sizeof (buf), inputtext);
                     mysql_format(servidor[mysqlControl], query, sizeof(query), "SELECT * FROM zz_usuarios WHERE nombre='%e' AND password='%e' LIMIT 1;", Nombre(playerid), buf);
                 } else {*/
 
@@ -18887,7 +18887,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             if (cuenta[playerid][cAdminPassword]) {
                 printf("tiene cifrado");
                 new buf[WP_HASH_LENGTH];
-                WP_Hash(buf, sizeof (buf), inputtext);
+                bcrypt_hash(buf, sizeof (buf), inputtext);
                 
                 if(!strcmp(buf, cuenta[playerid][cAdminPassword])) {
                     booleano[AdminDuty]{playerid} = true;
@@ -18908,7 +18908,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             } else { 
                 if(!strcmp(inputtext, cuenta[playerid][cAcceso2])) { 
                     new buf[WP_HASH_LENGTH];
-                    WP_Hash(buf, sizeof (buf), inputtext);
+                    bcrypt_hash(buf, sizeof (buf), inputtext);
                     printf(buf);
                     format(cuenta[playerid][cAdminPassword], WP_HASH_LENGTH, "%s", buf);
                     MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "adminPassword", buf);
@@ -20833,7 +20833,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     case PW_ADMIN:
         {
             new buf[WP_HASH_LENGTH];
-            WP_Hash(buf, sizeof (buf), inputtext);
+            bcrypt_hash(buf, sizeof (buf), inputtext);
             format(cuenta[playerid][cAdminPassword], WP_HASH_LENGTH, "%s", buf);
             MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "adminPassword", buf);
             Mensaje(playerid, COLOR_GRIS2, "Contrase�a Guardada");
@@ -28455,7 +28455,7 @@ COMMAND:ccjugador(playerid, params[])
     if(strlen(pass) < 4 || strlen(pass) > 24) return Mensaje(playerid, COLOR_GRIS2, "Su clave debe ser mayor a 5 caracteres y menor a 24.");
     
     new buf[WP_HASH_LENGTH];
-    WP_Hash(buf, sizeof (buf), pass);
+    bcrypt_hash(buf, sizeof (buf), pass);
     format(cuenta[playerid][cPassword], WP_HASH_LENGTH, "%s", buf);
     MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "password", buf);
     
@@ -28478,7 +28478,7 @@ COMMAND:ccadmin(playerid, params[])
     if(strlen(pass) < 4 || strlen(pass) > 24)return Mensaje(playerid, COLOR_GRIS2, "Su clave debe ser mayor a 5 caracteres y menor a 24.");
     
     new buf[WP_HASH_LENGTH];
-    WP_Hash(buf, sizeof (buf), pass);
+    bcrypt_hash(buf, sizeof (buf), pass);
     format(cuenta[playerid][cAdminPassword], WP_HASH_LENGTH, "%s", buf);
     MySQL_UPDATE_STRING("zz_usuarios", Nombre(playerid), "adminPassword", buf);
     
